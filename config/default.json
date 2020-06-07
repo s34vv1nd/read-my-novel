@@ -1,0 +1,5 @@
+{
+    "mongoURI": "mongodb+srv://s34vv1nd:haiphong@read-my-novel-db-xmoq2.mongodb.net/read-my-novel?retryWrites=true&w=majority",
+    "jwtSecret": "secret",
+    "PORT": 4000
+}
