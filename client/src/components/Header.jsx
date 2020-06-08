@@ -1,15 +1,18 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
-
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import logo from '.././applogo.png';
-import { AppName } from '.././GlobalVariables.js'
+import { logout } from '../actions/authenticate';
+import { AppName } from '../GlobalVariables.js';
 
-export default class TestNavbar extends Component {
+class Header extends Component {
     render() {
+        console.log(this.props.isAuthenticated + " " + (this.props.isAuthenticated ? "logout" : "login"));
+
         return (
             <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
                 <Link to="/" className="navbar-brand">
@@ -34,12 +37,28 @@ export default class TestNavbar extends Component {
                         <Link to="/notifications" className="nav-link">Notifications</Link>
                     </Nav>
                     <Nav>
-                        <Button variant="primary" href="/login">
-                            Login
-                        </Button>
+                        {this.props.isAuthenticated ?
+                            <Button variant="primary" onClick={this.props.logout}> Logout </Button>
+                            :
+                            <Button variant="primary" href="/login"> Login </Button>
+                        }
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
         )
     }
 }
+
+Header.propTypes = {
+    logout: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(
+    mapStateToProps,
+    { logout }
+)(Header);

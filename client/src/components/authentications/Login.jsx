@@ -1,7 +1,10 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { withRouter, Redirect } from 'react-router';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { login } from '../../actions/authenticate';
 
-export default withRouter(class Login extends Component {
+class Login extends Component {
     constructor() {
         super();
         this.state = {
@@ -16,22 +19,21 @@ export default withRouter(class Login extends Component {
     }
 
     onChange(e) {
-        this.setState({[e.target.id]: e.target.value });
+        this.setState({ [e.target.id]: e.target.value });
     }
 
-    onSubmit(e) {
+    async onSubmit(e) {
         e.preventDefault();
-        const user = {
-            email: this.state.email,
-            password: this.state.password
-        }
-
-        if (1) {
-            this.props.history.push('/');
-        }
+        this.props.login(this.state.email, this.state.password);
     }
 
     render() {
+        console.log(this.props.isAuthenticated + " " + (this.props.isAuthenticated ? "logout" : "login"));
+
+        if (this.props.isAuthenticated) {
+            return <Redirect to='/' />;
+        }
+
         return (
             <div className="container">
                 <form noValidate onSubmit={this.onSubmit}>
@@ -39,7 +41,7 @@ export default withRouter(class Login extends Component {
                         <label htmlFor="email">
                             Email
                         </label>
-                        <input type="email" className="form-control" id="email" placeholder="Enter email" 
+                        <input type="email" className="form-control" id="email" placeholder="Enter email"
                             value={this.state.email} onChange={this.onChange} />
                     </div>
                     <div className="form-group">
@@ -52,8 +54,24 @@ export default withRouter(class Login extends Component {
                     <button type="submit" className="btn btn-primary">
                         Log in
                     </button>
+
                 </form>
+                <Link to='/register'><small>Did not have an account?</small></Link>
             </div>
         )
     }
-})
+}
+
+Login.propTypes = {
+    login: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(
+    mapStateToProps,
+    { login }
+)(Login);

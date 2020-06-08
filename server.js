@@ -15,11 +15,11 @@ connectDB();
 //Init middlewares
 app.use(cors());
 app.use(bodyParser.json());
-app.use(helmet);
+app.use(helmet());
 
 // Define Routes
-app.use('/users', require('./routes/users'));
-app.use('/auth', require('./routes/auth'));
+app.use('/api/users', require('./routes/api/users'));
+app.use('/api/auth', require('./routes/api/auth'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

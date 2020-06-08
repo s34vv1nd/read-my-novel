@@ -23,7 +23,6 @@ export default class HomeCarousel extends Component {
                         className="d-block w-100"
                         src={banner2}
                         alt="Third slide"
-                        fluid
                     />
 
                     <Carousel.Caption>
