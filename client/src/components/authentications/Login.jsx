@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import {useLocation} from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import { login } from '../../actions/authenticate';
+import { Link, Redirect, withRouter } from 'react-router-dom';
+import { login } from '../../actions/auth';
 
 class Login extends Component {
     constructor() {
@@ -28,10 +29,12 @@ class Login extends Component {
     }
 
     render() {
-        console.log(this.props.isAuthenticated + " " + (this.props.isAuthenticated ? "logout" : "login"));
+        //let location = useLocation();
+        let { from } = this.props.location.state || { from: { pathname: "/" } };
 
         if (this.props.isAuthenticated) {
-            return <Redirect to='/' />;
+            console.log(this.props.location);         
+            return <Redirect to={from} />;
         }
 
         return (
@@ -74,4 +77,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { login }
-)(Login);
+)(withRouter(Login));

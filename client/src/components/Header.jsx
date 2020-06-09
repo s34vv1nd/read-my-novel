@@ -6,7 +6,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import logo from '.././applogo.png';
-import { logout } from '../actions/authenticate';
+import { logout } from '../actions/auth';
 import { AppName } from '../GlobalVariables.js';
 
 class Header extends Component {
@@ -27,7 +27,7 @@ class Header extends Component {
                         <Link to="/create" className="nav-link">Create</Link>
                     </Nav>
                     <Nav>
-                        <form className="form-inline my-2 my-lg-0">
+                        <form className="form-inline my-2 my-lg-0"  noValidate>
                             <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
                             <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                         </form>
@@ -40,7 +40,7 @@ class Header extends Component {
                         {this.props.isAuthenticated ?
                             <Button variant="primary" onClick={this.props.logout}> Logout </Button>
                             :
-                            <Button variant="primary" href="/login"> Login </Button>
+                            <Link to='/login'><Button variant="primary"> Login </Button></Link>
                         }
                     </Nav>
                 </Navbar.Collapse>

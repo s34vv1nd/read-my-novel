@@ -2,17 +2,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { loadUser } from './actions/authenticate';
+import { loadUser } from './actions/auth';
 import Alert from './components/Alert';
-import Login from './components/authentications/Login.jsx';
-import Register from './components/authentications/Register.jsx';
-import Browse from './components/Browse.js';
-import Create from './components/Create.js';
 import Header from './components/Header';
-import Home from './components/home/Home.jsx';
-import Rankings from './components/Rankings.js';
+import Home from './components/home/Home';
+import Login from './components/authentications/Login';
+import Register from './components/authentications/Register';
+import Browse from './components/browse/Browse';
+import Create from './components/create/Create';
+import Rankings from './components/rankings/Rankings';
+import Library from './components/library/Library';
+import Notifications from './components/notifications/Notifications';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
+import PrivateRoute from './components/PrivateRoute';
 
 
 if (localStorage.token) {
@@ -40,16 +43,21 @@ function App() {
                         <Route path="/rankings">
                             <Rankings />
                         </Route>
-                        <Route path="/create">
+
+                        <PrivateRoute path="/create">
                             <Create />
-                        </Route>
-                        <Route path="/library">
-                        </Route>
-                        <Route path="/notifications">
-                        </Route>
+                        </PrivateRoute>
+                        <PrivateRoute path="/library">
+                            <Library />
+                        </PrivateRoute>
+                        <PrivateRoute path="/notifications">
+                            <Notifications />
+                        </PrivateRoute>
+
                         <Route path="/login">
                             <Login />
                         </Route>
+
                         <Route path="/register">
                             <Register />
                         </Route>
