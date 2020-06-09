@@ -6,13 +6,18 @@ const LibrarySchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
     },
-    books: [
-        {
-            book_id: {type: Schema.Types.ObjectId, ref: 'book'},
-            bookmark: {type: Number, default: 0},
-            date_added: {type: Date, default: Date.now}
-        }
-    ]
+    book: {
+        type: Schema.Types.ObjectId, 
+        ref: 'book'
+    },
+    bookmark: {
+        type: Number, 
+        default: 0
+    },
+    date_added: {
+        type: Date, 
+        default: Date.now
+    }
 });
 
 module.exports = Library = mongoose.model('library', LibrarySchema, 'library');
