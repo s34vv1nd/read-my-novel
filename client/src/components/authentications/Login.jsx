@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import {useLocation} from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { login } from '../../actions/auth';
@@ -33,34 +34,32 @@ class Login extends Component {
         let { from } = this.props.location.state || { from: { pathname: "/" } };
 
         if (this.props.isAuthenticated) {
-            console.log(this.props.location);         
+            console.log(this.props.location);
             return <Redirect to={from} />;
         }
 
         return (
-            <div className="container">
-                <form noValidate onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="email">
-                            Email
-                        </label>
-                        <input type="email" className="form-control" id="email" placeholder="Enter email"
-                            value={this.state.email} onChange={this.onChange} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">
-                            Password
-                        </label>
-                        <input type="password" className="form-control" id="password" placeholder="Enter password"
-                            value={this.state.password} onChange={this.onChange} />
-                    </div>
-                    <button type="submit" className="btn btn-primary">
-                        Log in
-                    </button>
+            <>
+                <Form noValidate onSubmit={this.onSubmit}>
+                    <Form.Group controlId="email">
+                        <Form.Label>Email address</Form.Label>
+                        <Form.Control type="email" placeholder="Enter email" onChange={this.onChange} value={this.state.email} />
+                        <Form.Text className="text-muted">
+                            We'll never share your email with anyone else.
+                        </Form.Text>
+                    </Form.Group>
 
-                </form>
+                    <Form.Group controlId="password">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control type="password" placeholder="Password" onChange={this.onChange} value={this.state.password} />
+                    </Form.Group>
+
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                </Form>
                 <Link to='/register'><small>Did not have an account?</small></Link>
-            </div>
+            </>
         )
     }
 }

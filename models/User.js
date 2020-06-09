@@ -14,6 +14,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    coin: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
     date: {
         type: Date,
         default: Date.now

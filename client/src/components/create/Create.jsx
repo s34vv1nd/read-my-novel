@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import {Row, Col, Button} from 'react-bootstrap';
 import {Redirect} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -10,9 +11,15 @@ class Create extends Component {
         }
 
         return (
-            <div>
-                <p>Create</p>
-            </div>
+            <Fragment>
+                <Row>
+                    <Col>
+                        <Button>
+
+                        </Button>
+                    </Col>
+                </Row>
+            </Fragment>
         )
     }
 }

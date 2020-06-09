@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import {Form, Button} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
@@ -45,74 +46,41 @@ class Register extends Component {
         }
 
         return (
-            <div className="container">
-                <form noValidate onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="username">
-                            Username
-                        </label>
+            <Fragment>
+                <Form noValidate onSubmit={this.onSubmit}>
+                    <Form.Group controlId="username">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control type="username" placeholder="Enter username" 
+                        onChange={this.onChange} value={this.state.username} />
+                    </Form.Group>
 
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="username"
-                            placeholder="Enter username"
-                            value={this.state.username}
-                            onChange={this.onChange}
-                        />
-                    </div>
+                    <Form.Group controlId="email">
+                        <Form.Label>Email address</Form.Label>
+                        <Form.Control type="email" placeholder="Enter email" 
+                        onChange={this.onChange} value={this.state.email} />
+                        <Form.Text className="text-muted">
+                            We'll never share your email with anyone else.
+                        </Form.Text>
+                    </Form.Group>
 
-                    <div className="form-group">
-                        <label htmlFor="email">
-                            Email address
-                        </label>
+                    <Form.Group controlId="password">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control type="password" placeholder="Enter Password" 
+                        onChange={this.onChange} value={this.state.password} />
+                    </Form.Group>
 
-                        <input
-                            type="email"
-                            className="form-control"
-                            id="email"
-                            placeholder="Enter email address"
-                            value={this.state.email}
-                            onChange={this.onChange}
-                        />
-                    </div>
+                    <Form.Group controlId="confirmPassword">
+                        <Form.Label>Confirm password</Form.Label>
+                        <Form.Control type="password" placeholder="Confirm password" 
+                        onChange={this.onChange} value={this.state.confirmPassword} />
+                    </Form.Group>
 
-                    <div className="form-group">
-                        <label htmlFor="password">
-                            Password
-                        </label>
-
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="password"
-                            placeholder="Enter password"
-                            value={this.state.password}
-                            onChange={this.onChange}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="confirmPassword">
-                            Confirm password
-                        </label>
-
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="confirmPassword"
-                            placeholder="Confirm password"
-                            value={this.state.confirmPassword}
-                            onChange={this.onChange}
-                        />
-                    </div>
-
-                    <button type="submit" className="btn btn-primary">
-                        Register
-                    </button>
-                </form>
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                </Form>
                 <Link to='/login'><small>Already have an account?</small></Link>
-            </div>
+            </Fragment>
         )
     }
 }
