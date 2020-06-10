@@ -10,17 +10,17 @@ export default class Browse extends Component {
             <>
                 <h2>Novels Genre</h2>
                 <ListGroup horizontal>
-                    <ListGroupItem><Link to="">All</Link></ListGroupItem>
-                    <ListGroupItem><Link to="">Genre</Link></ListGroupItem>
-                    <ListGroupItem><Link to="">Genre</Link></ListGroupItem>
-                    <ListGroupItem><Link to="">Genre</Link></ListGroupItem>
-                    <ListGroupItem><Link to="">Genre</Link></ListGroupItem>
+                    <ListGroupItem><Link to="#">All</Link></ListGroupItem>
+                    <ListGroupItem><Link to="#">Genre</Link></ListGroupItem>
+                    <ListGroupItem><Link to="#">Genre</Link></ListGroupItem>
+                    <ListGroupItem><Link to="#">Genre</Link></ListGroupItem>
+                    <ListGroupItem><Link to="#">Genre</Link></ListGroupItem>
                 </ListGroup>
 
                 <ListGroup horizontal>
-                    <ListGroupItem><Link to="">All</Link></ListGroupItem>
-                    <ListGroupItem><Link to="">Completed</Link></ListGroupItem>
-                    <ListGroupItem><Link to="">Ongoing</Link></ListGroupItem>
+                    <ListGroupItem><Link to="#">All</Link></ListGroupItem>
+                    <ListGroupItem><Link to="#">Completed</Link></ListGroupItem>
+                    <ListGroupItem><Link to="#">Ongoing</Link></ListGroupItem>
                 </ListGroup>
 
                 <Container>
@@ -32,7 +32,7 @@ export default class Browse extends Component {
                                         <Image width="100" height="80" src="" alt="Image" thumbnail />
                                     </Col>
                                     <Col xs={12} md={4}>
-                                        <h4><Link to="">Name</Link></h4>
+                                        <h4><Link to="#">Name</Link></h4>
                                         <p>Genre</p>
                                         <p>Rating</p>
                                         <p>Overview</p>
@@ -47,7 +47,7 @@ export default class Browse extends Component {
                                         <Image width="100" height="80" src="" alt="Image" thumbnail />
                                     </Col>
                                     <Col xs={12} md={4}>
-                                        <h4><Link to="">Name</Link></h4>
+                                        <h4><Link to="#">Name</Link></h4>
                                         <p>Genre</p>
                                         <p>Rating</p>
                                         <p>Overview</p>

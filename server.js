@@ -20,6 +20,7 @@ app.use(helmet());
 // Define Routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/creation', require('./routes/api/creation'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

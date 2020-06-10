@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const BookSchema = new mongoose.Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'user'
+        ref: 'user',
+        required: true
     },
     name: {
         type: String,
@@ -14,15 +15,14 @@ const BookSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'genre'
     }],
-    chapters: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'chapter'
-    }],
     completed: {
         type: Boolean,
         default: false
     },
-    rating: Number,
+    ratings: {
+        type: Number,
+        default: 0
+    },
     date_created: {
         type: Date,
         default: Date.now

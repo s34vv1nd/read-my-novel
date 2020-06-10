@@ -19,13 +19,11 @@ const UserSchema = new mongoose.Schema({
         default: 0,
         min: 0
     },
-    books_created: [
-        {type: mongoose.Schema.Types.ObjectId, ref: 'book'}
-    ],
     date: {
         type: Date,
         default: Date.now
     }
 });
+
 
 module.exports = User = mongoose.model('user', UserSchema, 'user');
