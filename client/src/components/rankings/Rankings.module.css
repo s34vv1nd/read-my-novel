@@ -1,0 +1,25 @@
+h2{
+    text-align: center;
+}
+h4{
+    color: blue;
+}
+
+img{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.topBookCol{
+    padding: 10px;
+    text-align: center;
+
+}
+
+.bookRow{
+    margin: 20px 0px 20px 0px;
+}
+
+.bookContainer{
+    background-color: lightcyan;
+}
