@@ -22,9 +22,9 @@ request: req.params: {
     sortBy: 'alphabet'/'popularity'/'ratings'/  {future maybe: 'vote'}
 }
 */
-router.get('', async (req, res) => {
-    
+router.get('/', async (req, res) => {
     try {
+        console.log(req.query);
         let genres = req.query.genres || 'all';
         let status = req.query.status || 'all';
         let page = parseInt(req.query.page || 1);

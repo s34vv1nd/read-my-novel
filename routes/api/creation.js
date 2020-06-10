@@ -17,7 +17,6 @@ router.get('/', auth, async (req, res) => {
     try {
         const books = await Book.find({ author: req.user.id })
             .populate('genres', 'name').exec();
-        console.log(books);
         res.status(200).json(books);
         /*
         response: res.data
@@ -39,6 +38,12 @@ router.get('/', auth, async (req, res) => {
 // @route POST api/creation
 // @desc create new book
 // @access Private
+/*
+    req.body: {
+        name,
+        genres
+    }
+*/
 router.post('/', auth, async (req, res) => {
 
     try {
@@ -48,7 +53,8 @@ router.post('/', auth, async (req, res) => {
         }
 
         let author = req.user.id;
-        let { name, genres } = req.body;
+        let  name = req.body.name;
+        let genres = req.body.genres;
 
         let book = await Book.findOne({ name: name })
         if (book) {
@@ -58,7 +64,7 @@ router.post('/', auth, async (req, res) => {
         }
 
 
-        if (!genres) {
+        if (!genres || genres == 0) {
             return res.
                 status(400).
                 json({ errors: [{ msg: 'Genre cannot be empty.' }] });

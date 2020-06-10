@@ -9,7 +9,7 @@ module.exports = async function(req, res, next) {
   if (!token) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
-
+  //console.log(token);
   // Verify token
   try {
     await jwt.verify(token, config.get('jwtSecret'), (error, decoded)=>{

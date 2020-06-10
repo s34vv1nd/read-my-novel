@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const LibrarySchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
+        ref: 'user',
         required: true,
     },
     book: {
