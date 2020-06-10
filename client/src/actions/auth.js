@@ -24,7 +24,6 @@ export const loadUser = () => async dispatch => {
             type: USER_LOADED,
             payload: res.data
         });
-        dispatch(loadUser());
     } catch (err) {
         dispatch({
             type: AUTH_ERROR
@@ -34,13 +33,22 @@ export const loadUser = () => async dispatch => {
 
 // Register User
 export const register = ({ username, email, password }) => async dispatch => {
+    const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+    
+    const body = JSON.stringify({ username, email, password });
+
     try {
-        const res = await axios.post('/api/users', { username, email, password });
+        const res = await axios.post('/api/users', body, config);
 
         dispatch({
             type: REGISTER_SUCCESS,
             payload: res.data
         });
+        dispatch(loadUser);
         dispatch(setAlert("Registered Successfully!", 'success', 1000));
     } catch (err) {
         const errors = err.response.data.errors;
@@ -57,8 +65,16 @@ export const register = ({ username, email, password }) => async dispatch => {
 
 // Login User
 export const login = (email, password) => async dispatch => {
-    try {
-        const res = await axios.post('/api/auth', { email, password });
+    const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+    
+      const body = JSON.stringify({ email, password });
+    
+      try {
+        const res = await axios.post('/api/auth', body, config);
 
         dispatch({
             type: LOGIN_SUCCESS,

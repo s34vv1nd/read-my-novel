@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -7,22 +7,26 @@ import BookList from './BookList';
 import NewBookForm from './NewBookForm';
 import { getBooksCreated } from '../../actions/creation';
 
-class Create extends Component {
-    render() {
-        if (!this.props.isAuthenticated) {
-            return <Redirect to='/login' />;
-        }
-        
-        this.props.getBooksCreated();
+const Create = ({
+    isAuthenticated,
+    getBooksCreated
+}) => {
+    useEffect(() => {
+        getBooksCreated();
+    }, []);
 
-        return (
-            <Fragment>
-                <NewBookForm />
-                <BookList />
-            </Fragment>
-        )
+    if (!isAuthenticated) {
+        return <Redirect to='/login' />;
     }
+
+    return (
+        <Fragment>
+            <NewBookForm />
+            <BookList />
+        </Fragment>
+    )
 }
+
 
 Create.propTypes = {
     isAuthenticated: PropTypes.bool
@@ -34,5 +38,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    {getBooksCreated}
+    { getBooksCreated }
 )(Create);

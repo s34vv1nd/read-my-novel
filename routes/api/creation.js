@@ -13,8 +13,10 @@ const Genre = require('../../models/Genre');
 // @desc    get books created by current user
 // @access  Private
 router.get('/', auth, async (req, res) => {
+    
     try {
-        const books = await Book.find({ author: req.user.id }).select('name genres completed date_created').populate().exec();
+        const books = await Book.find({ author: req.user.id })
+            .populate('genres', 'name').exec();
         console.log(books);
         res.status(200).json(books);
     } catch (err) {
@@ -51,7 +53,7 @@ router.post('/', auth, async (req, res) => {
                 json({ errors: [{ msg: 'Genre cannot be empty.' }] });
         }
 
-        let genres_id = await Genre.find().where('name').in(genres).select('_id').exec();
+        let genres_id = await Genre.find().where('name').in(genres).select('id').exec();
 
         if (genres_id.length < genres.length) {
             return res.

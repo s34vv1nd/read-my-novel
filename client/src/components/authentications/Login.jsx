@@ -13,7 +13,6 @@ class Login extends Component {
             email: '',
             password: '',
             errors: {},
-            redirect: false
         }
 
         this.onChange = this.onChange.bind(this);

@@ -1,50 +1,42 @@
-import React, { Component, Fragment } from 'react';
-import {Row, Col, Button, Table} from 'react-bootstrap';
-import {Redirect} from 'react-router-dom';
+import React, { Component, Fragment, useEffect } from 'react';
+import { Row, Col, Button, Table } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { getBooksCreated } from '../../actions/creation';
+import Spinner from '../Spinner';
 
-class BookList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            bookList: null
-        }
-    }
-
-    render() {
-                
-        if (this.props.books) {
-            this.state.bookList = this.props.books.map(book =>
+const BookList = ({
+    books,
+    loadingbook,
+    getBooksCreated
+}) => {
+    return  (
+        <Table responsive>
+            <thead>
                 <tr>
-                    <td>{ this.props.books.indexOf(book) }</td>
-                    <td>{ book.name }</td>
-                    <td>{ book.genres.map(genre => `${genre} `) }</td>
-                    <td>{ book.completed ? "Completed" : "Ongoing" }</td>
-                    <td>{ book.Date }</td>
+                    <th>#</th>
+                    <th>Book name</th>
+                    <th>Book genres</th>
+                    <th>Status</th>
+                    <th>Date created</th>
                 </tr>
-            );
-        }
-
-        return (
-            <Table responsive>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Book name</th>
-                        <th>Book genres</th>
-                        <th>Status</th>
-                        <th>Date created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.bookList}
-                </tbody>
-            </Table>
-        );
-    }
+            </thead>
+            <tbody>
+                {books.map(book =>
+                    <tr key={books.indexOf(book) + 1}>
+                        <td>{books.indexOf(book) + 1}</td>
+                        <td>{book.name}</td>
+                        <td>{book.genres.map(genre => `${genre['name'] || genre} `)}</td>
+                        <td>{book.completed ? "Completed" : "Ongoing"}</td>
+                        <td>{book.date_created}</td>
+                    </tr>)
+                }
+            </tbody>
+        </Table>
+    );
 }
+
 
 // BookList.propTypes = {
 //     books: PropTypes.arrayOf(PropTypes.exact({
@@ -59,10 +51,11 @@ class BookList extends Component {
 // };
 
 const mapStateToProps = state => ({
-    books: state.creation.books
+    books: state.creation.books,
+    loadingbook: state.creation.loadingbook
 });
 
 export default connect(
     mapStateToProps,
-    {getBooksCreated}
+    { getBooksCreated }
 )(BookList);

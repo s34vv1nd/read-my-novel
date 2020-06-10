@@ -11,6 +11,7 @@ import { AppName } from '../GlobalVariables.js';
 
 class Header extends Component {
     render() {
+
         return (
             <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
                 <Link to="/" className="navbar-brand">
