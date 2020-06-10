@@ -19,6 +19,17 @@ router.get('/', auth, async (req, res) => {
             .populate('genres', 'name').exec();
         console.log(books);
         res.status(200).json(books);
+        /*
+        response: res.data
+            books: [{
+                _id: ObjectId,
+                name: String,
+                genres: [{_id: ObjectId, name: String}],
+                completed: Boolean,
+                ratings: Number,
+                date_created: Date
+            }]
+        */
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
