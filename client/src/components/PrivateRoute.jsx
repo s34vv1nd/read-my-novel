@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 function PrivateRoute({ isAuthenticated, children, ...rest }) {
-
-
     return (
       <Route
         {...rest}
