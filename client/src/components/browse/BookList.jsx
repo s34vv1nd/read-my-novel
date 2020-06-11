@@ -1,5 +1,6 @@
 import React, { Component, Fragment, useEffect } from 'react';
 import { Row, Col, Button, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const BookList = ({
     books,
@@ -20,7 +21,7 @@ const BookList = ({
                 {books.map(book =>
                     <tr key={books.indexOf(book) + 1}>
                         <td>{books.indexOf(book) + 1}</td>
-                        <td>{book.name}</td>
+                        <td><Link to="#">{book.name}</Link></td>
                         <td>{book.genres.map(genre => `${genre['name'] || genre} `)}</td>
                         <td>{book.completed ? "Completed" : "Ongoing"}</td>
                         <td>{book.rating}</td>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button, Tabs, Tab } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-export default class Detail extends Component {
+export default class Book extends Component {
 
     constructor(props) {
         super();
