@@ -1,25 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const LibrarySchema = new Schema({
+const VoteSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
-        unique: false
     },
     book: {
         type: Schema.Types.ObjectId, 
         ref: 'book',
-        require: true,
-        unique: false
-    },
-    bookmark: {
-        type: Number, 
-        default: 0
+        required: true
     }
 }, {timestamps: true}); // timestamps add {createdAt: Date, updatedAt: Date}
 
-LibrarySchema.index({user: 1, book: 1}, {unique: true});
-
-module.exports = Library = mongoose.model('library', LibrarySchema, 'library');
+module.exports = Vote = mongoose.model('vote', VoteSchema, 'vote');

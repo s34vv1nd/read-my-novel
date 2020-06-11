@@ -1,25 +1,29 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const LibrarySchema = new Schema({
+const ReviewSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
-        unique: false
     },
     book: {
         type: Schema.Types.ObjectId, 
         ref: 'book',
-        require: true,
-        unique: false
+        required: true
     },
-    bookmark: {
-        type: Number, 
+    content: {
+        type: String,
+        required: true
+    },
+    upvote: {
+        type: Number,
+        default: 0
+    },
+    downvote: {
+        type: Number,
         default: 0
     }
 }, {timestamps: true}); // timestamps add {createdAt: Date, updatedAt: Date}
 
-LibrarySchema.index({user: 1, book: 1}, {unique: true});
-
-module.exports = Library = mongoose.model('library', LibrarySchema, 'library');
+module.exports = Review = mongoose.model('review', ReviewSchema, 'review');

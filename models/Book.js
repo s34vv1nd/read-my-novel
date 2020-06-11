@@ -22,11 +22,7 @@ const BookSchema = new mongoose.Schema({
     ratings: {
         type: Number,
         default: 0
-    },
-    date_created: {
-        type: Date,
-        default: Date.now
     }
-});
+}, {timestamps: true});// timestamps add {createdAt: Date, updatedAt: Date}
 
 module.exports = Book = mongoose.model('book', BookSchema, 'book');

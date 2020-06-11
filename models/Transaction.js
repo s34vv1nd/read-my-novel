@@ -6,16 +6,16 @@ const TransactionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
+        unique: false
     },
     chapter: {
         type: Schema.Types.ObjectId, 
         ref: 'chapter',
-        required: true
-    },
-    date_added: {
-        type: Date, 
-        default: Date.now
+        required: true,
+        unique: false
     }
-});
+}, {timestamps: true}); // timestamps add {createdAt: Date, updatedAt: Date}
+
+TransactionSchema.index({user: 1, chapter: 1}, {unique: true});
 
 module.exports = Transaction = mongoose.model('transaction', TransactionSchema, 'transaction');

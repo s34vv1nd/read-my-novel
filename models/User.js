@@ -18,12 +18,8 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0,
         min: 0
-    },
-    date: {
-        type: Date,
-        default: Date.now
     }
-});
+}, {timestamps: true}); // timestamps add {createdAt: Date, updatedAt: Date}
 
 
 module.exports = User = mongoose.model('user', UserSchema, 'user');

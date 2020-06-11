@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 const ChapterSchema = new mongoose.Schema({
     book: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'book'
+        ref: 'book',
+        unique: false
     },
     number: {
         type: Number,
         required: true,
-        min: 0
+        min: 0,
+        unique: false
     },
     name: {
         type: String,
@@ -26,14 +28,12 @@ const ChapterSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    date_created: {
-        type: Date,
-        default: Date.now
-    },
     date_published: {
         type: Date,
         default: null
     }
-});
+}, {timestamps: true});// timestamps add {createdAt: Date, updatedAt: Date}
+
+ChapterSchema.index({book: 1, number: 1}, {unique: true});
 
 module.exports = Chapter = mongoose.model('chapter', ChapterSchema, 'chapter');

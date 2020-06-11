@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const auth = require('../../middlewares/auth');
+const auth = require('../../../middlewares/auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
-const Book = require('../../models/Book');
-const Genre = require('../../models/Genre');
+const Book = require('../../../models/Book');
+const Genre = require('../../../models/Genre');
 
 // @route   GET api/creation
 // @desc    get books created by current user
@@ -20,14 +20,7 @@ router.get('/', auth, async (req, res) => {
         res.status(200).json(books);
         /*
         response: res.data
-            books: [{
-                _id: ObjectId,
-                name: String,
-                genres: [{_id: ObjectId, name: String}],
-                completed: Boolean,
-                ratings: Number,
-                date_created: Date
-            }]
+            books: [Book]
         */
     } catch (err) {
         console.error(err.message);
@@ -88,12 +81,7 @@ router.post('/', auth, async (req, res) => {
         await book.save();
 
         res.status(201).json({
-            book: {
-                name: book.name,
-                genres: genres,
-                completed: book.completed,
-                date_created: book.date_created
-            },
+            //book,
             success: true,
             message: 'Book created!',
             errors: {}
@@ -104,5 +92,7 @@ router.post('/', auth, async (req, res) => {
         res.status(500).send('Server Error');
     }
 })
+
+router.use('/chapter', require('./chapter'));
 
 module.exports = router;
