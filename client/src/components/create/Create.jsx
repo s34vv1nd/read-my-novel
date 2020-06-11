@@ -8,6 +8,7 @@ import NewBookForm from './NewBookForm';
 import { getBooksCreated } from '../../actions/creation';
 
 const Create = ({
+    books,
     isAuthenticated,
     getBooksCreated
 }) => {
@@ -22,18 +23,20 @@ const Create = ({
     return (
         <Fragment>
             <NewBookForm />
-            <BookList />
+            <BookList books={books} />
         </Fragment>
     )
 }
 
 
 Create.propTypes = {
-    isAuthenticated: PropTypes.bool
+    isAuthenticated: PropTypes.bool.isRequired,
+    books: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    books: state.creation.books,
 });
 
 export default connect(

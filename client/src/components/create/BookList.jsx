@@ -8,8 +8,6 @@ import Spinner from '../Spinner';
 
 const BookList = ({
     books,
-    loadingbook,
-    getBooksCreated
 }) => {
     return  (
         <Table responsive>
@@ -37,25 +35,4 @@ const BookList = ({
     );
 }
 
-
-// BookList.propTypes = {
-//     books: PropTypes.arrayOf(PropTypes.exact({
-//         author: PropTypes.string,
-//         name: PropTypes.string,
-//         genres: PropTypes.arrayOf(PropTypes.string),
-//         completed: PropTypes.bool,
-//         ratings: PropTypes.number,
-//         date_created: PropTypes.instanceOf(Date)
-//     })),
-//     getBooksCreated: PropTypes.func
-// };
-
-const mapStateToProps = state => ({
-    books: state.creation.books,
-    loadingbook: state.creation.loadingbook
-});
-
-export default connect(
-    mapStateToProps,
-    { getBooksCreated }
-)(BookList);
+export default BookList;

@@ -13,7 +13,7 @@ const Genre = require('../../models/Genre');
 // @desc    get books created by current user
 // @access  Private
 router.get('/', auth, async (req, res) => {
-    
+
     try {
         const books = await Book.find({ author: req.user.id })
             .populate('genres', 'name').exec();
@@ -53,7 +53,7 @@ router.post('/', auth, async (req, res) => {
         }
 
         let author = req.user.id;
-        let  name = req.body.name;
+        let name = req.body.name;
         let genres = req.body.genres;
 
         let book = await Book.findOne({ name: name })
@@ -77,7 +77,7 @@ router.post('/', auth, async (req, res) => {
                 status(400).
                 json({ errors: [{ msg: 'Invalid genres.' }] });
         }
-        
+
 
         book = new Book({
             author: author,
@@ -89,7 +89,7 @@ router.post('/', auth, async (req, res) => {
 
         res.status(201).json({
             book: {
-                name: book.name, 
+                name: book.name,
                 genres: genres,
                 completed: book.completed,
                 date_created: book.date_created

@@ -1,20 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const LibrarySchema = new Schema({
+const TransactionSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
     },
-    book: {
+    chapter: {
         type: Schema.Types.ObjectId, 
-        ref: 'book',
-        require: true
-    },
-    bookmark: {
-        type: Number, 
-        default: 0
+        ref: 'chapter',
+        required: true
     },
     date_added: {
         type: Date, 
@@ -22,4 +18,4 @@ const LibrarySchema = new Schema({
     }
 });
 
-module.exports = Library = mongoose.model('library', LibrarySchema, 'library');
+module.exports = Transaction = mongoose.model('transaction', TransactionSchema, 'transaction');

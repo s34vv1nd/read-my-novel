@@ -38,7 +38,7 @@ router.post('/', auth, async (req, res) => {
         if (!bookofid) {
             return res.status(400).json({ error: { msg: 'This book does not exist' } });
         }
-        if (bookofid.name !== book.name) {            
+        if (bookofid.name !== book.name) {
             return res.status(400).json({ error: { msg: 'Book name and id does not match' } });
         }
 
@@ -54,7 +54,7 @@ router.post('/', auth, async (req, res) => {
 
         await libraryInstance.save();
         console.log(libraryInstance);
-        
+
         let libraryInstance2 = await Library.findById(libraryInstance.id).populate('user', ['-password']).populate('book');
 
         res.status(201).json(libraryInstance2);
