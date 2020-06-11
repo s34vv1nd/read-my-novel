@@ -10,9 +10,9 @@ const Book = require('../../../../models/Book');
 const Genre = require('../../../../models/Genre');
 const Chapter = require('../../../../models/Chapter');
 
-// @route POST api/creation/chapter
-// @desc create new chapter
-// @access Private
+// @route   POST api/creation/chapter
+// @desc    create new chapter
+// @access  Private
 /*
     req.body: {
         book: id of book,
