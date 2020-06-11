@@ -14,10 +14,12 @@ export default function(state = initialState, action) {
     switch (type) {
         case GET_BOOKS_SUCCESS:
             return {
-                books: payload
+                books: payload,
+                genres: state.genres
             };
         case GET_GENRES_SUCCESS:
             return {
+                books: state.books,
                 genres: payload
             }
         default:
