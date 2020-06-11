@@ -29,15 +29,12 @@ router.post('/', auth, async (req, res) => {
         }
 
         const _book = await Book.findById(book);
-        console.log(_book.author);
-        console.log(req.user.id);
         if (!_book || !_book.author || !_book.author.equals(req.user.id)) {
             return res.status(400).json({errors: [{msg: 'Cannot create chapter'}]});
         }
         
         let number = await Chapter.find({book: book}).countDocuments();
         number += 1;
-        console.log(number);
         const chapter = new Chapter({
             book, number, name, content, price
         });

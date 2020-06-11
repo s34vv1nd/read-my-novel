@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { Container, Row, Col, Image, ListGroup, ListGroupItem } from 'react-bootstrap'
+import React, { Component, useEffect } from 'react';
+import { Container, Row, Col, Image, ListGroup, ListGroupItem } from 'react-bootstrap';
+import {connect} from 'react-redux';
 import {
     BrowserRouter as Router,
     Link,
