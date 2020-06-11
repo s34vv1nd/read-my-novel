@@ -154,6 +154,18 @@ router.put('/', auth, getBookById, async (req, res) => {
     }
 })
 
+// @route   DELETE api/creation
+// @desc    Delete book by id
+// @access  Private
+/*
+    req.body: {
+        book: {
+            id
+        }
+    }
+*/
+
+
 router.use('/chapter', require('./chapter'));
 
 module.exports = router;

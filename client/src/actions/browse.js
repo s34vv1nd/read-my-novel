@@ -8,7 +8,7 @@ import {
 
 //Get list of books
 
-export const loadBookBy = ({genres, status}) => async dispatch => {
+export const loadBookBy = (genres, status) => async dispatch => {
     try {
         const res = await axios.get('api/browse', {
             params: {
