@@ -20,9 +20,9 @@ class Browse extends Component {
         this.componentDidMount = this.componentDidMount.bind(this);
     }
 
-    componentDidMount() {
-        this.props.loadGenres();
-        this.props.loadBookBy();
+    async componentDidMount() {
+        await this.props.loadGenres();
+        await this.props.loadBookBy();
     }
 
     async onChange(e) {
