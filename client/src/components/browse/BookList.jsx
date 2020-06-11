@@ -9,8 +9,8 @@ const BookList = ({
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Book name</th>
-                    <th>Book genres</th>
+                    <th>Name</th>
+                    <th>Genres</th>
                     <th>Status</th>
                     <th>Rating</th>
                     <th>Created at</th>
