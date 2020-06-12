@@ -19,7 +19,7 @@ class Book extends Component {
 
     async componentDidMount() {
         await this.props.loadBook(this.props.match.params.bookid);
-        // console.log(this.props.book);
+        console.log(this.props.book);
     }
 
     async handleSelect(selectedTab) {
@@ -42,13 +42,11 @@ class Book extends Component {
                         <Col xs={12} md={4}>
                             <h2>Name: {this.props.book.name}</h2>
                             <ListGroup horizontal>
-                                <ListGroup.Item>Genre</ListGroup.Item>
-                                <ListGroup.Item>Completed</ListGroup.Item>
-                                <ListGroup.Item>#chapters</ListGroup.Item>
-                                <ListGroup.Item>Views</ListGroup.Item>
+                                <ListGroup.Item key="genre">{this.props.book.genres}</ListGroup.Item>
+                                <ListGroup.Item key="status">{this.props.book.completed}</ListGroup.Item>
                             </ListGroup>
-                            <p>Author: </p>
-                            <p>Rating: </p>
+                            <p>Author: {this.props.book.author}</p>
+                            <p>Rating: {this.props.book.ratings}</p>
                             <ButtonGroup>
                                 <Button variant="secondary">Read</Button>
                                 <Button variant="secondary">Add to library</Button>

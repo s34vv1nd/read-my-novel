@@ -10,7 +10,8 @@ import {
 
 export const loadBook = (bookID) => async dispatch => {
     try {
-        const res = await axios.get('api/book' + bookID)
+        const res = await axios.get('https::localhost:4000/api/book/' + bookID)
+        console.log(res.data);
         dispatch({
             type: GET_BOOK_SUCCESS,
             payload: res.data
@@ -24,7 +25,7 @@ export const loadBook = (bookID) => async dispatch => {
 
 export const loadChapter = (bookID, chapID) => async dispatch => {
     try {
-        const res = await axios.get('api/book' + bookID + '/' + chapID);
+        const res = await axios.get('https::localhost:4000/api/book/' + bookID + '/' + chapID);
         dispatch({
             type: GET_CHAPTER_SUCCESS,
             payload: res.data

@@ -20,7 +20,7 @@ export default function(state = initialState, action) {
         case GET_CHAPTER_SUCCESS:
             return {
                 book: payload.book,
-                chapters: payload.chapter
+                chapters: payload.chapters
             }
         default:
             return state;
