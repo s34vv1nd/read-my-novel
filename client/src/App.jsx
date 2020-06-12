@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { loadUser } from './actions/auth';
 import Alert from './components/Alert';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Home from './components/home/Home';
 import Login from './components/authentications/Login';
 import Register from './components/authentications/Register';
@@ -65,6 +66,7 @@ function App() {
                             <Register />
                         </Route>
                     </Switch>
+                    <Footer />
                 </div>
             </Router>
         </Provider>
