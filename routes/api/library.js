@@ -74,7 +74,7 @@ router.post('/', auth, getBookById, async (req, res) => {
     }
 })
 
-// @route   PATCH api/library
+// @route   PUT api/library
 // @desc    Update bookmark of 1 book from user's library
 // @access  Private
 /*
@@ -85,7 +85,7 @@ router.post('/', auth, getBookById, async (req, res) => {
         }
     }
 */
-router.patch('/', auth, getBookById, async (req, res) => {
+router.put('/', auth, getBookById, async (req, res) => {
     try {
         const bookid = req.book.id;
         const userid = req.user.id;

@@ -135,6 +135,4 @@ router.get('/:bookid/:chapid', getbook, getchapter, async (req, res, next) => {
     }
 })
 
-router.use(':bookid/rating', require('./ratings'));
-
 module.exports = router;
