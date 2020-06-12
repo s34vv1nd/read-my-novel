@@ -10,13 +10,14 @@ import {
 
 export const loadBook = (bookID) => async dispatch => {
     try {
-        const res = await axios.get('https::localhost:4000/api/book/' + bookID)
+        const res = await axios.get('http://localhost:4000/api/book/' + bookID)
         console.log(res.data);
         dispatch({
             type: GET_BOOK_SUCCESS,
             payload: res.data
         });
     } catch(err) {
+        console.error(err);
         dispatch({
             type: GET_BOOK_FAIL
         });

@@ -14,7 +14,7 @@ class Book extends Component {
         };
 
         this.handleSelect = this.handleSelect.bind(this);
-        this.componentDidMount = this.componentDidMount.bind(this);
+        //this.componentDidMount = this.componentDidMount.bind(this);
     }
 
     async componentDidMount() {
@@ -42,10 +42,10 @@ class Book extends Component {
                         <Col xs={12} md={4}>
                             <h2>Name: {this.props.book.name}</h2>
                             <ListGroup horizontal>
-                                <ListGroup.Item key="genre">{this.props.book.genres}</ListGroup.Item>
+                                <ListGroup.Item key="genre">{this.props.book.genres[0].name}</ListGroup.Item>
                                 <ListGroup.Item key="status">{this.props.book.completed}</ListGroup.Item>
                             </ListGroup>
-                            <p>Author: {this.props.book.author}</p>
+                            <p>Author: {this.props.book.author.username}</p>
                             <p>Rating: {this.props.book.ratings}</p>
                             <ButtonGroup>
                                 <Button variant="secondary">Read</Button>

@@ -4,7 +4,10 @@ import {
 } from '../actions/types';
 
 const initialState = {
-    book: {},
+    book: {
+        author: {},
+        genres: [{name: ''}]
+    },
     chapters: {}
 }
 
