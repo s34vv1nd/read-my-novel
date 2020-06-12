@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 import styles from './Rankings.module.css';
+// import './Rankings.module.css';
 import { loadRankings } from '../../actions/rankings';
 import { connect } from 'react-redux';
 
