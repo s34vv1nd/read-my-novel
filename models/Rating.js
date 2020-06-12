@@ -1,25 +1,27 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const TransactionSchema = new Schema({
+const RatingSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
         unique: false
     },
-    chapter: {
+    book: {
         type: Schema.Types.ObjectId, 
-        ref: 'chapter',
+        ref: 'book',
         required: true,
         unique: false
     },
-    coin: {
+    star: {
         type: Number,
+        min: 0,
+        max: 5,
         required: true
     }
 }, {timestamps: true}); // timestamps add {createdAt: Date, updatedAt: Date}
 
-TransactionSchema.index({user: 1, chapter: 1}, {unique: true});
+RatingSchema.index({user: 1, book: 1}, {unique: true});
 
-module.exports = Transaction = mongoose.model('transaction', TransactionSchema, 'transaction');
+module.exports = Rating = mongoose.model('rating', RatingSchema, 'rating');

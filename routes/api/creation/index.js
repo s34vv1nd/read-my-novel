@@ -7,8 +7,11 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
+const deleteBookById = require('../utils').deleteBookById;
+
 const Book = require('../../../models/Book');
 const Genre = require('../../../models/Genre');
+const Chapter = require('../../../models/Chapter');
 
 // @route   GET api/creation
 // @desc    get books created by current user
@@ -110,9 +113,9 @@ router.post('/', auth, async (req, res) => {
 router.put('/', auth, getBookById, async (req, res) => {
     try {
         if (!req.book.author.equals(req.user.id)) {
-            console.log(req.book._id);
-            console.log(req.user.id);
-            return res.status(400).json({ error: 'Invalid book', success: false });
+            console.log('Book id:   ', req.book._id);
+            console.log('Author id: ', req.user.id);
+            return res.status(400).json({ error: 'Invalid book/author', success: false });
         }
         const { name, genres, completed } = req.body.book;
 
@@ -164,6 +167,29 @@ router.put('/', auth, getBookById, async (req, res) => {
         }
     }
 */
+router.delete('/', auth, getBookById, async (req, res) => {
+    try {
+        // Check if user own this book
+        if (!req.book.author.equals(req.user.id)) {
+            console.log('Book id:   ', req.book._id);
+            console.log('Author id: ', req.user.id);
+            return res.status(400).json({ error: 'Invalid book/author', success: false });
+        }
+
+        try {
+            await deleteBookById(req.book.id);
+        }
+        catch (err) {
+            console.log(err);
+            return res.status(500).json({error: 'utils/deleteBookById failed.'})
+        }
+        return res.status(200).json({ success: true });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Server Error when delete book');
+    }
+})
 
 
 router.use('/chapter', require('./chapter'));

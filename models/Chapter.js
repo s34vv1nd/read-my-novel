@@ -28,7 +28,7 @@ const ChapterSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    date_published: {
+    publishedAt: {
         type: Date,
         default: null
     }
