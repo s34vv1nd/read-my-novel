@@ -27,7 +27,7 @@ const getbook = async (req, res, next) => {
     try {
         const bookid = req.params.bookid || '';
         try {
-            const book = await Book.findById(bookid).populate('genres').exec();
+            const book = await Book.findById(bookid).populate('genres').populate('author', '-password').exec();
             req.book = book;
             next();
         }
