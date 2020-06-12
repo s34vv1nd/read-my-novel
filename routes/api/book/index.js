@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const auth = require('../../middlewares/auth');
+const auth = require('../../../middlewares/auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
-const Book = require('../../models/Book');
-const Genre = require('../../models/Genre');
-const Library = require('../../models/Library');
-const Chapter = require('../../models/Chapter');
-const Transaction = require('../../models/Transaction');
+const Book = require('../../../models/Book');
+const Genre = require('../../../models/Genre');
+const Library = require('../../../models/Library');
+const Chapter = require('../../../models/Chapter');
+const Transaction = require('../../../models/Transaction');
 
 router.get('/', async (req, res) => {
     try {
@@ -118,6 +118,12 @@ router.get('/:bookid/:chapid', getbook, getchapter, async (req, res, next) => {
                 book: req.book,
                 chapter: await req.chapter.exec()
             });
+            /*
+                res.data: {
+                    book,
+                    chapter
+                }
+             */
         }
         else {
             return res.status(400).json({ errors: [{ msg: 'User need to pay for chapter' }] });
@@ -128,5 +134,7 @@ router.get('/:bookid/:chapid', getbook, getchapter, async (req, res, next) => {
         res.status(500).send('Server Error');
     }
 })
+
+router.use(':bookid/rating', require('./ratings'));
 
 module.exports = router;

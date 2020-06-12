@@ -16,7 +16,7 @@ const Chapter = require('../../models/Chapter');
 // @access  Private
 router.get('/', auth, async (req, res) => {
     try {
-        const libraryInstances = await Library.find({user: req.user.id});
+        const libraryInstances = await Library.find({ user: req.user.id });
         const ids = libraryInstances.map(x => x.book);
         const books = await Book.find().where('_id').in(ids).exec();
         res.status(200).json(books);
@@ -90,18 +90,18 @@ router.patch('/', auth, getBookById, async (req, res) => {
         const bookid = req.book.id;
         const userid = req.user.id;
         const chapnum = req.body.book.chapter;
-        const filter = {book: bookid, user: userid};
+        const filter = { book: bookid, user: userid };
 
         const libraryInstance = await Library.findOne(filter);
         if (!libraryInstance) {
-            return res.status(400).json({error: 'Book not in library', success: false});
+            return res.status(400).json({ error: 'Book not in library', success: false });
         }
-        const countChapters = await Chapter.find({book: bookid}).countDocuments();
+        const countChapters = await Chapter.find({ book: bookid }).countDocuments();
         if (!Number.isInteger(chapnum) || chapnum > countChapters || chapnum < 0) {
-            return res.status(400).json({error: 'Invalid chapter', success: false});
+            return res.status(400).json({ error: 'Invalid chapter', success: false });
         }
-        const newlibraryInstance = await Library.findOneAndUpdate(filter, {bookmark: chapnum}, {new: true});
-        res.status(200).json({newlibraryInstance, success: true});
+        const newlibraryInstance = await Library.findOneAndUpdate(filter, { bookmark: chapnum }, { new: true });
+        res.status(200).json({ newlibraryInstance, success: true });
     }
     catch (err) {
         console.log(err.message);
@@ -121,11 +121,11 @@ router.patch('/', auth, getBookById, async (req, res) => {
 */
 router.delete('/', auth, getBookById, async (req, res) => {
     try {
-        const libraryInstance = await Library.findOne({user: req.user.id, book: req.book.id});
+        const libraryInstance = await Library.findOne({ user: req.user.id, book: req.book.id });
         if (!libraryInstance) {
-            return res.status(400).json({error: 'Book not in library', success: false});
+            return res.status(400).json({ error: 'Book not in library', success: false });
         }
-        await Library.deleteOne({user: req.user.id, book: req.book.id});
+        await Library.deleteOne({ user: req.user.id, book: req.book.id });
         res.status(200).json({
             success: true
         })

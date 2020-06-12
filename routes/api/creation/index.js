@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
-const deleteBookById = require('../utils').deleteBookById;
+const deleteBookById = require('../utils/delete').deleteBookById;
 
 const Book = require('../../../models/Book');
 const Genre = require('../../../models/Genre');

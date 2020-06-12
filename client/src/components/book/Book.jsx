@@ -3,17 +3,45 @@ import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button } from 'reac
 import { connect } from 'react-redux';
 import ChapterList from './ChapterList';
 import { loadBook } from '../../actions/book';
+import {loadLibrary, addToLibrary, removeFromLibrary} from '../../actions/library';
 
 class Book extends Component {
 
     constructor(props) {
         super();
-        //this.componentDidMount = this.componentDidMount.bind(this);
+        this.state = {
+            inLibrary: false
+        }
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.onClickLibrary = this.onClickLibrary.bind(this);
     }
 
     async componentDidMount() {
-        await this.props.loadBook(this.props.match.params.bookid);
-        console.log(this.props.book);
+        const bookid = this.props.match.params.bookid;
+        await this.props.loadBook(bookid);
+        await this.props.loadLibrary();
+        if (this.props.books.filter(book => book._id == bookid).length > 0) {
+            // In library
+            await this.setState({inLibrary: true});
+        }
+        else {
+            // Not in library
+            await this.setState({inLibrary: false});
+        }
+    }
+
+    async onClickLibrary(e) {
+        const bookid = this.props.match.params.bookid;
+        if (this.state.inLibrary) {
+            if (removeFromLibrary(bookid)) {
+                await this.setState({inLibrary: false});
+            }
+        }
+        else {
+            if (addToLibrary(bookid)) {
+                await this.setState({inLibrary: true});
+            }
+        }
     }
 
     render() {
@@ -35,7 +63,7 @@ class Book extends Component {
                             <p>Rating: {this.props.book.ratings}</p>
                             <ButtonGroup>
                                 <Button variant="primary">Read</Button>
-                                <Button variant="primary">Add to library</Button>
+                                <Button variant="primary" onClick={this.onClickLibrary}>{this.state.inLibrary ? "Remove from library" : "Add to library"}</Button>
                             </ButtonGroup>
                         </Col>
                     </Row>
@@ -53,10 +81,11 @@ class Book extends Component {
 
 const mapStateToProps = state => ({
     book: state.book.book,
+    books: state.browse.books,
     chapters: state.book.chapters
 });
 
 export default connect(
     mapStateToProps,
-    { loadBook }
+    { loadBook, loadLibrary }
 )(Book);
