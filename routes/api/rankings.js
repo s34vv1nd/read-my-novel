@@ -8,4 +8,7 @@ const { check, validationResult } = require('express-validator');
 
 const Book = require('../../models/Book');
 
-// ....
+// @route   GET api/rankings
+// @desc    get top book rankings
+// @access  Public
+
