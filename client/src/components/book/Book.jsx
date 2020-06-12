@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button, Tabs, Tab } from 'react-bootstrap'
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
+import { loadBook } from '../../actions/book';
 
-export default class Book extends Component {
+class Book extends Component {
 
     constructor(props) {
         super();
@@ -12,12 +14,18 @@ export default class Book extends Component {
         };
 
         this.handleSelect = this.handleSelect.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
     }
 
-    handleSelect(selectedTab) {
+    async componentDidMount() {
+        await this.props.loadBook(this.props.match.params.bookid);
+        // console.log(this.props.book);
+    }
+
+    async handleSelect(selectedTab) {
         // The active tab must be set into the state so that
         // the Tabs component knows about the change and re-renders.
-        this.setState({
+        await this.setState({
             activeTab: selectedTab
         });
     }
@@ -32,7 +40,7 @@ export default class Book extends Component {
                             <Image src="" alt="Image" thumbnail />
                         </Col>
                         <Col xs={12} md={4}>
-                            <h2>{this.props.match.params.bookid}</h2>
+                            <h2>Name: {this.props.book.name}</h2>
                             <ListGroup horizontal>
                                 <ListGroup.Item>Genre</ListGroup.Item>
                                 <ListGroup.Item>Completed</ListGroup.Item>
@@ -97,3 +105,13 @@ export default class Book extends Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    book: state.book.book,
+    chapters: state.book.chapters
+});
+
+export default connect(
+    mapStateToProps,
+    { loadBook }
+)(Book);

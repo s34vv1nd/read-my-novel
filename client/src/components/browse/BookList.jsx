@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const BookList = ({
     books,
 }) => {
-    return  (
+    return (
         <Table responsive>
             <thead>
                 <tr>
@@ -21,7 +21,10 @@ const BookList = ({
                 {books.map(book =>
                     <tr key={books.indexOf(book) + 1}>
                         <td>{books.indexOf(book) + 1}</td>
-                        <td><Link to="#">{book.name}</Link></td>
+                        <td><Link to={{
+                            pathname: '/book/' + book._id,
+                            state: { id: book._id }
+                        }}>{book.name}</Link></td>
                         <td>{book.genres.map(genre => `${genre['name'] || genre} `)}</td>
                         <td>{book.completed ? "Completed" : "Ongoing"}</td>
                         <td>{book.rating}</td>

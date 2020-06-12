@@ -25,6 +25,7 @@ app.use('/api/browse', require('./routes/api/browse'));
 app.use('/api/library', require('./routes/api/library'));
 app.use('/api/book', require('./routes/api/book'));
 app.use('/api/genres', require('./routes/api/genres'));
+app.use('/api/book', require('./routes/api/book'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
