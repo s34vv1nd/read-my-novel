@@ -32,7 +32,7 @@ export default class Book extends Component {
                             <Image src="" alt="Image" thumbnail />
                         </Col>
                         <Col xs={12} md={4}>
-                            <h2>Name</h2>
+                            <h2>{this.props.match.params.bookid}</h2>
                             <ListGroup horizontal>
                                 <ListGroup.Item>Genre</ListGroup.Item>
                                 <ListGroup.Item>Completed</ListGroup.Item>

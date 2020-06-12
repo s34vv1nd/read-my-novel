@@ -13,6 +13,7 @@ import Create from './components/create/Create';
 import Rankings from './components/rankings/Rankings';
 import Library from './components/library/Library';
 import Notifications from './components/notifications/Notifications';
+import Book from './components/browse/Book';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './components/PrivateRoute';
@@ -42,6 +43,8 @@ function App() {
                         </Route>
                         <Route path="/rankings">
                             <Rankings />
+                        </Route>
+                        <Route path="/book/:bookid" component={Book}>
                         </Route>
 
                         <PrivateRoute path="/create">
