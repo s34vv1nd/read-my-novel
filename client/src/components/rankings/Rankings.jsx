@@ -1,124 +1,74 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import styles from './Rankings.module.css';
+import { loadRankings } from '../../actions/rankings';
+import { connect } from 'react-redux';
 
 
+class Rankings extends Component {
+    constructor() {
+        super();
+        this.state = {
+            
+        }
 
-export default class Rankings extends Component {
+        this.componentDidMount = this.componentDidMount.bind(this);
+    }
+
+    async componentDidMount() {
+        await this.props.loadRankings();
+    }
+
     render() {
         return (
             <>
                 <h2> Power Ranking</h2>
                 <Container>
-                    <Row>
-                        <Col xs={12} md={4} className={styles.topBookCol}>
+                    {this.props.books.map(book =>
+                        <Row className={styles.bookRow} key={this.props.books.indexOf(book) + 1}>
                             <Container className={styles.bookContainer}>
                                 <Row>
-                                    <Col >
-                                        <h4>1</h4>
+                                    <Col xs={9} md={1}> <h4>{this.props.books.indexOf(book) + 1}</h4>  </Col>
+                                    <Col xs={9} md={1}>
                                         <Image width="100" height="80" src="" alt="Image" thumbnail />
                                     </Col>
-                                </Row>
-                                <Row>
-                                    <Col >
-                                        <h4><Link to="#">Name</Link></h4>
-                                        <p>Author: </p>
-                                        <p>View: </p>
+                                    <Col xs={9} md={7}>
+                                        <h4><Link to={{
+                                            pathname: '/book/' + book._id,
+                                            state: { id: book._id }
+                                        }}>{book.name}</Link></h4>
+                                        <p>Author: {book.author.username}</p>
+                                        <p>Rating: {book.ratings} </p>
+
+                                    </Col>
+                                    <Col xs={9} md={3}>
+                                        <Link to={{
+                                            pathname: '/book/' + book._id,
+                                            state: { id: book._id }
+                                        }}><button type="button" class="btn btn-primary" >Read</button></Link>
                                         <button type="button" class="btn btn-primary">Vote</button>
-                                        <button type="button" class="btn btn-primary">Read</button>
+
                                     </Col>
                                 </Row>
+
                             </Container>
-                        </Col>
-                        <Col xs={12} md={4} className={styles.topBookCol}>
-                            <Container className={styles.bookContainer}>
-                                <Row>
-                                    <Col >
-                                        <h4>2</h4>
-                                        <Image width="100" height="80" src="" alt="Image" thumbnail />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col >
-                                        <h4><Link to="#">Name</Link></h4>
-                                        <p>Author: </p>
-                                        <p>View: </p>
-                                        <button type="button" class="btn btn-primary">Vote</button>
-                                        <button type="button" class="btn btn-primary">Read</button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </Col>
-                        <Col xs={12} md={4} className={styles.topBookCol}>
-                            <Container className={styles.bookContainer}>
-                                <Row>
-                                    <Col >
-                                        <h4>3</h4>
-                                        <Image width="100" height="80" src="" alt="Image" thumbnail />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col >
-                                        <h4><Link to="#">Name</Link></h4>
-                                        <p>Author: </p>
-                                        <p>View: </p>
-                                        <button type="button" class="btn btn-primary">Vote</button>
-                                        <button type="button" class="btn btn-primary">Read</button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </Col>
-                    </Row>
-                    <Row className={styles.bookRow}>
-                        <Container className={styles.bookContainer}>
-                            <Row>
-                                <Col xs={9} md={1}> <h4>4</h4>  </Col>
-                                <Col xs={9} md={1}>
-                                    <Image width="100" height="80" src="" alt="Image" thumbnail />
-                                </Col>
-                                <Col xs={9} md={7}>
-                                    <h4><Link to="#">Name</Link></h4>
-                                    <p>Author: </p>
-                                    <button type="button" class="btn btn-primary">Read</button>
-                                </Col>
-                                <Col xs={9} md={3}>
-                                    <p>View: </p>
-                                    <button type="button" class="btn btn-primary">Vote</button>
-
-                                </Col>
-                            </Row>
-
-                        </Container>
 
 
-                    </Row>
-                    <Row className={styles.bookRow}>
-                        <Container className={styles.bookContainer}>
-                            <Row>
-                                <Col xs={9} md={1}> <h4>5</h4>  </Col>
-                                <Col xs={9} md={1}>
-                                    <Image width="100" height="80" src="" alt="Image" thumbnail />
-                                </Col>
-                                <Col xs={9} md={7}>
-                                    <h4><Link to="#">Name</Link></h4>
-                                    <p>Author: </p>
-                                    <button type="button" class="btn btn-primary">Read</button>
-                                </Col>
-                                <Col xs={9} md={3}>
-                                    <p>View: </p>
-                                    <button type="button" class="btn btn-primary">Vote</button>
-
-                                </Col>
-                            </Row>
-
-                        </Container>
-
-
-                    </Row>
+                        </Row>
+                    )}
 
                 </Container>
             </>
         )
     }
 }
+
+const mapStateToProps = state => ({
+    books: state.rankings.books,
+});
+
+export default connect(
+    mapStateToProps,
+    { loadRankings }
+)(Rankings);
