@@ -6,9 +6,9 @@ import {
 const initialState = {
     book: {
         author: {},
-        genres: [{name: ''}]
+        genres: [{}]
     },
-    chapters: {}
+    chapters: []
 }
 
 export default function(state = initialState, action) {

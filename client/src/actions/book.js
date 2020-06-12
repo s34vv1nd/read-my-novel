@@ -3,7 +3,11 @@ import {
     GET_BOOK_SUCCESS, 
     GET_BOOK_FAIL,
     GET_CHAPTER_SUCCESS,
-    GET_CHAPTER_FAIL
+    GET_CHAPTER_FAIL,
+    ADD_BOOK_SUCCESS,
+    ADD_BOOK_FAIL,
+    GET_LIBRARY_SUCCESS,
+    GET_LIBRARY_FAIL
 } from './types';
 
 //Get list of books
@@ -26,7 +30,7 @@ export const loadBook = (bookID) => async dispatch => {
 
 export const loadChapter = (bookID, chapID) => async dispatch => {
     try {
-        const res = await axios.get('https::localhost:4000/api/book/' + bookID + '/' + chapID);
+        const res = await axios.get('http://localhost:4000/api/book/' + bookID + '/' + chapID);
         dispatch({
             type: GET_CHAPTER_SUCCESS,
             payload: res.data
@@ -37,4 +41,4 @@ export const loadChapter = (bookID, chapID) => async dispatch => {
         })
     }
 }
- 
+

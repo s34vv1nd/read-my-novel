@@ -1,33 +1,19 @@
-import React, { Component } from 'react';
-import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button, Tabs, Tab } from 'react-bootstrap'
+import React, { Component, Fragment } from 'react';
+import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button } from 'react-bootstrap'
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
+import ChapterList from './ChapterList';
 import { loadBook } from '../../actions/book';
 
 class Book extends Component {
 
     constructor(props) {
         super();
-        this.state = {
-            // Takes active tab from props if it is defined there
-            activeTab: props.activeTab || 1
-        };
-
-        this.handleSelect = this.handleSelect.bind(this);
         //this.componentDidMount = this.componentDidMount.bind(this);
     }
 
     async componentDidMount() {
         await this.props.loadBook(this.props.match.params.bookid);
         console.log(this.props.book);
-    }
-
-    async handleSelect(selectedTab) {
-        // The active tab must be set into the state so that
-        // the Tabs component knows about the change and re-renders.
-        await this.setState({
-            activeTab: selectedTab
-        });
     }
 
     render() {
@@ -40,64 +26,25 @@ class Book extends Component {
                             <Image src="" alt="Image" thumbnail />
                         </Col>
                         <Col xs={12} md={4}>
-                            <h2>Name: {this.props.book.name}</h2>
+                            <h3>Name: {this.props.book.name}</h3>
                             <ListGroup horizontal>
-                                <ListGroup.Item key="genre">{this.props.book.genres[0].name}</ListGroup.Item>
-                                <ListGroup.Item key="status">{this.props.book.completed}</ListGroup.Item>
+                                {this.props.book.genres.map(genre => <ListGroup.Item key={genre.name}>{genre.name}</ListGroup.Item>)}
+                                <ListGroup.Item key="status">{this.props.book.completed == true ? "Completed" : "Ongoing"}</ListGroup.Item>
                             </ListGroup>
                             <p>Author: {this.props.book.author.username}</p>
                             <p>Rating: {this.props.book.ratings}</p>
                             <ButtonGroup>
-                                <Button variant="secondary">Read</Button>
-                                <Button variant="secondary">Add to library</Button>
+                                <Button variant="primary">Read</Button>
+                                <Button variant="primary">Add to library</Button>
                             </ButtonGroup>
                         </Col>
                     </Row>
                 </Container>
-                <Tabs activeKey={this.state.activeTab} onSelect={this.handleSelect}>
-                    <Tab eventKey={1} title="About">
-                        <h4>Overview</h4>
-                        <h4>Most views</h4>
-                        <ListGroup horizontal>
-                            <ListGroup.Item>
-                                <p><Link to=''>Username</Link></p>
-                                <p>#views</p>
-                            </ListGroup.Item>
-                            <ListGroup.Item>
-                                <p><Link to=''>Username</Link></p>
-                                <p>#views</p>
-                            </ListGroup.Item>
-                            <ListGroup.Item>
-                                <p><Link to=''>Username</Link></p>
-                                <p>#views</p>
-                            </ListGroup.Item>
-                        </ListGroup>
-                    </Tab>
-                    <Tab eventKey={2} title="Table of Contents">
-                        <Container>
-                            <Row>
-                                <Col xs={9} md={4}>
-                                    <Link to=''>Chapter</Link>
-                                    <p>Date</p>
-                                </Col>
-                                <Col xs={9} md={4}>
-                                    <Link to=''>Chapter</Link>
-                                    <p>Date</p>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col xs={9} md={4}>
-                                    <Link to=''>Chapter</Link>
-                                    <p>Date</p>
-                                </Col>
-                                <Col xs={9} md={4}>
-                                    <Link to=''>Chapter</Link>
-                                    <p>Date</p>s
-                                </Col>
-                            </Row>
-                        </Container>
-                    </Tab>
-                </Tabs>
+
+                <Fragment>
+                    <ChapterList chapters={this.props.chapters} bookid={this.props.match.params.bookid} />
+                </Fragment>
+
 
             </>
         );
