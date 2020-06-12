@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button } from 'react-bootstrap'
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom'
 import ChapterList from './ChapterList';
 import { loadBook } from '../../actions/book';
-import {loadLibrary, addToLibrary, removeFromLibrary} from '../../actions/library';
+import { loadLibrary, addToLibrary, removeFromLibrary } from '../../actions/library';
 
 class Book extends Component {
 
@@ -22,11 +23,11 @@ class Book extends Component {
         await this.props.loadLibrary();
         if (this.props.books.filter(book => book._id == bookid).length > 0) {
             // In library
-            await this.setState({inLibrary: true});
+            await this.setState({ inLibrary: true });
         }
         else {
             // Not in library
-            await this.setState({inLibrary: false});
+            await this.setState({ inLibrary: false });
         }
     }
 
@@ -34,12 +35,12 @@ class Book extends Component {
         const bookid = this.props.match.params.bookid;
         if (this.state.inLibrary) {
             if (removeFromLibrary(bookid)) {
-                await this.setState({inLibrary: false});
+                await this.setState({ inLibrary: false });
             }
         }
         else {
             if (addToLibrary(bookid)) {
-                await this.setState({inLibrary: true});
+                await this.setState({ inLibrary: true });
             }
         }
     }
@@ -54,7 +55,11 @@ class Book extends Component {
                             <Image src="" alt="Image" thumbnail />
                         </Col>
                         <Col xs={12} md={4}>
-                            <h3>Name: {this.props.book.name}</h3>
+                            {/* <h3><Link to={{
+                                pathname: '/book/' + this.props.match.params.bookid + '/' + this.props.chapters[0]._id,
+                                state: { id: this.props.chapters[0]._id }
+                            }}>Name: {this.props.book.name}</Link></h3> */}
+                            {console.log(this.props.chapters[0]._id)}
                             <ListGroup horizontal>
                                 {this.props.book.genres.map(genre => <ListGroup.Item key={genre.name}>{genre.name}</ListGroup.Item>)}
                                 <ListGroup.Item key="status">{this.props.book.completed == true ? "Completed" : "Ongoing"}</ListGroup.Item>
@@ -62,7 +67,10 @@ class Book extends Component {
                             <p>Author: {this.props.book.author.username}</p>
                             <p>Rating: {this.props.book.ratings}</p>
                             <ButtonGroup>
-                                <Button variant="primary">Read</Button>
+                                {/* <Link to={{
+                                    pathname: '/book/' + this.props.match.params.bookid + '/' + this.props.chapters[0]._id,
+                                    state: { id: this.props.chapters[0]._id }
+                                }}><Button variant="primary">Read</Button></Link> */}
                                 <Button variant="primary" onClick={this.onClickLibrary}>{this.state.inLibrary ? "Remove from library" : "Add to library"}</Button>
                             </ButtonGroup>
                         </Col>

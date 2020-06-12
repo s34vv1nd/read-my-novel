@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styles from './Rankings.module.css';
 import { loadRankings } from '../../actions/rankings';
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ class Rankings extends Component {
     constructor() {
         super();
         this.state = {
-            
+
         }
 
         this.componentDidMount = this.componentDidMount.bind(this);

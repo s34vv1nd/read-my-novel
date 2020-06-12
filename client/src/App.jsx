@@ -15,6 +15,7 @@ import Rankings from './components/rankings/Rankings';
 import Library from './components/library/Library';
 import Notifications from './components/notifications/Notifications';
 import Book from './components/book/Book';
+import Chapter from './components/book/Chapter';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './components/PrivateRoute';
@@ -46,6 +47,8 @@ function App() {
                             <Rankings />
                         </Route>
                         <Route exact path="/book/:bookid" component={Book}>
+                        </Route>
+                        <Route exact path="./book/:bookid/:chapid" component={Chapter}>
                         </Route>
 
                         <PrivateRoute path="/create">

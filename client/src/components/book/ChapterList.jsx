@@ -25,15 +25,16 @@ const ChapterList = ({
                         <td>{chapters.indexOf(chapter) + 1}</td>
                         <td>{chapter.number}</td>
                         <td><Link to={{
-                            pathname: '/book/' + bookid + '/chapter/' + chapter._id,
+                            pathname: '/book/' + bookid + '/' + chapter._id,
                             state: { id: chapter._id }
                         }}>{chapter.name}</Link></td>
                         <td>{chapter.published ? "Publish" : "Not publish"}</td>
                         <td>{chapter.createdAt}</td>
                         <td>{chapter.updatedAt}</td>
-                        <td><Button onClick={function () {
-                            
-                        }}>Read chapter</Button></td>
+                        <td><Link to={{
+                            pathname: '/book/' + bookid + '/' + chapter._id,
+                            state: { id: chapter._id }
+                        }}><Button>Read chapter</Button></Link></td>
                     </tr>)
                 }
             </tbody>
