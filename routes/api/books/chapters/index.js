@@ -21,7 +21,10 @@ const Transaction = require('../../../../models/Transaction');
 // @access  Semi
 router.get('/', findBookById, async (req, res, next) => {
     try {
-        if (req.params.published === false) next();
+        if (req.params.published === false) {
+            console.log(req.params.published);
+            next();
+        }
         const chapters = await Chapter.find({book: req.book._id, published: true}, '-content').sort('number');
         return res.status(200).json(chapters);
     }

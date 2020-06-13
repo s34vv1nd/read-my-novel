@@ -21,7 +21,7 @@ class Book extends Component {
         const bookid = this.props.match.params.bookid;
         await this.props.loadBook(bookid);
         await this.props.loadLibrary();
-        if (this.props.books.filter(book => book._id == bookid).length > 0) {
+        if (this.props.books && this.props.books.filter(book => book._id == bookid).length > 0) {
             // In library
             await this.setState({ inLibrary: true });
         }

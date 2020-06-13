@@ -11,7 +11,7 @@ const Book = require('../../models/Book');
 const Library = require('../../models/Library');
 const Chapter = require('../../models/Chapter');
 
-// @route   GET api/libray
+// @route   GET api/library?
 // @desc    Get books from  user's library
 // @access  Private
 router.get('/', auth, async (req, res) => {
