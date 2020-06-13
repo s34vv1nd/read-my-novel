@@ -7,7 +7,7 @@ import {
 //Get list of books
 export const loadRankings = () => async dispatch => {
     try {
-        const res = await axios.get('api/browse', {
+        const res = await axios.get('api/books', {
             params: {
                 sortBy: 'rating'
             }
