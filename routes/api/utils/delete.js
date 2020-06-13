@@ -102,7 +102,7 @@ const deleteBookById = async bookid => {
         await deleteReviewByBookId(bookid);
         await deleteRatingByBookId(bookid);
         await deleteVoteByBookId(bookid);
-        await Book.findOneAndDelete({ _id: bookid });
+        console.log(await Book.findOneAndDelete({ _id: bookid }));
     }
     catch (err) {
         throw err;

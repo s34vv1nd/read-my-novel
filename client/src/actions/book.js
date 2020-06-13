@@ -10,10 +10,11 @@ import {
 
 export const loadBook = (bookID) => async dispatch => {
     try {
-        const res = await axios.get('api/book/' + bookID)
+        const res_book = await axios.get('api/books/' + bookID);
+        const res_chapters = await axios.get('api/books/' + bookID + '/chapters');
         dispatch({
             type: GET_BOOK_SUCCESS,
-            payload: res.data
+            payload: {book: res_book.data, chapters: res_chapters.data}
         });
     } catch(err) {
         console.error(err);
@@ -25,10 +26,11 @@ export const loadBook = (bookID) => async dispatch => {
 
 export const loadChapter = (bookID, chapID) => async dispatch => {
     try {
-        const res = await axios.get('api/book/' + bookID + '/' + chapID);
+        const res_book = await axios.get('api/books/' + bookID);
+        const res_chapter = await axios.get('api/books/' + bookID + '/chapters/' + chapID);
         dispatch({
             type: GET_CHAPTER_SUCCESS,
-            payload: res.data
+            payload: {book: res_book.data, chapters: [res_chapter.data]}
         });
     } catch(err) {
         dispatch({

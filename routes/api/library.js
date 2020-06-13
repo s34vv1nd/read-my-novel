@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const auth = require('../../middlewares/auth');
-const getBookById = require('../../middlewares/getBookById');
+const findBookById = require('../../middlewares/book').findBookById;
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
@@ -40,7 +40,7 @@ router.get('/', auth, async (req, res) => {
         }
     }
 */
-router.post('/', auth, getBookById, async (req, res) => {
+router.post('/', auth, findBookById, async (req, res) => {
     try {
         const bookid = req.book.id;
         const userid = req.user.id;
@@ -85,7 +85,7 @@ router.post('/', auth, getBookById, async (req, res) => {
         }
     }
 */
-router.put('/', auth, getBookById, async (req, res) => {
+router.put('/', auth, findBookById, async (req, res) => {
     try {
         const bookid = req.book.id;
         const userid = req.user.id;
@@ -119,7 +119,7 @@ router.put('/', auth, getBookById, async (req, res) => {
         }
     }
 */
-router.delete('/', auth, getBookById, async (req, res) => {
+router.delete('/', auth, findBookById, async (req, res) => {
     try {
         const libraryInstance = await Library.findOne({ user: req.user.id, book: req.book.id });
         if (!libraryInstance) {

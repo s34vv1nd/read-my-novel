@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const auth = require('../../middlewares/auth');
-const getBookById = require('../../middlewares/getBookById');
+const findBookById = require('../../middlewares/book').findBookById;
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
@@ -23,7 +23,7 @@ const Rating = require('../../models/Rating');
     });
     // res.data is a number from 0 to 5 (0 is unrated)
 */
-router.get('/', getBookById, async (req, res, next) => {
+router.get('/', findBookById, async (req, res, next) => {
     try {
         const { user, book } = req.query;
         if (!user) return next();
@@ -56,7 +56,7 @@ router.get('/', getBookById, async (req, res, next) => {
     });
     // res.data is true/false (success/failure)
 */
-router.put('/', auth, getBookById, async (req, res) => {
+router.put('/', auth, findBookById, async (req, res) => {
     try {
         const book = req.book.id;
         const user = req.user.id;

@@ -10,7 +10,7 @@ import {
 
 export const loadBookBy = (genres, status) => async dispatch => {
     try {
-        const res = await axios.get('api/browse', {
+        const res = await axios.get('api/books', {
             params: {
                 genres: genres,
                 status: status,
