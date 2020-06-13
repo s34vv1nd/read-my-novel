@@ -55,11 +55,14 @@ class Book extends Component {
                             <Image src="" alt="Image" thumbnail />
                         </Col>
                         <Col xs={12} md={4}>
-                            {/* <h3><Link to={{
-                                pathname: '/book/' + this.props.match.params.bookid + '/' + this.props.chapters[0]._id,
-                                state: { id: this.props.chapters[0]._id }
-                            }}>Name: {this.props.book.name}</Link></h3> */}
-                            {console.log(this.props.chapters[0]._id)}
+                            {
+                                (this.props.chapters && this.props.chapters[0]) ?
+                                    <h3><Link to={{
+                                        pathname: '/book/' + this.props.match.params.bookid + '/' + this.props.chapters[0]._id,
+                                    }}>Name: {this.props.book.name}</Link></h3>
+                                : 
+                                    null
+                            }
                             <ListGroup horizontal>
                                 {this.props.book.genres.map(genre => <ListGroup.Item key={genre.name}>{genre.name}</ListGroup.Item>)}
                                 <ListGroup.Item key="status">{this.props.book.completed == true ? "Completed" : "Ongoing"}</ListGroup.Item>
