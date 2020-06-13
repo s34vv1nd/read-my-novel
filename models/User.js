@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    avatar: {
+        data: Buffer,
+        contentType: String
+    },
     coin: {
         type: Number,
         default: 0,

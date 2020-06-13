@@ -11,6 +11,14 @@ const BookSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    cover: {
+        data: Buffer,
+        contentType: String
+    },
+    banner: {
+        data: Buffer,
+        contentType: String
+    },
     genres: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'genre'
