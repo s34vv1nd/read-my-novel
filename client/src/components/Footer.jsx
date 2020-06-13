@@ -6,12 +6,11 @@ import { Link } from 'react-router-dom';
 import './Footer.css';
 
 
-
 export default class Footer extends Component {
     render() {
 
         return (
-            <div class="jumbotron bg-secondary text-white ">
+            <div class="jumbotron bg-secondary text-white" style={{marginTop: '50px'}}>
                 <div class="row">
                     <div class="col-sm-6">
                         <h3> READ MY NOVEL</h3>
