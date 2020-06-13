@@ -1,11 +1,3 @@
-/* h2{
-    text-align: center;
-}
-h4{
-    color: blue;
-} */
-
-
 .topBookCol{
     padding: 10px;
     text-align: center;
@@ -17,5 +9,8 @@ h4{
 }
 
 .bookContainer{
-    background-color: lightcyan;
+    background-color: white;
+    border: ridge;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }

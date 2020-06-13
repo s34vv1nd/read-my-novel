@@ -6,7 +6,7 @@ export default class Recommended extends Component {
     render() {
         return (
             <div class="row" style={{ border: 'ridge', backgroundColor: 'white' }}>
-                <div class="col-sm-4">
+                <div class="col-md-4">
                     <div class="card" style={{ marginTop: '50px' }}>
                         <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                         <div class="card-body">
@@ -16,9 +16,9 @@ export default class Recommended extends Component {
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-md-8">
                     <div class="row" style={{ marginTop: '20px' }}>
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="card" >
                                 <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                 <div class="card-body">
@@ -28,7 +28,7 @@ export default class Recommended extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="card" >
                                 <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                 <div class="card-body">
@@ -38,7 +38,7 @@ export default class Recommended extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="card" >
                                 <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                 <div class="card-body">
@@ -48,7 +48,7 @@ export default class Recommended extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="card" >
                                 <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                 <div class="card-body">
@@ -60,7 +60,7 @@ export default class Recommended extends Component {
                         </div>
                     </div>
                     <div class="row" style={{ marginTop: '20px', marginBottom: '20px' }}>
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="card" >
                                 <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                 <div class="card-body">
@@ -70,7 +70,7 @@ export default class Recommended extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="card" >
                                 <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                 <div class="card-body">
@@ -80,7 +80,7 @@ export default class Recommended extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="card" >
                                 <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                 <div class="card-body">
@@ -90,7 +90,7 @@ export default class Recommended extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="card" >
                                 <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                 <div class="card-body">

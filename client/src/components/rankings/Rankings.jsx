@@ -24,19 +24,17 @@ class Rankings extends Component {
     render() {
         return (
             <>
-                <h2> Power Ranking</h2>
+                <h2 style={{textAlign:'center', marginTop:'20px'}}> Power Ranking</h2>
                 <Container>
                     {this.props.books.map(book =>
-                        // <Row className={styles.bookRow} key={this.props.books.indexOf(book) + 1}>
                         <Row className="bookRow" key={this.props.books.indexOf(book) + 1}>
-                            {/* <Container className={styles.bookContainer}> */}
                             <Container className="bookContainer">
                                 <Row>
-                                    <Col xs={9} md={1}> <h4>{this.props.books.indexOf(book) + 1}</h4>  </Col>
-                                    <Col xs={9} md={1}>
+                                    <Col xs={8} md={1}> <h4 style={{color:'blue'}}>{this.props.books.indexOf(book) + 1}</h4>  </Col>
+                                    <Col xs={8} md={1}>
                                         <Image width="100" height="80" src="" alt="Image" thumbnail />
                                     </Col>
-                                    <Col xs={9} md={7}>
+                                    <Col xs={8} md={8}>
                                         <h4><Link to={{
                                             pathname: '/book/' + book._id,
                                             state: { id: book._id }
@@ -45,7 +43,7 @@ class Rankings extends Component {
                                         <p>Rating: {book.ratings} </p>
 
                                     </Col>
-                                    <Col xs={9} md={3}>
+                                    <Col xs={8} md={2}>
                                         <Link to={{
                                             pathname: '/book/' + book._id,
                                             state: { id: book._id }

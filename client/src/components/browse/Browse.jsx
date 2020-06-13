@@ -38,7 +38,7 @@ class Browse extends Component {
         
         return (
             <>
-                <h2>Novels Genre</h2>
+                <h2 style={{textAlign:'center', marginTop:'20px'}}>Novels Genre</h2>
                 <Container>
                     <Row>
                         <Col xs={12} md={4}>
