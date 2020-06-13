@@ -16,7 +16,6 @@ const Library = require('../../models/Library');
 router.get('/', async (req, res) => {
     try {
         const genres = await Genre.find();
-        console.log(genres);
         res.status(200).json(genres);
     }
     catch (err) {

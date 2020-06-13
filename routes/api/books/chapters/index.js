@@ -16,14 +16,14 @@ const Chapter = require('../../../../models/Chapter');
 const Transaction = require('../../../../models/Transaction');
 
 
-// @route   GET api/books/:bookid/chapters
+// @route   GET api/books/:bookid/chapters?published=true
 // @desc    get chapters of a book
 // @access  Semi
 router.get('/', findBookById, async (req, res, next) => {
     try {
-        const chapters = await Chapter.find({book: req.book._id, published: true}, '-content');
-        res.body = chapters;
-        next();
+        if (req.params.published === false) next();
+        const chapters = await Chapter.find({book: req.book._id, published: true}, '-content').sort('number');
+        return res.status(200).json(chapters);
     }
     catch (err) {
         console.error(err);
@@ -32,11 +32,10 @@ router.get('/', findBookById, async (req, res, next) => {
 }, auth, async (req, res) => {
     try {
         if (req.book.author.equals(req.user.id)) {
-            const chapters = await Chapter.find({book: req.book._id, published: false}, '-content');
-            chapters.forEach(chapter => res.body.push(chapter));
+            const chapters = await Chapter.find({book: req.book._id}, '-content').sort('number');
+            return res.status(200).json(chapters);
         }
-        res.body.sort((a, b) => a.number - b.number);
-        return res.status(200).json(res.body);
+        return res.status(400).send('Get chapters unauthorized');
     }
     catch (err) {
         console.error(err);
