@@ -13,7 +13,7 @@ class Library extends Component {
         }
 
         this.componentDidMount = this.componentDidMount.bind(this);
-
+        this.onClickRemove = this.onClickRemove.bind(this);
     }
 
     async componentDidMount() {
@@ -21,11 +21,13 @@ class Library extends Component {
     }
 
     async onClickRemove(e) {
+        e.preventDefault();
         await this.setState({
             bookid: e.target.value
         });
 
-        await this.props.removeFromLibrary(this.state.bookid);
+        await removeFromLibrary(this.state.bookid);
+        await this.props.loadLibrary();
     }
 
     render() {
@@ -82,5 +84,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { loadLibrary, removeFromLibrary }
+    { loadLibrary }
 )(Library);

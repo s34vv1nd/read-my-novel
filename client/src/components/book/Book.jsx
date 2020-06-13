@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import ChapterList from './ChapterList';
 import { loadBook } from '../../actions/book';
-import { loadLibrary, addToLibrary, removeFromLibrary } from '../../actions/library';
+import { isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/library';
 
 class Book extends Component {
 
@@ -20,8 +20,8 @@ class Book extends Component {
     async componentDidMount() {
         const bookid = this.props.match.params.bookid;
         await this.props.loadBook(bookid);
-        await this.props.loadLibrary();
-        if (this.props.books && this.props.books.filter(book => book._id == bookid).length > 0) {
+        const inLibrary = await isInLibrary(bookid);
+        if (inLibrary === true) {
             // In library
             await this.setState({ inLibrary: true });
         }
@@ -32,14 +32,16 @@ class Book extends Component {
     }
 
     async onClickLibrary(e) {
+        e.preventDefault();
         const bookid = this.props.match.params.bookid;
-        if (this.state.inLibrary) {
-            if (removeFromLibrary(bookid)) {
+        const inLibrary = await isInLibrary(bookid);
+        if (inLibrary) {
+            if (await removeFromLibrary(bookid)) {
                 await this.setState({ inLibrary: false });
             }
         }
         else {
-            if (addToLibrary(bookid)) {
+            if (await addToLibrary(bookid)) {
                 await this.setState({ inLibrary: true });
             }
         }
@@ -93,10 +95,11 @@ class Book extends Component {
 const mapStateToProps = state => ({
     book: state.book.book,
     books: state.browse.books,
-    chapters: state.book.chapters
+    chapters: state.book.chapters,
+    user: state.auth.user
 });
 
 export default connect(
     mapStateToProps,
-    { loadBook, loadLibrary }
+    { loadBook, isInLibrary }
 )(Book);

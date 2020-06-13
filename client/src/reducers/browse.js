@@ -33,11 +33,6 @@ export default function(state = initialState, action) {
                 ...state,
                 books: payload
             }
-        case GET_LIBRARY_FAIL:
-            return {
-                ...state,
-                books: null
-            }
         default:
             return state;
     }

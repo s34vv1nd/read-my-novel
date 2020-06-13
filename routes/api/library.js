@@ -12,22 +12,28 @@ const Book = require('../../models/Book');
 const Library = require('../../models/Library');
 const Chapter = require('../../models/Chapter');
 
-// @route   GET api/library?
+// @route   GET api/library?bookid=
 // @desc    Get books from  user's library
 // @access  Private
 router.get('/', auth, async (req, res) => {
     try {
-        const libraryInstances = await Library.find({ user: req.user.id });
+        const book = req.query.bookid;
+        const filter = {user: req.user.id};
+        if (book) filter.book = book;
+        const libraryInstances = await Library.find(filter);
         const ids = libraryInstances.map(x => x.book);
-        const books = await Book.find().where('_id').in(ids).exec();
-        res.status(200).json(books);
+        
+        const books = await Book.find().where('_id').in(ids)
+            .populate('genres')
+            .populate('author', '-password');
+        return res.status(200).json({books, success: true});
         /*
             res.data = books = [{Book}]
         */
     }
     catch (err) {
         console.log(err.message);
-        res.status(500).send('Server Error when get user library');
+        return res.status(500).send('Server Error when get user library');
     }
 })
 
@@ -41,11 +47,12 @@ router.get('/', auth, async (req, res) => {
         }
     }
 */
-router.post('/', auth, findBookById, async (req, res) => {
+router.post('/', auth, async (req, res) => {
     try {
-        const bookid = req.book.id;
+        const bookid = req.body.book.id;
         const userid = req.user.id;
-        const libraryInstance = await Library.findOne({ user: userid, book: bookid }).exec();
+        let libraryInstance = await Library.findOne({ user: userid, book: bookid }).exec();
+
         if (libraryInstance) {
             return res.status(400).json({ error: { msg: 'This book is already in library' } });
         }
@@ -57,11 +64,11 @@ router.post('/', auth, findBookById, async (req, res) => {
 
         await libraryInstance.save();
 
-        const libraryInstance2 = await Library.findById(libraryInstance.id).populate('user', ['-password']).populate('book');
-        const newval = (libraryInstance2.book.collections += 1);
-        const user = await Book.findByIdAndUpdate(req.user.id, {collections: newval});
+        let libraryInstance2 = await Library.findById(libraryInstance.id).populate('user', ['-password']).populate('book');
+        let newval = (libraryInstance2.book.collections += 1);
+        await Book.updateOne({ _id: bookid }, { collections: newval });
 
-        res.status(201).json(libraryInstance2);
+        res.status(201).json({libraryInstance2, success: true});
         /*
             res.data: {
                 _id,
@@ -88,7 +95,7 @@ router.post('/', auth, findBookById, async (req, res) => {
         }
     }
 */
-router.put('/', auth, findBookById, async (req, res) => {
+router.put('/', auth, async (req, res) => {
     try {
         const bookid = req.book.id;
         const userid = req.user.id;
@@ -112,25 +119,21 @@ router.put('/', auth, findBookById, async (req, res) => {
     }
 })
 
-// @route   DELETE api/library
+// @route   DELETE api/library?bookid=
 // @desc    Delete 1 book from user's library
 // @access  Private
 /*
-    req.body: {
-        book: {
-            id
-        }
-    }
+    
 */
-router.delete('/', auth, findBookById, async (req, res) => {
+router.delete('/', auth, async (req, res) => {
     try {
-        const libraryInstance = await Library.findOne({ user: req.user.id, book: req.book.id });
+        const libraryInstance = await Library.findOne({ user: req.user.id, book: req.query.bookid });
         if (!libraryInstance) {
-            return res.status(400).json({ error: 'Book not in library', success: false });
+            return res.status(400).send('Book not in library');
         }
-        await Library.deleteOne({ user: req.user.id, book: req.book.id });
+        await Library.deleteOne({ user: req.user.id, book: req.query.bookid });
         const user = await User.findById(req.user.id, 'collections');
-        await User.findByIdAndUpdate(req.user.id, {collections: user.collections});
+        await User.findByIdAndUpdate(req.user.id, { collections: user.collections });
         res.status(200).json({
             success: true
         })

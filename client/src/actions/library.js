@@ -11,40 +11,57 @@ import {
 export const loadLibrary = () => async dispatch => {
     try {
         const res = await axios.get('api/library');
-
-        if (res.statusCode >= 400) {
+        if (res.data.success) {
+            dispatch({
+                type: GET_LIBRARY_SUCCESS,
+                payload: res.data.books
+            });
+        }
+        else {
             dispatch({
                 type: GET_LIBRARY_FAIL
             })
         }
-        else {
-            dispatch({
-                type: GET_LIBRARY_SUCCESS,
-                payload: res.data
-            })
-        }
     }
     catch (err) {
-        console.error(err);
         dispatch({
             type: GET_LIBRARY_FAIL
         })
     }
 }
 
+export const isInLibrary = async (bookid) => {
+    try {
+        const res = await axios.get('api/library', {
+            params: {
+                bookid: bookid
+            }
+        });
+        if (res.data.success) {
+            return res.data.books.length > 0;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        return false;
+    }
+}
+
 export const addToLibrary = async (bookid) => {
     try {
+        //console.log('add ', bookid);
         const res = await axios.post('api/library', {
             book: {
                 id: bookid
             }
         });
-        if (res.statusCode >= 400) {
-            return false;
+        if (res.data.success) {
+            return true;
         }
         else {
-            loadLibrary();
-            return true;
+            return false;
         }
     }
     catch (err) {
@@ -55,19 +72,13 @@ export const addToLibrary = async (bookid) => {
 
 export const removeFromLibrary = async (bookid) => {
     try {
-        const res = await axios.delete('api/library', {
-            data: {
-                book: {
-                    id: bookid
-                }
-            }
-        });
-        if (res.statusCode >= 400) {
-            return false;
+        //console.log('delete ', bookid);
+        const res = await axios.delete('api/library?bookid=' + bookid);
+        if (res.data.success) {
+            return true;
         }
         else {
-            loadLibrary();
-            return true;
+            return false;
         }
     }
     catch (err) {
