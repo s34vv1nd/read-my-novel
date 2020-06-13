@@ -22,6 +22,14 @@ const BookSchema = new mongoose.Schema({
     ratings: {
         type: Number,
         default: 0
+    },
+    votes: {
+        type: Number,
+        default: 0
+    },
+    collections: {
+        type: Number,
+        default: 0
     }
 }, {timestamps: true});// timestamps add {createdAt: Date, updatedAt: Date}
 

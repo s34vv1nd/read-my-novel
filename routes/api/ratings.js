@@ -12,7 +12,7 @@ const Book = require('../../models/Book');
 const Rating = require('../../models/Rating');
 
 // @route   GET api/ratings?user=:userid&book=:bookid
-// @desc    get a user's rating of a book
+// @desc    get user's ratings of a book
 // @access  Public
 /*
     const res = axios.get('api/ratings', {
@@ -26,19 +26,8 @@ const Rating = require('../../models/Rating');
 router.get('/', findBookById, async (req, res, next) => {
     try {
         const { user, book } = req.query;
-        if (!user) return next();
-        const rating = await Rating.findOne({ user, book });
-        res.status(200).json(rating ? rating.rating : 0);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).send('Server Error when get rating');
-    }
-}, auth, async (req, res) => {
-    try {
-        const user = req.user.id;
-        const rating = await Rating.findOne({ user, book });
-        res.status(200).json(rating ? rating.rating : 0);
+        const ratings = await Rating.find({ user, book });
+        res.status(200).json(ratings);
     }
     catch (err) {
         console.log(err);

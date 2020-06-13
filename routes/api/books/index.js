@@ -22,7 +22,7 @@ request: req.params: {
     status: completed'/'ongoing'/'all'
     page: Number || 1
     perPage: Number || 10
-    sortBy: 'alphabet'/'popularity'/'ratings'/  {future maybe: 'vote'}
+    sortBy: 'alphabet'/'ratings'/'votes'/'popularity' (default: 'alphabet')
 }
 */
 router.get('/', async (req, res) => {
@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
         let status = req.query.status || 'all';
         let page = parseInt(req.query.page || 1);
         let perPage = parseInt(req.query.perPage || -1);
-        let sortBy = req.query.sortBy || 'popularity';
+        let sortBy = req.query.sortBy || 'alphabet';
 
         let query;
         if (author) query = {author: author};
@@ -44,46 +44,32 @@ router.get('/', async (req, res) => {
             status = (status === 'completed');
             query = { ...query, completed: status };
         }
+        console.log(query);
         let books = await Book.find(query)
             .populate('author', 'username')
             .populate('genres', 'name')
             .exec();
 
-        // Default: sort books by number of user libraries have them
-        let sortVal = async book => {
-            return await Library.find({ book: book.id }).countDocuments();
-        };
-
-        // Otherwise:
+        let sortVal;
         switch (sortBy) {
-            case 'ratings'://ratings
+            case 'ratings':
                 sortVal = book => book.ratings;
                 break;
-            case 'alphabet'://alphabet of book name
+            case 'votes':
+                sortVal = book => book.votes;
+                break;
+            case 'collections':
+                sortVal = book => book.collections;
+                break;
+            default:    // alphabet
                 sortVal = book => book.name;
         }
-
-        //Schwartzian_transform
-        let books2 = await Promise.all(books.map(async book => [await sortVal(book), book]));
-        books2.sort((a, b) => +(a[0] > b[0]) || -(a[0] < b[0]));
-        books = books2.map(book => book[1]);
+        books.sort((a, b) => +(sortVal(a) > sortVal(b)) || -(sortVal(a) < sortVal(b)));
 
         //books[((page - 1)*perPage + 1) .. (page * perPage)]
         if (perPage !== -1) books = books.slice((page - 1) * perPage, page * perPage);
 
         res.status(200).json(books);
-        /*
-        response: res.data =
-            books: [{
-                _id: ObjectId,
-                author: {_id: ObjectId, username: String}
-                name: String,
-                genres: [{_id: ObjectId, name: String}],
-                completed: Boolean,
-                ratings: Number,
-                date_created: Date
-            }]
-        */
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

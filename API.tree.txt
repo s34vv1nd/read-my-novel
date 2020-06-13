@@ -1,0 +1,18 @@
+routes
+	api
+		auth (GET)
+		users (POST)
+		books (GET, POST)
+			:bookid (GET, PUT, DELETE)
+				chapters (GET, POST)
+					:chapid (GET, PUT, DELETE)
+						comments
+							:commentid
+				reviews
+					:reviewid
+		genres (GET)
+		library (GET, POST, PUT, DELETE)
+		ratings (GET, PUT)
+		votes
+		transactions
+		

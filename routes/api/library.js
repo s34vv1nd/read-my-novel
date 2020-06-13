@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
+const User = require('../../models/User');
 const Book = require('../../models/Book');
 const Library = require('../../models/Library');
 const Chapter = require('../../models/Chapter');
@@ -44,7 +45,7 @@ router.post('/', auth, findBookById, async (req, res) => {
     try {
         const bookid = req.book.id;
         const userid = req.user.id;
-        let libraryInstance = await Library.findOne({ user: userid, book: bookid }).exec();
+        const libraryInstance = await Library.findOne({ user: userid, book: bookid }).exec();
         if (libraryInstance) {
             return res.status(400).json({ error: { msg: 'This book is already in library' } });
         }
@@ -56,7 +57,9 @@ router.post('/', auth, findBookById, async (req, res) => {
 
         await libraryInstance.save();
 
-        let libraryInstance2 = await Library.findById(libraryInstance.id).populate('user', ['-password']).populate('book');
+        const libraryInstance2 = await Library.findById(libraryInstance.id).populate('user', ['-password']).populate('book');
+        const newval = (libraryInstance2.book.collections += 1);
+        const user = await Book.findByIdAndUpdate(req.user.id, {collections: newval});
 
         res.status(201).json(libraryInstance2);
         /*
@@ -126,6 +129,8 @@ router.delete('/', auth, findBookById, async (req, res) => {
             return res.status(400).json({ error: 'Book not in library', success: false });
         }
         await Library.deleteOne({ user: req.user.id, book: req.book.id });
+        const user = await User.findById(req.user.id, 'collections');
+        await User.findByIdAndUpdate(req.user.id, {collections: user.collections});
         res.status(200).json({
             success: true
         })
