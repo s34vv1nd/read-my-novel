@@ -37,7 +37,7 @@ class Library extends Component {
 
         return (
             <>
-                <h2>Library</h2>
+                <h2 style={{textAlign:'center', marginTop:'20px'}}>Library</h2>
                 {(this.props.books && this.props.books[0])?
                     <Table responsive>
                         <thead>
