@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
-import styles from './Rankings.module.css';
-// import './Rankings.module.css';
 import { loadRankings } from '../../actions/rankings';
 import { connect } from 'react-redux';
 
+// import styles from './Rankings.module.css';
+import './Rankings.css';
 
 class Rankings extends Component {
     constructor() {
@@ -27,8 +27,10 @@ class Rankings extends Component {
                 <h2> Power Ranking</h2>
                 <Container>
                     {this.props.books.map(book =>
-                        <Row className={styles.bookRow} key={this.props.books.indexOf(book) + 1}>
-                            <Container className={styles.bookContainer}>
+                        // <Row className={styles.bookRow} key={this.props.books.indexOf(book) + 1}>
+                        <Row className="bookRow" key={this.props.books.indexOf(book) + 1}>
+                            {/* <Container className={styles.bookContainer}> */}
+                            <Container className="bookContainer">
                                 <Row>
                                     <Col xs={9} md={1}> <h4>{this.props.books.indexOf(book) + 1}</h4>  </Col>
                                     <Col xs={9} md={1}>
