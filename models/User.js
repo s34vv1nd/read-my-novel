@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     avatar: {
-        data: Buffer,
+        type: Buffer,
         contentType: String
     },
     coin: {
