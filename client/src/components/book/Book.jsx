@@ -61,7 +61,7 @@ class Book extends Component {
                                         pathname: '/book/' + this.props.match.params.bookid + '/' + this.props.chapters[0]._id,
                                     }}>Name: {this.props.book.name}</Link></h3>
                                 : 
-                                    null
+                                    <h3>{this.props.book.name}</h3>
                             }
                             <ListGroup horizontal>
                                 {this.props.book.genres.map(genre => <ListGroup.Item key={genre.name}>{genre.name}</ListGroup.Item>)}

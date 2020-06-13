@@ -48,7 +48,7 @@ function App() {
                         </Route>
                         <Route exact path="/book/:bookid" component={Book}>
                         </Route>
-                        <Route exact path="./book/:bookid/:chapid" component={Chapter}>
+                        <Route exact path="/book/:bookid/:chapid" component={Chapter}>
                         </Route>
 
                         <PrivateRoute path="/create">
