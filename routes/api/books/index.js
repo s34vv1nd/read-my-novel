@@ -44,7 +44,6 @@ router.get('/', async (req, res) => {
             status = (status === 'completed');
             query = { ...query, completed: status };
         }
-        console.log(query);
         let books = await Book.find(query)
             .populate('author', 'username')
             .populate('genres', 'name')
@@ -87,11 +86,9 @@ router.get('/', async (req, res) => {
 */
 router.post('/', auth, async (req, res) => {
     try {
-        console.log(req.body);
         const author = req.user.id;
         const name = req.body.name;
         const genrenames = req.body.genres;
-        console.log(author, name, genrenames);
         const genres = await Genre.find().where('name').in(genrenames).select('id').exec();
         if (genres.length === 0 || genres.length < genrenames.length) {
             return res.status(400).send('Invalid genres');
