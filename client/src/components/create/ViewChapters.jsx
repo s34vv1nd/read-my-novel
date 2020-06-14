@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import { Button } from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Button, Table, ButtonGroup } from 'react-bootstrap';
 import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -31,44 +31,49 @@ class ViewChapters extends Component {
 
         return (
             <>
-                <h2>Book name: {this.props.book.name}</h2>
-                <Table responsive>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Chapter #</th>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Created at</th>
-                            <th>Last update</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.props.chapters.map(chapter =>
-                            <tr key={this.props.chapters.indexOf(chapter) + 1}>
-                                <td>{this.props.chapters.indexOf(chapter) + 1}</td>
-                                <td>{chapter.number}</td>
-                                <td><Link to={{
-                                    pathname: '/create/' + this.state.bookid + '/' + chapter._id,
-                                    state: { id: chapter._id }
-                                }}>{chapter.name}</Link></td>
-                                <td>{chapter.published ? "Publish" : "Not publish"}</td>
-                                <td>{chapter.createdAt}</td>
-                                <td>{chapter.updatedAt}</td>
-                                <td><Link to={{
-                                    pathname: '/create/' + this.state.bookid + '/' + chapter._id,
-                                    state: { id: chapter._id }
-                                }}><Button>Update</Button></Link></td>
-                                <td><Button>Delete</Button></td>
-                            </tr>)
-                        }
-                    </tbody>
-                </Table>
+                <h2>{this.props.book.name}</h2>
+                {this.props.chapters && this.props.chapters[0] ?
+                    <Table responsive>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Chapter #</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Created at</th>
+                                <th>Last update</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.props.chapters.map(chapter =>
+                                <tr key={this.props.chapters.indexOf(chapter) + 1}>
+                                    <td>{this.props.chapters.indexOf(chapter) + 1}</td>
+                                    <td>{chapter.number}</td>
+                                    <td><Link to={{
+                                        pathname: '/create/book/' + this.state.bookid + '/chapter/' + chapter._id,
+                                        state: { id: chapter._id }
+                                    }}>{chapter.name}</Link></td>
+                                    <td>{chapter.published ? "Publish" : "Not publish"}</td>
+                                    <td>{chapter.createdAt}</td>
+                                    <td>{chapter.updatedAt}</td>
+                                    <td><Link to={{
+                                        pathname: '/create/book/' + this.state.bookid + '/chapter/' + chapter._id,
+                                        state: { id: chapter._id }
+                                    }}><Button>Update</Button></Link></td>
+                                    <td><Button>Delete</Button></td>
+                                </tr>)
+                            }
+                        </tbody>
+                    </Table>
+                    :
+                    <p>No chapter available</p>
+                }
+
                 <ButtonGroup>
                     <Link to={{
-                        pathname: '/create/' + this.state.bookid + '/chapter'
+                        pathname: '/create/book/' + this.state.bookid + '/chapter'
                     }}><Button>Create chapter</Button></Link>
                     <Button>Delete book</Button>
                 </ButtonGroup>
@@ -78,7 +83,7 @@ class ViewChapters extends Component {
     }
 }
 
-ViewBook.propTypes = {
+ViewChapters.propTypes = {
     isAuthenticated: PropTypes.bool
 };
 
