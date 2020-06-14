@@ -14,4 +14,4 @@ routes
 		library (GET, POST, PUT, DELETE)
 		ratings (GET, PUT)
 		votes (GET, POST, DELETE)
-		transactions
+		transactions (GET, POST)
