@@ -1,34 +1,41 @@
-import React, { Component, Fragment, useEffect } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
+import { Button } from 'react-bootstrap';
+import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BookList from './BookList';
-import NewBookForm from './NewBookForm';
 import { loadUser } from '../../actions/auth';
 import { getBooksCreated } from '../../actions/creation';
 
-const Create = ({
-    user,
-    books,
-    isAuthenticated,
-    getBooksCreated
-}) => {
-    useEffect(() => {
-        loadUser();
-        getBooksCreated(user._id);
-    }, []);
+class Create extends Component {
+    constructor() {
+        super();
+        this.state = {
 
-    if (!isAuthenticated) {
-        return <Redirect to='/login' />;
+        }
+
+        this.componentDidMount = this.componentDidMount.bind(this);
     }
 
-    return (
-        <Fragment>
-            <NewBookForm />
-            <BookList books={books} />
-        </Fragment>
-    )
+    async componentDidMount() {
+        await this.props.loadUser();
+        await this.props.getBooksCreated(this.props.user._id);
+    }
+
+    render() {
+        if (!this.props.isAuthenticated) {
+            return <Redirect to='/login' />;
+        }
+
+        return (
+            <>
+                <Fragment>
+                    <BookList books={this.props.books} />
+                </Fragment>
+                <Link to = '/create/book'><Button>Create book</Button></Link>
+            </>
+        )
+    }
 }
 
 Create.propTypes = {

@@ -16,6 +16,8 @@ import Library from './components/library/Library';
 import Notifications from './components/notifications/Notifications';
 import Book from './components/book/Book';
 import Chapter from './components/book/Chapter';
+import NewBookForm from './components/create/NewBookForm';
+import ViewChapters from './components/create/ViewChapters';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './components/PrivateRoute';
@@ -50,9 +52,14 @@ function App() {
                         </Route>
                         <Route exact path="/book/:bookid/:chapid" component={Chapter}>
                         </Route>
+                        <Route exact path="/create/:bookid" component={ViewChapters}>
+                        </Route>
 
                         <PrivateRoute path="/create">
                             <Create />
+                        </PrivateRoute>
+                        <PrivateRoute path="/create/book">
+                            <NewBookForm />
                         </PrivateRoute>
                         <PrivateRoute path="/library">
                             <Library />
