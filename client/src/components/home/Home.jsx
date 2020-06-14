@@ -5,6 +5,7 @@ import HomeRelease from './NewRelease.jsx';
 import Recommended from './Recommended.jsx';
 import Comment from './Comment.jsx';
 import CommentForm from './CommentForm.jsx';
+import ReadChapter from './ReadChapter.jsx';
 
 
 export default class Home extends Component {
@@ -22,6 +23,7 @@ export default class Home extends Component {
                 <table></table>
                 <CommentForm />
                 <Comment />
+                <ReadChapter />
             </Fragment>
         )
     }

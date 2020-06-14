@@ -1,0 +1,13 @@
+.bookScreen{
+    background-image: url('https://s3.amazonaws.com/images.wealthyaffiliate.com/uploads/63090/wysiwyg/blogs/1138df9901a5fa1d2b1e42bc27c001fc_1354102966_cropped.jpg');
+    padding-bottom: 50px;
+}
+
+.readingArea{
+    width: 70%;
+    margin: auto;
+    background-color: white;
+    overflow-y: scroll;
+    border: ridge;
+    height: 500px;
+}
