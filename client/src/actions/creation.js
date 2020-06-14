@@ -8,7 +8,11 @@ import {
     CREATE_CHAPTER_SUCCESS,
     CREATE_CHAPTER_FAIL,
     UPDATE_CHAPTER_SUCCESS,
-    UPDATE_CHAPTER_FAIL
+    UPDATE_CHAPTER_FAIL,
+    DELETE_BOOK_SUCCESS,
+    DELETE_BOOK_FAIL,
+    DELETE_CHAPTER_SUCCESS,
+    DELETE_CHAPTER_FAIL
 } from './types';
 import { loadChapter } from './book';
 
@@ -85,6 +89,37 @@ export const createChapter = ({bookid, name, content, price}) => async dispatch 
         console.log(err)
         dispatch({
             type: CREATE_CHAPTER_FAIL
+        })
+    }
+}
+
+//Delete book
+export const deleteBook = (bookid) => async dispatch => {
+    try {
+        const res = await axios.delete('api/books/' + bookid);
+
+        dispatch({
+            type: DELETE_BOOK_SUCCESS,
+            //payload: res.data
+        })
+    } catch(err) {
+        dispatch({
+            type: DELETE_BOOK_FAIL
+        })
+    }
+}
+
+//Delete chapter
+export const deleteChapter = (bookid, chapid) => async dispatch => {
+    try {
+        const res = await axios.delete('/api/books/' + bookid + '/chapters/' + chapid);
+
+        dispatch({
+            type: DELETE_CHAPTER_SUCCESS
+        })
+    } catch(err) {
+        dispatch({
+            type: DELETE_CHAPTER_FAIL
         })
     }
 }

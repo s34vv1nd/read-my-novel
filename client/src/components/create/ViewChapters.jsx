@@ -4,16 +4,21 @@ import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadBook } from '../../actions/book';
+import { deleteBook, deleteChapter, createChapter } from '../../actions/creation';
 
 
 class ViewChapters extends Component {
     constructor() {
         super();
         this.state = {
-            bookid: ''
+            bookid: '',
+            chapid: ''
         }
 
         this.componentDidMount = this.componentDidMount.bind(this);
+        this.onClickCreateChapter = this.onClickCreateChapter.bind(this);
+        this.onClickDeleteBook = this.onClickDeleteBook.bind(this);
+        this.onClickDeleteChapter = this.onClickDeleteChapter.bind(this);
     }
 
     async componentDidMount() {
@@ -22,6 +27,38 @@ class ViewChapters extends Component {
         });
 
         await this.props.loadBook(this.state.bookid);
+    }
+
+    async onClickDeleteChapter(e) {
+        e.preventDefault();
+        await this.setState({
+            chapid: e.target.value
+        });
+
+        await this.props.deleteChapter(this.state.bookid, this.state.chapid);
+        await this.props.loadBook(this.state.bookid);
+    }
+
+    async onClickDeleteBook(e) {
+        e.preventDefault();
+        await this.props.deleteBook(this.state.bookid);
+        return <Redirect to='/create' />;
+    }
+
+    async onClickCreateChapter(e) {
+        e.preventDefault();
+        await this.props.createChapter({
+            bookid: this.state.bookid, 
+            name: "Chapter Name", 
+            content: "Chapter Content", 
+            price: 0
+        });
+
+        //console.log(this.props.newchapter);
+        return <Redirect to= {{
+            pathname: '/create/book/' + this.state.bookid + '/chapter/' + this.props.newchapter._id,
+            state: { id: this.props.newchapter._id }
+        }} />
     }
 
     render() {
@@ -62,7 +99,7 @@ class ViewChapters extends Component {
                                         pathname: '/create/book/' + this.state.bookid + '/chapter/' + chapter._id,
                                         state: { id: chapter._id }
                                     }}><Button>Update</Button></Link></td>
-                                    <td><Button>Delete</Button></td>
+                                    <td><Button onClick={this.onClickDeleteChapter} value={chapter._id}>Delete</Button></td>
                                 </tr>)
                             }
                         </tbody>
@@ -72,10 +109,8 @@ class ViewChapters extends Component {
                 }
 
                 <ButtonGroup>
-                    <Link to={{
-                        pathname: '/create/book/' + this.state.bookid + '/chapter'
-                    }}><Button>Create chapter</Button></Link>
-                    <Button>Delete book</Button>
+                    <Button onClick={this.onClickCreateChapter}>Create chapter</Button>
+                    <Button onClick={this.onClickDeleteBook}>Delete book</Button>
                 </ButtonGroup>
 
             </>
@@ -91,9 +126,10 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     book: state.book.book,
     chapters: state.book.chapters,
+    newchapter: state.creation.chapter
 });
 
 export default connect(
     mapStateToProps,
-    { loadBook }
+    { loadBook, deleteBook, deleteChapter, createChapter }
 )(ViewChapters);
