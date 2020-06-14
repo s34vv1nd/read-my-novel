@@ -3,8 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loadChapter } from '../../actions/book';
-import { createChapter} from '../../actions/creation';
+import axios from 'axios';
 
 
 class CreateChapter extends Component {
@@ -13,6 +12,8 @@ class CreateChapter extends Component {
         this.state = {
             bookid: '',
             chapid: '',
+            book: {},
+            chapters: [],
             name: '',
             content: '',
             price: 0
@@ -23,6 +24,17 @@ class CreateChapter extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    loadChapter = async (bookid, chapid) => {
+        if (!bookid || !chapid) return null;
+        const res_book = await axios.get('api/books/' + bookid);
+        const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
+        if (!res_book.data || !res_chapter.data) return null;
+        return {
+            book: res_book.data,
+            chapters: [res_chapter.data]
+        };
+    }
+
     async componentDidMount() {
         await this.setState({
             bookid: this.props.match.params.bookid,
@@ -30,10 +42,14 @@ class CreateChapter extends Component {
         });
 
         if (this.state.chapid) {
-            await this.props.loadChapter(this.state.bookid, this.state.chapid);
             await this.setState({
-                name: this.props.chapters[0].name,
-                content: this.props.chapters[0].content
+                book: await this.loadChapter(this.state.bookid, this.state.chapid).book,
+                chapters: await this.loadChapter(this.state.bookid, this.state.chapid).chapters
+            });
+
+            await this.setState({
+                name: this.state.chapters[0].name,
+                content: this.state.chapters[0].content
             });
         }
     }
@@ -50,7 +66,7 @@ class CreateChapter extends Component {
 
     render() {
         if (!this.props.isAuthenticated) {
-            return <Redirect to='/login'/>;
+            return <Redirect to='/login' />;
         }
 
         return (
@@ -94,11 +110,9 @@ CreateChapter.propTypes = {
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
-    book: state.book.book,
-    chapters: state.book.chapters,
 });
 
 export default connect(
     mapStateToProps,
-    { loadChapter, createChapter }
+    {}
 )(CreateChapter);
