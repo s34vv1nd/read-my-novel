@@ -24,8 +24,8 @@ router.get('/', auth, async (req, res) => {
         const ids = libraryInstances.map(x => x.book);
         
         const books = await Book.find().where('_id').in(ids)
-            .populate('genres')
-            .populate('author', '-password');
+            .populate('genres', 'name')
+            .populate('author', 'username');
         return res.status(200).json({books, success: true});
         /*
             res.data = books = [{Book}]
@@ -64,7 +64,9 @@ router.post('/', auth, async (req, res) => {
 
         await libraryInstance.save();
 
-        let libraryInstance2 = await Library.findById(libraryInstance.id).populate('user', ['-password']).populate('book');
+        let libraryInstance2 = await Library.findById(libraryInstance.id)
+            .populate('user', 'username')
+            .populate('book', 'name collections');
         let newval = (libraryInstance2.book.collections += 1);
         await Book.updateOne({ _id: bookid }, { collections: newval });
 
@@ -97,7 +99,7 @@ router.post('/', auth, async (req, res) => {
 */
 router.put('/', auth, async (req, res) => {
     try {
-        const bookid = req.book.id;
+        const bookid = req.body.book.id;
         const userid = req.user.id;
         const chapnum = req.body.book.chapter;
         const filter = { book: bookid, user: userid };
@@ -129,18 +131,18 @@ router.delete('/', auth, async (req, res) => {
     try {
         const libraryInstance = await Library.findOne({ user: req.user.id, book: req.query.bookid });
         if (!libraryInstance) {
-            return res.status(400).send('Book not in library');
+            return res.status(400).json({user: req.user.id, book: req.query.bookid, error: 'Book not in library', success: false});
         }
         await Library.deleteOne({ user: req.user.id, book: req.query.bookid });
-        const user = await User.findById(req.user.id, 'collections');
-        await User.findByIdAndUpdate(req.user.id, { collections: user.collections });
-        res.status(200).json({
+        const book = await Book.findById(req.query.bookid, 'collections');
+        await Book.updateOne({_id: req.query.bookid}, { collections: book.collections - 1 });
+        return res.status(200).json({
             success: true
         })
     }
     catch (err) {
         console.log(err.message);
-        res.status(500).send('Server Error when delete book from user library');
+        res.status(500).json({error: 'Server Error when delete book from user library', success: false});
     }
 })
 

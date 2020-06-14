@@ -13,6 +13,5 @@ routes
 		genres (GET)
 		library (GET, POST, PUT, DELETE)
 		ratings (GET, PUT)
-		votes
+		votes (GET, POST, DELETE)
 		transactions
-		

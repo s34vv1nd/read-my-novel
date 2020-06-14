@@ -17,16 +17,22 @@ const Rating = require('../../models/Rating');
 /*
     const res = axios.get('api/ratings', {
         params: {
-            (user: userid,) // if not provided, equals to current user id
+            user: userid
             book: bookid
         }
     });
     // res.data is a number from 0 to 5 (0 is unrated)
 */
-router.get('/', findBookById, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
         const { user, book } = req.query;
-        const ratings = await Rating.find({ user, book });
+        let filter = {};
+        if (user) filter = {user};
+        if (book) filter = {...filter, book};
+        const ratings = await Rating.find(filter)
+            .populate('user', 'username')
+            .populate('book', 'name')
+            .sort('-createdAt');
         res.status(200).json(ratings);
     }
     catch (err) {
@@ -45,16 +51,22 @@ router.get('/', findBookById, async (req, res, next) => {
     });
     // res.data is true/false (success/failure)
 */
-router.put('/', auth, findBookById, async (req, res) => {
+router.put('/', auth, async (req, res) => {
     try {
-        const book = req.book.id;
+        const book = req.body.book;
         const user = req.user.id;
-        await Rating.findOneAndUpdate({book, user}, {rating: req.body.rating}, {new: true, upsert: true});
-        res.status(200).send(true);
+        await Rating.updateOne({book, user}, {rating: req.body.rating}, {new: true, upsert: true});
+        const ratings = await Rating.find({book}, 'rating');
+        console.log(ratings);
+        let num = ratings.length;
+        let sum = await ratings.reduce((total, number) => total + (number.rating), 0);
+        console.log(num, sum);
+        await Book.updateOne({_id: book}, {ratings: sum / num});
+        res.status(200).json({success: true});
     }
     catch (err) {
         console.log(err);
-        res.status(500).send(false);
+        res.status(500).send({error: 'Server Error when put ratings', body: req.body, success:  false});
     }
 })
 

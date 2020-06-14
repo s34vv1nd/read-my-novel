@@ -12,6 +12,4 @@ const Book = require('../../models/Book');
 const Chapter = require('../../models/Chapter');
 const Transaction = require('../../models/Transaction');
 
-// @route   GET api/transaction
-// @desc    get a user's rating of a book
-// @access  Private
+// @route GET api/transactions?user=:userid&book=:bookid

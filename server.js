@@ -24,6 +24,7 @@ app.use('/api/books', require('./routes/api/books'));
 app.use('/api/library', require('./routes/api/library'));
 app.use('/api/genres', require('./routes/api/genres'));
 app.use('/api/ratings', require('./routes/api/ratings'));
+app.use('/api/votes', require('./routes/api/votes'))
 
 
 // Serve static assets in production
