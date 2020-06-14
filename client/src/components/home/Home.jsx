@@ -3,6 +3,9 @@ import HomeCarousel from './HomeCarousel.jsx';
 import { Link } from 'react-router-dom'
 import HomeRelease from './NewRelease.jsx';
 import Recommended from './Recommended.jsx';
+import Comment from './Comment.jsx';
+import CommentForm from './CommentForm.jsx';
+
 
 export default class Home extends Component {
     render() {
@@ -17,6 +20,8 @@ export default class Home extends Component {
                 <div></div>
                 <h2 style={{marginTop: '20px'}}>Latest Updates</h2>
                 <table></table>
+                <CommentForm />
+                <Comment />
             </Fragment>
         )
     }
