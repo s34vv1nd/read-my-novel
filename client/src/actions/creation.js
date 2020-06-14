@@ -8,17 +8,21 @@ import {
 } from './types';
 
 // get book created by current user
-export const getBooksCreated = (userid) => async dispatch => {
+export const getBooksCreated = (user) => async dispatch => {
     try {
-        const res = await axios.get('api/books', {
-            params: {
-                author: userid
-            }
-        });
-        
+        let data;
+        if (!user) data = []; else {
+            const res = await axios.get('api/books', {
+                params: {
+                    author: user._id
+                }
+            });
+            data = res.data;
+        }
+
         dispatch({
             type: GET_CREATED_BOOKS_SUCCESS,
-            payload: res.data
+            payload: data
         });
     }
     catch (err) {
