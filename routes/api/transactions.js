@@ -15,6 +15,14 @@ const Transaction = require('../../models/Transaction');
 // @route   GET api/transactions?user=:userid&chapter=:chapterid
 // @desc    get transactions between users and chapters
 // @access  Public
+/*
+    const res = await axios.get('api/transactions', {
+        params: {
+            user: userid,
+            chapter: chapterid
+        }
+    })
+*/
 router.get('/', async (req, res) => {
     try {
         const {user, chapter} = req.query;
@@ -65,7 +73,7 @@ router.post('/', auth, async (req, res) => {
         return res.status(200).json({success: true});
     }
     catch (err) {
-        console.error(err);
+        console.log(err);
         res.status(500).json({error: 'Server Error when post transaction', success: false});
     }
 })

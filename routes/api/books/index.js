@@ -181,7 +181,7 @@ router.put('/:bookid', auth, findBookById, async (req, res) => {
     }
 })
 
-const chaptersRouter = require('./chapters');
-router.use('/:bookid/chapters', chaptersRouter);
+router.use('/:bookid/chapters', require('./chapters'));
+router.use('/:bookid/reviews', require('./reviews'));
 
 module.exports = router;
