@@ -45,12 +45,7 @@ class CreateChapter extends Component {
 
     async onSubmit(e) {
         e.preventDefault();
-        await this.props.createChapter({
-            bookid: this.state.bookid, 
-            name: this.state.name, 
-            content: this.state.content, 
-            price: this.state.price
-        });
+        //update chapter
     }
 
     render() {

@@ -42,7 +42,7 @@ class ViewChapters extends Component {
     async onClickDeleteBook(e) {
         e.preventDefault();
         await this.props.deleteBook(this.state.bookid);
-        return <Redirect to='/create' />;
+        this.props.history.goBack();
     }
 
     async onClickCreateChapter(e) {
@@ -55,10 +55,7 @@ class ViewChapters extends Component {
         });
 
         //console.log(this.props.newchapter);
-        return <Redirect to= {{
-            pathname: '/create/book/' + this.state.bookid + '/chapter/' + this.props.newchapter._id,
-            state: { id: this.props.newchapter._id }
-        }} />
+        this.props.history.push('/create/book/' + this.state.bookid + '/chapter/' + this.props.newchapter._id);
     }
 
     render() {

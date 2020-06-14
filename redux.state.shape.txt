@@ -1,0 +1,12 @@
+REDUX STATE SHAPE:
+
+state : {
+    books: [],
+    book: {
+        book:
+        chapters: []
+        chapter: {
+            
+        }
+    }
+}
