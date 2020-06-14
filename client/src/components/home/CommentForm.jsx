@@ -11,7 +11,7 @@ export default class CommentForm extends Component {
                             <form>
                                 <div class="row">
                                     <textarea placeholder="How do u feel about this book?"
-                                        style={{ width: '500px', height: '300px' }}></textarea>
+                                        style={{ width: '100%', height: 'auto' }}></textarea>
                                 </div>
                                 <div class="row">
                                     <button type="submit" class="btn btn-success green">
