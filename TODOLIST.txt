@@ -1,0 +1,12 @@
+- Create book list
+- Create book form
+- Create chapter list
+- Create chapter form
+- Search bar
+- Reviews section in book
+- Comments section in chapter
+- Home page: Carousel redirect, ...
+- Show user (avatar) in header
+- User info page / edit page
+- Notifications: when new chapter of books in library is published
+- Pagination for Browse, Ranking, chapter list in Book, Library
