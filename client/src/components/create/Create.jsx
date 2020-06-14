@@ -32,7 +32,7 @@ class Create extends Component {
                 <Fragment>
                     <BookList books={this.props.books} />
                 </Fragment>
-                <Link to = '/create/book'><Button>Create book</Button></Link>
+                <Link to='/create/book'><Button>Create book</Button></Link>
             </>
         )
     }

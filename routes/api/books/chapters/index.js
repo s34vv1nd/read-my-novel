@@ -86,11 +86,11 @@ router.get('/:chapid', findBookById, findChapterById, async (req, res, next) => 
 // @desc    create new chapter
 // @access  Private
 /*
-    req.body: {
-        name: name of chapter (not empty),
-        content: content of chapter (not empty),
-        (price: price of chapter (default: 0)) 
-    }
+    const res = await axios.post('api/books/' + bookid + '/chapters/', {
+        name: chapter name,
+        content: content
+        price: price
+    })
 */
 router.post('/', auth, findBookById, async (req, res) => {
     try {
@@ -98,12 +98,12 @@ router.post('/', auth, findBookById, async (req, res) => {
         const { name, content, price } = req.body;
 
         if (!book || !name || !content) {
-            return res.status(400).json({ errors: [{ msg: 'Invalid chapter creation' }], body: req.body });
+            return res.status(400).json({ error: 'Cannot create chapter', success: false });
         }
 
         const _book = await Book.findById(book);
         if (!_book || !_book.author || !_book.author.equals(req.user.id)) {
-            return res.status(400).json({ errors: [{ msg: 'Cannot create chapter' }], body: req.body });
+            return res.status(400).json({ error: 'Cannot create chapter', success: false });
         }
 
         let number = await Chapter.find({ book: book }).countDocuments();
@@ -116,11 +116,11 @@ router.post('/', auth, findBookById, async (req, res) => {
             if (err) throw err;
         });
 
-        res.status(201).json(chapter);
+        res.status(201).json({chapter, success: true});
     }
     catch (err) {
         console.log(err);
-        res.status(500).send('Server Error when post chapter')
+        res.status(500).json({ error: 'Server Error when post chapter', success: false });
     }
 })
 
@@ -176,5 +176,7 @@ router.delete('/:chapid', auth, findBookById, findChapterById, async (req, res) 
         res.status(500).send('Server Error when delete book');
     }
 })
+
+router.use('/comments', require('./comment'));
 
 module.exports = router;

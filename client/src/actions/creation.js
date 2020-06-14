@@ -4,17 +4,22 @@ import {
     CREATE_SUCCESS,
     CREATE_FAIL,
     GET_CREATED_BOOKS_SUCCESS,
-    GET_CREATED_BOOKS_FAIL
+    GET_CREATED_BOOKS_FAIL,
+    CREATE_CHAPTER_SUCCESS,
+    CREATE_CHAPTER_FAIL,
+    UPDATE_CHAPTER_SUCCESS,
+    UPDATE_CHAPTER_FAIL
 } from './types';
+import { loadChapter } from './book';
 
 // get book created by current user
-export const getBooksCreated = (user) => async dispatch => {
+export const getBooksCreated = (userid) => async dispatch => {
     try {
         let data;
-        if (!user) data = []; else {
+        if (!userid) data = []; else {
             const res = await axios.get('api/books', {
                 params: {
-                    author: user._id
+                    author: userid
                 }
             });
             data = res.data;
@@ -45,7 +50,7 @@ export const createBook = ({ name, genres }) => async dispatch => {
         dispatch(setAlert('Book created successfully!', 'success', 1000));
     }
     catch (err) {
-        const errors = err.response.data.errors;
+        const errors = err.response.data.error;
 
         if (errors) {
             errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
@@ -54,5 +59,32 @@ export const createBook = ({ name, genres }) => async dispatch => {
         dispatch({
             type: CREATE_FAIL
         });
+    }
+}
+
+// create a new chapter
+export const createChapter = ({bookid, name, content, price}) => async dispatch => {
+    try {
+        const res = await axios.post('api/books/' + bookid + '/chapters', {
+            name, content, price            
+        });
+        console.log(res.data);
+        if (res.data.success) {
+            dispatch({
+                type: CREATE_CHAPTER_SUCCESS,
+                payload: res.data.chapter   // ko can thiet
+            })
+        }
+        else {  
+            dispatch({
+                type: CREATE_CHAPTER_FAIL,
+            })
+        }
+    }
+    catch (err) {
+        console.log(err)
+        dispatch({
+            type: CREATE_CHAPTER_FAIL
+        })
     }
 }

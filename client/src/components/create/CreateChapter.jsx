@@ -4,6 +4,7 @@ import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadChapter } from '../../actions/book';
+import { createChapter} from '../../actions/creation';
 
 
 class CreateChapter extends Component {
@@ -13,10 +14,13 @@ class CreateChapter extends Component {
             bookid: '',
             chapid: '',
             name: '',
-            content: ''
+            content: '',
+            price: 0
         }
 
         this.componentDidMount = this.componentDidMount.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     async componentDidMount() {
@@ -35,21 +39,23 @@ class CreateChapter extends Component {
     }
 
     async onChange(e) {
+        e.preventDefault();
         await this.setState({ [e.target.id]: e.target.value });
     }
 
     async onSubmit(e) {
         e.preventDefault();
-        await this.props.createBook({
-            name: this.state.name,
-            content: [this.state.genres]
+        await this.props.createChapter({
+            bookid: this.state.bookid, 
+            name: this.state.name, 
+            content: this.state.content, 
+            price: this.state.price
         });
-        await this.props.getBooksCreated();
     }
 
     render() {
         if (!this.props.isAuthenticated) {
-            return <Redirect to='/login' />;
+            return <Redirect to='/login'/>;
         }
 
         return (
@@ -64,9 +70,15 @@ class CreateChapter extends Component {
                         </Form.Group>
 
                         <Form.Group controlId="content">
-                            <Form.Label>Genre</Form.Label>
+                            <Form.Label>Content</Form.Label>
                             <Form.Control as="textarea" rows="20" placeholder="Enter content"
                                 onChange={this.onChange} value={this.state.content} />
+                        </Form.Group>
+
+                        <Form.Group controlId="price">
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control type="text" placeholder="Enter chapter's price"
+                                onChange={this.onChange} value={this.state.price} />
                         </Form.Group>
 
                         <Button variant="primary" type="submit">
@@ -93,5 +105,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { loadChapter }
+    { loadChapter, createChapter }
 )(CreateChapter);

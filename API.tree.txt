@@ -8,8 +8,10 @@ routes
 					:chapid (GET, PUT, DELETE)
 						comments
 							:commentid
-				reviews
-					:reviewid
+				reviews (GET, POST)
+					:reviewid (GET, PUT, DELETE)
+						upvote
+						downvote
 		genres (GET)
 		library (GET, POST, PUT, DELETE)
 		ratings (GET, PUT)

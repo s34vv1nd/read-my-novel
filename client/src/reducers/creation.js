@@ -3,12 +3,13 @@ import {
     CREATE_FAIL,
     GET_CREATED_BOOKS_SUCCESS,
     GET_CREATED_BOOKS_FAIL,
+    CREATE_CHAPTER_SUCCESS,
     LOGOUT
 } from '../actions/types';
 
 const initialState = {
     books: [],
-    loadingbooks: true
+    chapter: null
 }
 
 export default function(state = initialState, action) {
@@ -18,17 +19,15 @@ export default function(state = initialState, action) {
         case GET_CREATED_BOOKS_SUCCESS:
             return {
                 books: payload,
-                loadingbooks: false
             };
-        // case CREATE_SUCCESS:
-        //     return {
-        //         ...state,
-        //         books: state.books.concat(payload.book)
-        //     };
+        case CREATE_CHAPTER_SUCCESS:
+            return {
+                ...state,
+                chapter: payload
+            };
         case LOGOUT:
             return {
                 books: [],
-                loadingbooks: true
             }
         default:
             return state;

@@ -20,12 +20,18 @@ const CommentSchema = new Schema({
         required: true
     },
     upvote: {
-        type: Number,
-        default: 0
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'user' 
+        }],
+        default: []
     },
     downvote: {
-        type: Number,
-        default: 0
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'user' 
+        }],
+        default: []
     }
 }, {timestamps: true}); // timestamps add {createdAt: Date, updatedAt: Date}
 

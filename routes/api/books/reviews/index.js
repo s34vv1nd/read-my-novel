@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
 const bcrypt = require('bcryptjs');
-const auth = require('../../../middlewares/auth');
-const findBookById = require('../../../middlewares/book').findBookById;
+const auth = require('../../../../middlewares/auth');
+const findBookById = require('../../../../middlewares/book').findBookById;
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
-const deleteBookById = require('../utils/delete').deleteBookById;
+const deleteBookById = require('../../utils/delete').deleteBookById;
 
-const Book = require('../../../models/Book');
-const Genre = require('../../../models/Genre');
-const Review = require('../../../models/Review');
-const { model } = require('../../../models/Book');
+const Book = require('../../../../models/Book');
+const Genre = require('../../../../models/Genre');
+const Review = require('../../../../models/Review');
+const { model } = require('../../../../models/Book');
 
 // @route   GET api/books/:bookid/reviews?user=:userid
 // @desc    get reviews of a book
