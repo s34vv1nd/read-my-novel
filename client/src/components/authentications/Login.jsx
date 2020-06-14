@@ -29,7 +29,6 @@ class Login extends Component {
     }
 
     render() {
-        //let location = useLocation();
         let { from } = this.props.location.state || { from: { pathname: "/" } };
 
         if (this.props.isAuthenticated) {

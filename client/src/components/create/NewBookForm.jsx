@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createBook, getBooksCreated } from '../../actions/creation';
+import { Redirect } from 'react-router-dom';
 
 class NewBookForm extends Component {
     constructor() {
@@ -11,6 +12,7 @@ class NewBookForm extends Component {
             bookname: '',
             genres: [],
             errors: {},
+            submitted: false
         }
 
         this.onChange = this.onChange.bind(this);
@@ -25,9 +27,13 @@ class NewBookForm extends Component {
         e.preventDefault();
         await this.props.createBook({ name: this.state.bookname, genres: [this.state.genres] });
         await this.props.getBooksCreated();
+        this.setState({submitted : true})
     }
 
     render() {
+        if (this.state.submitted) {
+            return <Redirect to='/create'></Redirect>
+        }
 
         return (
             <Fragment>

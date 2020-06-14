@@ -113,11 +113,11 @@ router.post('/', auth, async (req, res) => {
 router.get('/:bookid', findBookById, async (req, res) => {
     try {
         const book = await Book.findById(req.book._id).populate('genres').populate('author', '-password');
-        res.status(200).json(book);
+        res.status(200).json({book, success: true});
     }
     catch (err) {
         console.log(err);
-        res.status(500).send('Get book failed');
+        res.status(500).json({success: false})
     }
 })
 

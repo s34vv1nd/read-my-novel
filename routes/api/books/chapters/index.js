@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router({mergeParams: true});
+const router = express.Router({ mergeParams: true });
 
 const bcrypt = require('bcryptjs');
 const auth = require('../../../../middlewares/auth');
@@ -21,12 +21,13 @@ const Transaction = require('../../../../models/Transaction');
 // @access  Semi
 router.get('/', findBookById, async (req, res, next) => {
     try {
-        if (req.params.published === false) {
-            console.log(req.params.published);
+        if (req.query.published === "false") {
             next();
         }
-        const chapters = await Chapter.find({book: req.book._id, published: true}, '-content').sort('number');
-        return res.status(200).json(chapters);
+        else {
+            const chapters = await Chapter.find({ book: req.book._id, published: true }, '-content').sort('number');
+            return res.status(200).json({ chapters, success: true });
+        }
     }
     catch (err) {
         console.error(err);
@@ -35,8 +36,8 @@ router.get('/', findBookById, async (req, res, next) => {
 }, auth, async (req, res) => {
     try {
         if (req.book.author.equals(req.user.id)) {
-            const chapters = await Chapter.find({book: req.book._id}, '-content').sort('number');
-            return res.status(200).json(chapters);
+            const chapters = await Chapter.find({ book: req.book._id }, '-content').sort('number');
+            return res.status(200).json({ chapters, success: true });
         }
         return res.status(400).send('Get chapters unauthorized');
     }
@@ -55,7 +56,7 @@ router.get('/', findBookById, async (req, res, next) => {
 */
 router.get('/:chapid', findBookById, findChapterById, async (req, res, next) => {
     try {
-        const {price, published} = req.chapter;
+        const { price, published } = req.chapter;
         if (price === 0 && published === true) {
             return res.status(200).json(req.chapter);
         }
@@ -95,7 +96,8 @@ router.get('/:chapid', findBookById, findChapterById, async (req, res, next) => 
 router.post('/', auth, findBookById, async (req, res) => {
     try {
         const book = req.book.id;
-        const { name, content, price } = req.body;
+        const { name, content } = req.body;
+        const price = parseInt(req.body.price);
 
         if (!book || !name || !content) {
             return res.status(400).json({ error: 'Cannot create chapter', success: false });
@@ -116,7 +118,7 @@ router.post('/', auth, findBookById, async (req, res) => {
             if (err) throw err;
         });
 
-        res.status(201).json({chapter, success: true});
+        res.status(201).json({ chapter, success: true });
     }
     catch (err) {
         console.log(err);
@@ -138,13 +140,15 @@ router.post('/', auth, findBookById, async (req, res) => {
 */
 router.put('/:chapid', auth, findBookById, findChapterById, async (req, res) => {
     try {
-        const { name, content, price, published } = req.body;
+        const { name, content } = req.body;
+        const price = parseInt(req.body.price);
+        const published = (req.body.published === "true");
         const chapter = req.chapter;
 
         try {
             let updated_chapter = await Chapter.findByIdAndUpdate(chapter._id, { name, content, price }, { new: true, omitUndefined: true });
             if (published && !chapter[0].published) {
-                updated_chapter = await Chapter.findByIdAndUpdate(chapter._id, {published, publishedAt: Date.now()}, {new: true, omitUndefined: true});
+                updated_chapter = await Chapter.findByIdAndUpdate(chapter._id, { published, publishedAt: Date.now() }, { new: true, omitUndefined: true });
             }
             res.status(200).json(updated_chapter);
         }

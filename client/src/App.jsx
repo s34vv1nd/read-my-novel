@@ -53,20 +53,25 @@ function App() {
                         </Route>
                         <Route exact path="/book/:bookid/:chapid" component={Chapter}>
                         </Route>
-                        <Route exact path="/create/book/:bookid" component={ViewChapters}>
+
+                        <Route exact path="/create/book/:bookid/chapter/:chapid" component={CreateChapter}>
                         </Route>
                         <Route exact path="/create/book/:bookid/chapter" component={CreateChapter}>
                         </Route>
-                        <Route exact path="/create/book/:bookid/chapter/:chapid" component={CreateChapter}>
-
+                        <Route exact path="/create/book/:bookid" component={ViewChapters}>
                         </Route>
-
-                        <PrivateRoute exact path="/create">
-                            <Create />
-                        </PrivateRoute>
                         <PrivateRoute path="/create/book">
                             <NewBookForm />
                         </PrivateRoute>
+                        <PrivateRoute exact path="/create">
+                            <Create />
+                        </PrivateRoute>
+                        
+                        
+                        
+                        
+
+                        
                         <PrivateRoute path="/library">
                             <Library />
                         </PrivateRoute>
