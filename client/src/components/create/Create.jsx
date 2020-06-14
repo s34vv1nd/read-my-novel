@@ -16,8 +16,8 @@ const Create = ({
 }) => {
     useEffect(() => {
         loadUser();
-        getBooksCreated(user._id);
-    }, []);
+        getBooksCreated(user);
+    }, [loadUser, user, isAuthenticated]);
 
     if (!isAuthenticated) {
         return <Redirect to='/login' />;
