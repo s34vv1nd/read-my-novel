@@ -4,7 +4,7 @@ import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
-
+import Spinner from '../Spinner';
 
 class CreateChapter extends Component {
     constructor() {
@@ -12,11 +12,12 @@ class CreateChapter extends Component {
         this.state = {
             bookid: '',
             chapid: '',
-            book: {},
-            chapters: [],
+            book: null,
+            chapters: null,
             name: '',
             content: '',
-            price: 0
+            price: 0,
+            published: false
         }
 
         this.componentDidMount = this.componentDidMount.bind(this);
@@ -25,14 +26,27 @@ class CreateChapter extends Component {
     }
 
     loadChapter = async (bookid, chapid) => {
-        if (!bookid || !chapid) return null;
-        const res_book = await axios.get('api/books/' + bookid);
         const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
-        if (!res_book.data || !res_chapter.data) return null;
-        return {
-            book: res_book.data,
-            chapters: [res_chapter.data]
-        };
+        const res_book = await axios.get('api/books/' + bookid);
+        // console.log(res_chapter.data);
+        // console.log(res_book.data);
+
+        if (res_chapter.data && res_book.data.success) {
+            return {
+                book: res_book.data.book,
+                chapters: res_chapter.data
+            };
+        }
+        return null;
+    }
+
+    updateChapter = async (bookid, chapid, name, content, price, published) => {
+        const { data } = await axios.put('api/book/' + bookid + '/chapters/' + chapid, {
+            name,
+            content,
+            price,
+            published
+        })
     }
 
     async componentDidMount() {
@@ -41,15 +55,18 @@ class CreateChapter extends Component {
             chapid: this.props.match.params.chapid
         });
 
-        if (this.state.chapid) {
+        if (this.state.chapid && this.state.bookid) {
+            const result = await this.loadChapter(this.state.bookid, this.state.chapid);
             await this.setState({
-                book: await this.loadChapter(this.state.bookid, this.state.chapid).book,
-                chapters: await this.loadChapter(this.state.bookid, this.state.chapid).chapters
+                book: result.book,
+                chapters: result.chapters
             });
+        }
 
+        if (this.state.book && this.state.chapters) {
             await this.setState({
-                name: this.state.chapters[0].name,
-                content: this.state.chapters[0].content
+                name: this.state.chapters.name,
+                content: this.state.chapters.content
             });
         }
     }
@@ -59,19 +76,35 @@ class CreateChapter extends Component {
         await this.setState({ [e.target.id]: e.target.value });
     }
 
+    async onClickPublish(e) {
+        e.preventDefault();
+        // console.log(this.state.published);
+        if (this.state.published) {
+            await this.setState({ published: false });
+        } else {
+            await this.setState({ published: true });
+        }
+    }
+
     async onSubmit(e) {
         e.preventDefault();
         //update chapter
+        await this.updateChapter(this.state.bookid, this.state.chapid, this.state.name, this.state.content, this.state.price, this.state.published);
     }
 
     render() {
+
         if (!this.props.isAuthenticated) {
             return <Redirect to='/login' />;
         }
 
+        if (!this.state.book && !this.state.chapters) {
+            return <Spinner />;
+        }
+
         return (
             <>
-                <h2>{this.props.book.name}</h2>
+                <h2>{this.state.book.name}</h2>
                 <Fragment>
                     <Form noValidate onSubmit={this.onSubmit}>
                         <Form.Group controlId="name">
@@ -92,8 +125,12 @@ class CreateChapter extends Component {
                                 onChange={this.onChange} value={this.state.price} />
                         </Form.Group>
 
-                        <Button variant="primary" type="submit">
-                            Create chapter
+                        <Button variant="primary" onClick={this.onClickPublish}>
+                            {this.state.published ? "Not publish" : "Publish"}
+                        </Button>
+
+                        <Button variant="primary" onClick={this.onSubmit}>
+                            Create
                         </Button>
 
                     </Form>

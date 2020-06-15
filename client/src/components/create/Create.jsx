@@ -3,23 +3,43 @@ import { Button } from 'react-bootstrap';
 import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import Spinner from '../Spinner';
 import BookList from './BookList';
 import { loadUser } from '../../actions/auth';
-import { getBooksCreated } from '../../actions/creation';
+
 
 class Create extends Component {
     constructor() {
         super();
         this.state = {
-
+            userid: null,
+            books: null
         }
 
         this.componentDidMount = this.componentDidMount.bind(this);
     }
 
+    getBooksCreated = async (userid) => {
+        const { data } = await axios.get('api/books', {
+            params: {
+                author: userid
+            }
+        });
+        // console.log(data);
+        if (data.success) return data.books;
+        return null;
+    }
+
     async componentDidMount() {
-        await this.props.loadUser();
-        await this.props.getBooksCreated(this.props.user._id);
+        await this.setState({
+            userid: await this.props.loadUser()._id
+        });
+
+        await this.setState({
+            books: await this.getBooksCreated(this.state.userid)
+        })
+
     }
 
     render() {
@@ -27,10 +47,14 @@ class Create extends Component {
             return <Redirect to='/login' />;
         }
 
+        if (!this.state.books) {
+            return <Spinner />
+        }
+
         return (
             <>
                 <Fragment>
-                    <BookList books={this.props.books} />
+                    <BookList books={this.state.books} />
                 </Fragment>
                 <Link to='/create/book'><Button>Create book</Button></Link>
             </>
@@ -40,17 +64,15 @@ class Create extends Component {
 
 Create.propTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
-    user: PropTypes.object,
-    books: PropTypes.array.isRequired
+    user: PropTypes.object
 };
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user,
-    books: state.creation.books,
+    user: state.auth.user
 });
 
 export default connect(
     mapStateToProps,
-    { loadUser, getBooksCreated }
+    { loadUser }
 )(Create);

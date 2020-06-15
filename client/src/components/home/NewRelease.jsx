@@ -14,7 +14,7 @@ export default class HomeRelease extends Component {
     }
 
     loadBooks = async () => {
-        const res = await axios.get('api/books', {
+        const { data } = await axios.get('api/books', {
             params: {
                 status: 'ongoing',
                 page: 1,
@@ -22,12 +22,13 @@ export default class HomeRelease extends Component {
                 sortBy: 'createdAt'
             }
         });
-        if (res.data.success) await this.setState({ books: res.data.books });
+        if (data.success) return data.books;
+        return null;
     }
 
     async componentDidMount() {
-        await this.loadBooks();
-        console.log(this.state.books);
+        await this.setState({books: await this.loadBooks()});
+        // console.log(this.state.books);
     }
 
     mainBook = () => {
@@ -74,7 +75,7 @@ export default class HomeRelease extends Component {
 
     render() {
         console.log(this.state.books);
-        if (!this.state.books) {
+        if (!this.state.books  || !this.state.books[0]) {
             return <Spinner />
         }
 
