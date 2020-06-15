@@ -27,7 +27,7 @@ export default class HomeRelease extends Component {
     }
 
     async componentDidMount() {
-        await this.setState({books: await this.loadBooks()});
+        await this.setState({ books: await this.loadBooks() });
         // console.log(this.state.books);
     }
 
@@ -58,8 +58,11 @@ export default class HomeRelease extends Component {
                                         <div class="card h-100" >
                                             <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                             <div class="card-body">
-                                                <h4 class="card-title"><Link to={"book/" + book._id}>{book.name}</Link></h4>
-                                                <p class="card-text">Author</p>
+                                                <h5 class="card-title"><Link to={"book/" + book._id}>{book.name}</Link></h5>
+                                                <p class="card-text">
+                                                    <div>{book.author.username}</div>
+                                                    <div>Rating: {book.ratings}</div>
+                                                </p>
                                                 <a href={"book/" + book._id} class="btn btn-primary mt-auto">READ</a>
                                             </div>
                                         </div>
@@ -70,12 +73,12 @@ export default class HomeRelease extends Component {
                     </div>
                 )
             }))
-            
+
     }
 
     render() {
         console.log(this.state.books);
-        if (!this.state.books  || !this.state.books[0]) {
+        if (!this.state.books || !this.state.books[0]) {
             return <Spinner />
         }
 

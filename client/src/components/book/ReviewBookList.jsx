@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 export default class Comment extends Component {
     render() {
         return (
-            <div class="container">
-                <h2 class="text-center">Other review</h2>
+            <div class="container" style={{marginTop:'20px'}}>
+                <h2>Other review</h2>
 
                 <div class="card">
                     <div class="card-body">

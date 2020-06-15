@@ -57,8 +57,11 @@ export default class Recommended extends Component {
                                         <div class="card h-100" >
                                             <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                             <div class="card-body">
-                                                <h4 class="card-title"><Link to={"book/" + book._id}>{book.name}</Link></h4>
-                                                <p class="card-text">Author</p>
+                                                <h5 class="card-title"><Link to={"book/" + book._id}>{book.name}</Link></h5>
+                                                <p class="card-text">
+                                                    <div>{book.author.username}</div>
+                                                    <div>Rating: {book.ratings}</div>
+                                                </p>
                                                 <a href={"book/" + book._id} class="btn btn-primary mt-auto">READ</a>
                                             </div>
                                         </div>
