@@ -6,13 +6,15 @@ routes
 			:bookid (GET, PUT, DELETE)
 				chapters (GET, POST)
 					:chapid (GET, PUT, DELETE)
-						comments
-							:commentid
+						comments (GET, POST)
+							:commentid (GET, POST, PUT, DELETE)
+                                upvote
+                                downvote
 				reviews (GET, POST)
 					:reviewid (GET, PUT, DELETE)
 						upvote
 						downvote
-		genres (GET)
+		genres (GET, POST(admin only))
 		library (GET, POST, PUT, DELETE)
 		ratings (GET, PUT)
 		votes (GET, POST, DELETE)

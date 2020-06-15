@@ -12,12 +12,16 @@ const auth = async function (req, res, next) {
     //console.log(token);
     // Verify token
     try {
-        await jwt.verify(token, config.get('jwtSecret'), (error, decoded) => {
+        await jwt.verify(token, config.get('jwtSecret'), async (error, decoded) => {
             if (error) {
                 res.status(401).json({ msg: 'Token is not valid' });
             }
             else {
-                req.user = decoded.user;
+                const user = await User.findById(decoded.user.id);
+                if (!user) {
+                    return res.status(401).json({error: 'Invalid Token', success: false});
+                }
+                req.user = req.decoder;
                 next();
             }
         });

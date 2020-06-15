@@ -12,9 +12,11 @@ const ChapterList = ({
 
     const getChapters = async (bookid) => {
         try {
+            console.log("bookid: ", bookid);
+            
             const { data } = await axios.get('api/books/' + bookid + '/chapters', {
                 params: {
-                    published: false
+                    published: true
                 }
             });
             if (!data.success) return null;
@@ -22,6 +24,7 @@ const ChapterList = ({
         }
         catch (err) {
             console.error(err);
+            throw err;
             return null;
         }
     }

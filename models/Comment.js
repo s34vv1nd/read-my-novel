@@ -10,6 +10,7 @@ const CommentSchema = new Schema({
     chapter: {
         type: Schema.Types.ObjectId, 
         ref: 'chapter',
+        required: true
     },
     parent: {
         type:Schema.Types.ObjectId,

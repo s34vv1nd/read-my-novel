@@ -23,6 +23,9 @@ const BookSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'genre'
     }],
+    sypnosis: {
+        type: String
+    },
     completed: {
         type: Boolean,
         default: false

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { loadUser } from './actions/auth';
 import { loadGenres } from './actions/genres';
+import { loadBooks } from './actions/books';
 import Alert from './components/Alert';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -33,6 +34,7 @@ function App() {
     useEffect(() => {
         store.dispatch(loadUser());
         store.dispatch(loadGenres());
+        store.dispatch(loadBooks());
     }, []);
 
     return (
@@ -68,12 +70,12 @@ function App() {
                         <PrivateRoute exact path="/create">
                             <Create />
                         </PrivateRoute>
-                        
-                        
-                        
-                        
 
-                        
+
+
+
+
+
                         <PrivateRoute path="/library">
                             <Library />
                         </PrivateRoute>

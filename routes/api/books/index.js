@@ -11,6 +11,7 @@ const deleteBookById = require('../utils/delete').deleteBookById;
 const Book = require('../../../models/Book');
 const Genre = require('../../../models/Genre');
 const Library = require('../../../models/Library');
+const { search } = require('./reviews');
 
 // @route   GET api/books
 // @desc    get books user want to browse (depending on {genre, completed/ongoing})
@@ -18,16 +19,19 @@ const Library = require('../../../models/Library');
 /*
 request: req.params: {
     author: author's id
+    searchStr: ''
     genres: [genres]/'all'
     status: completed'/'ongoing'/'all'
     page: Number || 1
     perPage: Number || 10
     sortBy: 'alphabet'/'ratings'/'votes'/'popularity'/'onCreated' (default: 'alphabet')
+    projection: 'name'
 }
 */
 router.get('/', async (req, res) => {
     try {
         let author = req.query.author;
+        let searchStr = req.query.searchStr;
         let genres = req.query.genres || 'all';
         let status = req.query.status || 'all';
         let page = parseInt(req.query.page || 1);
@@ -36,6 +40,9 @@ router.get('/', async (req, res) => {
 
         let query;
         if (author) query = {author: author};
+        if (searchStr) {
+            
+        }
         if (genres !== 'all') {
             genres = await Genre.find({ name: { "$in": genres } }).select('_id');
             query = { ...query, genres: { "$in": genres } };
@@ -44,7 +51,7 @@ router.get('/', async (req, res) => {
             status = (status === 'completed');
             query = { ...query, completed: status };
         }
-        let books = await Book.find(query)
+        let books = await Book.find(query, req.query.projection)
             .populate('author', 'username')
             .populate('genres', 'name')
             .exec();

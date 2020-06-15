@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import logo from '.././applogo.png';
 import { logout } from '../actions/auth';
 import { AppName } from '../GlobalVariables.js';
+import SearchBar from './SearchBar';
 
 class Header extends Component {
     render() {
@@ -26,10 +27,7 @@ class Header extends Component {
                         <Link to="/create" className="nav-link">Create</Link>
                     </Nav>
                     <Nav>
-                        <form className="form-inline my-2 my-lg-0"  noValidate>
-                            <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-                            <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                        </form>
+                        <SearchBar />
                     </Nav>
                     <Nav>
                         <Link to="/library" className="nav-link">Library</Link>
@@ -54,7 +52,7 @@ Header.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(

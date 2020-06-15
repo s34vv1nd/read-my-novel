@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
-const deleteChapterById = require('../../../utils/delete').deleteChapterById;
+const deleteChapterById = require('../../../utils/delete').deleteCommentById;
 
 const Book = require('../../../../../models/Book');
 const Chapter = require('../../../../../models/Chapter');
@@ -48,6 +48,31 @@ router.get('/', async (req, res) => {
     }
 })
 
+// @route   POST api/books/:bookid/chapters/:chapid/comments
+// @desc    post a comment to a chapter
+// @access  Private
+/*
+    const res = await axios.post('api/books/' + bookid + '/chapters/' + chapid + '/comments', {
+        content: 
+    });
+*/
+router.post('/', auth, async (req, res) => {
+    try {
+        const user = req.user.id;
+        const chapter = req.params.chapid;
+        const content = req.body.chapter;
+        const comment = new Comment({
+            user, chapter, content
+        })
+        await comment.save();
+        return res.status(201).json({comment, success: true});
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Server error when post comment', success: false });
+    }
+})
+
 // @route   GET api/books/:bookid/chapters/:chapid/comments/:commentid
 // @desc    get a comment by ID
 // @access  Public
@@ -73,22 +98,66 @@ router.get('/:commentid', async (req, res) => {
     }
 })
 
-// @route   POST api/books/:bookid/chapters/:chapid/comments
-// @desc    post a comment to a chapter
+// @route   POST api/books/:bookid/chapters/:chapid/comments/:commentid
+// @desc    post a reply to a comment
 // @access  Private
 /*
-    const res = await axios.post('api/books/' + bookid + '/chapters/' + chapid + '/comments', {
+    const res = await axios.post('api/books/' + bookid + '/chapters/' + chapid + '/comments/' + commentid, {
         content: 
     });
 */
 router.post('/', auth, async (req, res) => {
     try {
+        const user = req.user.id;
         const chapter = req.params.chapid;
-        
+        const parent = req.params.commentid;
+        const content = req.body.chapter;
+        const comment = new Comment({
+            user, chapter, parent, content
+        })
+        await comment.save();
+        return res.status(201).json({comment, success: true});
     }
     catch (err) {
         console.log(err);
         res.status(500).json({ error: 'Server error when post comment', success: false });
+    }
+})
+
+// @route   PUT api/books/:bookid/chapters/:chapid/comments/:commentid
+// @desc    Edit a comment of a chapter
+// @access  Private
+/*
+    const res = await axios.put('api/books/' + bookid + '/chapters/' + chapid + '/comments/' + commentid, {
+        content: 
+    });
+*/
+router.put('/:commentid', auth, async (req, res) => {
+    try {
+        const comment = Comment.findByIdAndUpdate(req.params.commentid, {content: req.body.content});
+        return res.status(201).json({comment, success: true});
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Server error when edit comment', success: false });
+    }
+})
+
+// @route   DELETE api/books/:bookid/chapters/:chapid/comments/:commentid
+// @desc    delete a comment by ID
+// @access  Private
+/*
+    const res = await axios.delete('api/books/' + bookid + '/chapters/' + chapid + '/comments/' + commentid);
+*/
+router.delete('/:commentid', auth, async (req, res) => {
+    try {
+        //await Comment.deleteOne({_id: req.params.commentid});
+        deleteCommentById(req.params.commentid);
+        res.status(200).json({success: true});
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({error: 'Server Error when delete a chapter', success: false});
     }
 })
 
