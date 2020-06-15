@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { loadUser } from './actions/auth';
+import { loadGenres } from './actions/genres';
 import Alert from './components/Alert';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -31,6 +32,7 @@ if (localStorage.token) {
 function App() {
     useEffect(() => {
         store.dispatch(loadUser());
+        store.dispatch(loadGenres());
     }, []);
 
     return (

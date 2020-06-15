@@ -22,7 +22,7 @@ request: req.params: {
     status: completed'/'ongoing'/'all'
     page: Number || 1
     perPage: Number || 10
-    sortBy: 'alphabet'/'ratings'/'votes'/'popularity' (default: 'alphabet')
+    sortBy: 'alphabet'/'ratings'/'votes'/'popularity'/'onCreated' (default: 'alphabet')
 }
 */
 router.get('/', async (req, res) => {
@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
         //books[((page - 1)*perPage + 1) .. (page * perPage)]
         if (perPage !== -1) books = books.slice((page - 1) * perPage, page * perPage);
 
-        res.status(200).json(books);
+        res.status(200).json({books, success: true});
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

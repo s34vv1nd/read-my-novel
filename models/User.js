@@ -15,6 +15,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    admin: {
+        type: Boolean
+    },
     avatar: {
         type: Buffer,
         contentType: String

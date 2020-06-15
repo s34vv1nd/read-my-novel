@@ -12,10 +12,10 @@ export const loadRankings = () => async dispatch => {
                 sortBy: 'rating'
             }
         });
-        console.log(res.data);
+        console.log(res.data.books);
         dispatch({
             type: GET_RANKINGS_SUCCESS,
-            payload: res.data
+            payload: res.data.books
         });
     } catch(err) {
         dispatch({

@@ -2,8 +2,8 @@ import axios from 'axios';
 import {
     GET_BOOKS_SUCCESS, 
     GET_BOOKS_FAIL,
-    GET_GENRES_SUCCESS,
-    GET_GENRES_FAIL
+    LOAD_GENRES_SUCCESS,
+    LOAD_GENRES_FAIL
 } from './types';
 
 //Get list of books
@@ -32,12 +32,12 @@ export const loadGenres = () => async dispatch => {
     try {
         const res = await axios.get('api/genres');
         dispatch({
-            type: GET_GENRES_SUCCESS,
+            type: LOAD_GENRES_SUCCESS,
             payload: res.data
         });
     } catch(err) {
         dispatch({
-            type: GET_GENRES_FAIL
+            type: LOAD_GENRES_FAIL
         })
     }
 }

@@ -31,7 +31,7 @@ export const getBooksCreated = (userid) => async dispatch => {
 
         dispatch({
             type: GET_CREATED_BOOKS_SUCCESS,
-            payload: data
+            payload: data.books
         });
     }
     catch (err) {
@@ -45,10 +45,10 @@ export const getBooksCreated = (userid) => async dispatch => {
 export const createBook = ({ name, genres }) => async dispatch => {
     try {
         const res = await axios.post('api/books', { name, genres });
-
+        console.log(res.data);
         dispatch({
             type: CREATE_SUCCESS,
-            payload: res.data
+            payload: res.data.book
         });
         dispatch(getBooksCreated());
         dispatch(setAlert('Book created successfully!', 'success', 1000));

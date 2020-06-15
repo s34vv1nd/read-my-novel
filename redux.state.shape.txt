@@ -1,12 +1,19 @@
 REDUX STATE SHAPE:
 
 state : {
-    books: [],
-    book: {
-        book:
-        chapters: []
-        chapter: {
-            
+    auth: {
+        token: 
+        isAuthenticated: Boolean
+        loading: Boolean
+        user: {
+            _id,
+            name,
+            email,
+            admin,
+            createdAt,
+            updatedAt
         }
     }
+    alert: [],
+    genres: [],
 }

@@ -1,10 +1,12 @@
 import React, { Component, Fragment, useEffect } from 'react';
 import { Row, Col, Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Spinner from '../Spinner';
 
 const BookList = ({
     books,
 }) => {
+    if (!books) return <Spinner />
     return (
         <Table responsive>
             <thead>

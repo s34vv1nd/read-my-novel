@@ -1,6 +1,6 @@
 import {
     GET_BOOKS_SUCCESS, 
-    GET_GENRES_SUCCESS,
+    LOAD_GENRES_SUCCESS,
     GET_LIBRARY_SUCCESS,
     GET_LIBRARY_FAIL,
     ADD_BOOK_SUCCESS,
@@ -23,7 +23,7 @@ export default function(state = initialState, action) {
                 ...state,
                 books: payload,
             };
-        case GET_GENRES_SUCCESS:
+        case LOAD_GENRES_SUCCESS:
             return {
                 ...state,
                 genres: payload

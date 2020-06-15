@@ -1,11 +1,44 @@
-import React, { Component, Fragment, useEffect } from 'react';
+import React, { Component, Fragment, useState, useEffect } from 'react';
 import { Row, Col, Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import Spinner from '../Spinner';
+
 
 const ChapterList = ({
-    chapters,
     bookid
 }) => {
+    const [chapters, setChapters] = useState(null);
+
+    const getChapters = async (bookid) => {
+        try {
+            const { data } = await axios.get('api/books/' + bookid + '/chapters', {
+                params: {
+                    published: false
+                }
+            });
+            if (!data.success) return null;
+            return data.chapters;
+        }
+        catch (err) {
+            console.error(err);
+            return null;
+        }
+    }
+
+    useEffect(() => {
+        const asyncFunc = async () => {
+            const chaps = await getChapters(bookid);
+            await setChapters(chaps);
+        }
+        asyncFunc();
+    }, []);
+
+    //console.log(chapters);
+    if (!chapters) {
+        return <Spinner />
+    }
+
     return (
         <Table responsive>
             <thead>

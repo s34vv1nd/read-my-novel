@@ -2,8 +2,9 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { createBook, getBooksCreated } from '../../actions/creation';
+import {setAlert} from '../../actions/alert';
 import { Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 class NewBookForm extends Component {
     constructor() {
@@ -23,10 +24,18 @@ class NewBookForm extends Component {
         this.setState({ [e.target.id]: e.target.value });
     }
 
+    createBook = async ({name, genres}) => {
+        const res = await axios.post('api/books', { name, genres });
+        return res.data;
+    }
+
     async onSubmit(e) {
         e.preventDefault();
-        await this.props.createBook({ name: this.state.bookname, genres: [this.state.genres] });
-        await this.props.getBooksCreated();
+        if (!this.state.genres) {
+            setAlert('Choose one genre!!', "danger", 2000);
+            return;
+        }
+        await this.createBook({ name: this.state.bookname, genres: [this.state.genres] });
         this.setState({submitted : true})
     }
 
@@ -46,8 +55,12 @@ class NewBookForm extends Component {
 
                     <Form.Group controlId="genres">
                         <Form.Label>Genre</Form.Label>
-                        <Form.Control type="text" placeholder="Enter genres"
-                            onChange={this.onChange} value={this.state.genres} />
+                        <Form.Control as="select" placeholder="Enter genres" onChange={this.onChange} value={this.state.genres} >
+                            <option value={null}>Choose...</option>
+                            {this.props.genres.map(genre => 
+                                <option key = {genre._id} value={genre.name}>{genre.name}</option>
+                            )}
+                        </Form.Control>
                     </Form.Group>
 
                     <Button variant="primary" type="submit">
@@ -59,16 +72,11 @@ class NewBookForm extends Component {
     }
 }
 
-NewBookForm.propTypes = {
-    createBook: PropTypes.func,
-    getBooksCreated: PropTypes.func
-};
-
 const mapStateToProps = state => ({
-
+    genres: state.genres
 });
 
 export default connect(
-    null,
-    { createBook, getBooksCreated }
+    mapStateToProps,
+    { setAlert }
 )(NewBookForm);

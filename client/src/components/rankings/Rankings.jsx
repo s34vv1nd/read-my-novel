@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 // import styles from './Rankings.module.css';
 import './Rankings.css';
+import Spinner from '../Spinner';
 
 class Rankings extends Component {
     constructor() {
@@ -22,6 +23,9 @@ class Rankings extends Component {
     }
 
     render() {
+        if (!this.props.books) {
+            return <Spinner />
+        }
         return (
             <>
                 <h2 style={{textAlign:'center', marginTop:'20px'}}> Power Ranking</h2>

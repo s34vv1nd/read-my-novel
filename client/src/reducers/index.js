@@ -5,6 +5,7 @@ import creation from './creation';
 import browse from './browse';
 import book from './book';
 import rankings from './rankings';
+import genres from './genres';
 
 export default combineReducers({
   alert,
@@ -12,5 +13,6 @@ export default combineReducers({
   creation,
   browse,
   book,
-  rankings
+  rankings,
+  genres
 });

@@ -2,43 +2,58 @@ import React, { Component, Fragment, useEffect } from 'react';
 import { Container, Form, Col, Row, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import BookList from './BookList';
-import {
-    Redirect
-} from "react-router-dom";
-import { loadBookBy, loadGenres } from '../../actions/browse';
+import Spinner from '../Spinner';
+//import { loadBookBy, loadGenres } from '../../actions/browse';
+import axios from 'axios';
 
 class Browse extends Component {
     constructor() {
         super();
         this.state = {
+            books: null,
             genre: '',
-            status: ''
+            status: '',
+            sortBy: ''
         }
 
         this.onChange = this.onChange.bind(this);
-        //this.onSubmit = this.onSubmit.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
     }
 
+    loadBooksBy = async (genre, status, sortBy) => {
+        try {
+            const { data } = await axios.get('api/books', {
+                params: {
+                    genres: genre,
+                    status: status,
+                    sortBy: 'alphabet'
+                }
+            });
+            if (data.success) return data.books;
+            return null;
+        }
+        catch (err) {
+            console.error(err);
+            return null;
+        }
+    }
+
     async componentDidMount() {
-        await this.props.loadGenres();
-        await this.props.loadBookBy();
+        await this.setState({books: await this.loadBooksBy(this.state.genre, this.state.status, this.state.sortBy)});
     }
 
     async onChange(e) {
         await this.setState({ [e.target.id]: e.target.value });
-        await this.props.loadBookBy(this.state.genre, this.state.status);
+        await this.setState({books: await this.loadBooksBy(this.state.genre, this.state.status, this.state.sortBy)});
     }
 
-    // async onSubmit(e) {
-    //     e.preventDefault();
-    // }
-
     render() {
-        
+        if (!this.state.books) {
+            return <Spinner />
+        }
         return (
             <>
-                <h2 style={{textAlign:'center', marginTop:'20px'}}>Novels Genre</h2>
+                <h2 style={{ textAlign: 'center', marginTop: '20px' }}>Novels Genre</h2>
                 <Container>
                     <Row>
                         <Col xs={12} md={4}>
@@ -46,7 +61,7 @@ class Browse extends Component {
                                 <Form.Group>
                                     <Form.Label>Genre</Form.Label>
                                     <Form.Control as="select" id="genre" onChange={this.onChange} value={this.state.genre}>
-                                        <option value ='all'>All</option>
+                                        <option value='all'>All</option>
                                         {this.props.genres.map(genre => <option key={genre.id} value={genre.name}>{genre.name}</option>)}
                                     </Form.Control>
                                 </Form.Group>
@@ -66,14 +81,11 @@ class Browse extends Component {
                             </Form>
 
                         </Col>
-                        {/* <Col xs={12} md={4}>
-                            <Button variant="outline-secondary" onClick={this.onSubmit}>Submit</Button>{' '}
-                        </Col> */}
                     </Row>
                 </Container>
 
                 <Fragment>
-                    <BookList books={this.props.books} />
+                    <BookList books={this.state.books} />
                 </Fragment>
 
             </>
@@ -82,11 +94,11 @@ class Browse extends Component {
 }
 
 const mapStateToProps = state => ({
-    books: state.browse.books,
-    genres: state.browse.genres
+    //books: state.browse.books,
+    genres: state.genres
 });
 
 export default connect(
     mapStateToProps,
-    { loadBookBy, loadGenres }
+    //{ loadBookBy, loadGenres }
 )(Browse);

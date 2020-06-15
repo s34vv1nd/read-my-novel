@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button } from 'react-bootstrap'
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
+import Spinner from '../Spinner';
 import ChapterList from './ChapterList';
-import { loadBook } from '../../actions/book';
-import {setAlert} from '../../actions/alert';
+import { setAlert } from '../../actions/alert';
 import { isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/library';
 
 class Book extends Component {
@@ -12,6 +13,8 @@ class Book extends Component {
     constructor(props) {
         super();
         this.state = {
+            bookid: null,
+            book: null,
             inLibrary: false,
             needRedirect: false
         }
@@ -19,36 +22,44 @@ class Book extends Component {
         this.onClickLibrary = this.onClickLibrary.bind(this);
     }
 
+    loadBook = async (bookid) => {
+        const { data } = await axios.get('api/books/' + this.state.bookid);
+        if (data.success) {
+            return data.book;
+        }
+        return null;
+    }
+
+    isInLibrary = async (bookid) => {
+        const { data } = await axios.get('api/library', {
+            params: {
+                bookid: bookid
+            }
+        })
+        if (data.success) return true;
+        return false;
+    }
+
     async componentDidMount() {
-        const bookid = this.props.match.params.bookid;
-        await this.props.loadBook(bookid);
-        const inLibrary = await isInLibrary(bookid);
-        if (inLibrary === true) {
-            // In library
-            await this.setState({ inLibrary: true });
-        }
-        else {
-            // Not in library
-            await this.setState({ inLibrary: false });
-        }
+        await this.setState({ bookid: this.props.match.params.bookid });
+        await this.setState({ book: await this.loadBook(this.state.bookid) });
+        await this.setState({ inLibrary: this.isInLibrary(this.state.bookid) });
     }
 
     async onClickLibrary(e) {
         e.preventDefault();
         if (!this.props.isAuthenticated) {
             await this.props.setAlert('Please login to bookmark!', 'info');
-            await this.setState({needRedirect: true});
+            await this.setState({ needRedirect: true });
             return;
         }
-        const bookid = this.props.match.params.bookid;
-        const inLibrary = await isInLibrary(bookid);
-        if (inLibrary) {
-            if (await removeFromLibrary(bookid)) {
+        if (this.state.inLibrary) {
+            if (await removeFromLibrary(this.state.bookid)) {
                 await this.setState({ inLibrary: false });
             }
         }
         else {
-            if (await addToLibrary(bookid)) {
+            if (await addToLibrary(this.state.bookid)) {
                 await this.setState({ inLibrary: true });
             }
         }
@@ -60,6 +71,10 @@ class Book extends Component {
             return <Redirect to='/login'></Redirect>
         }
 
+        if (!this.state.book) {
+            return <Spinner />;
+        }
+
         return (
             <>
                 <Container>
@@ -69,19 +84,19 @@ class Book extends Component {
                         </Col>
                         <Col xs={12} md={4}>
                             {
-                                (this.props.chapters && this.props.chapters[0]) ?
+                                (this.state.chapters && this.state.chapters[0]) ?
                                     <h3><Link to={{
-                                        pathname: '/book/' + this.props.match.params.bookid + '/' + this.props.chapters[0]._id,
-                                    }}>Name: {this.props.book.name}</Link></h3>
-                                : 
-                                    <h3>{this.props.book.name}</h3>
+                                        pathname: '/book/' + this.state.bookid + '/' + this.state.chapters[0]._id,
+                                    }}>Name: {this.state.book.name}</Link></h3>
+                                    :
+                                    <h3>{this.state.book.name}</h3>
                             }
                             <ListGroup horizontal>
-                                {this.props.book.genres.map(genre => <ListGroup.Item key={genre.name}>{genre.name}</ListGroup.Item>)}
-                                <ListGroup.Item key="status">{this.props.book.completed == true ? "Completed" : "Ongoing"}</ListGroup.Item>
+                                {this.state.book.genres.map(genre => <ListGroup.Item key={genre.name}>{genre.name}</ListGroup.Item>)}
+                                <ListGroup.Item key="status">{this.state.book.completed == true ? "Completed" : "Ongoing"}</ListGroup.Item>
                             </ListGroup>
-                            <p>Author: {this.props.book.author.username}</p>
-                            <p>Rating: {this.props.book.ratings}</p>
+                            <p>Author: {this.state.book.author.username}</p>
+                            <p>Rating: {this.state.book.ratings}</p>
                             <ButtonGroup>
                                 <Button variant="primary" onClick={this.onClickLibrary}>
                                     {this.state.inLibrary ? "Remove from library" : "Add to library"}
@@ -92,7 +107,7 @@ class Book extends Component {
                 </Container>
 
                 <Fragment>
-                    <ChapterList chapters={this.props.chapters} bookid={this.props.match.params.bookid} />
+                    <ChapterList bookid={this.state.bookid} />
                 </Fragment>
 
 
@@ -102,14 +117,11 @@ class Book extends Component {
 }
 
 const mapStateToProps = state => ({
-    book: state.book.book,
-    books: state.browse.books,
-    chapters: state.book.chapters,
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
+    user: state.auth.user,
 });
 
 export default connect(
     mapStateToProps,
-    { loadBook, isInLibrary, setAlert }
+    { isInLibrary, addToLibrary, removeFromLibrary, setAlert }
 )(Book);
