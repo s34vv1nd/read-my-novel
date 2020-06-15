@@ -7,6 +7,9 @@ import Spinner from '../Spinner';
 import ChapterList from './ChapterList';
 import { setAlert } from '../../actions/alert';
 import { isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/library';
+import ReviewBookForm from './ReviewBookForm'
+import ReviewBookList from './ReviewBookList'
+
 
 class Book extends Component {
 
@@ -77,7 +80,7 @@ class Book extends Component {
 
         return (
             <>
-                <Container>
+                <Container style={{border: 'ridge'}}>
                     <Row>
                         <Col xs={6} md={4}>
                             <Image src="" alt="Image" thumbnail />
@@ -108,6 +111,11 @@ class Book extends Component {
 
                 <Fragment>
                     <ChapterList bookid={this.state.bookid} />
+                </Fragment>
+
+                <Fragment>
+                    <ReviewBookForm />
+                    <ReviewBookList />
                 </Fragment>
 
 

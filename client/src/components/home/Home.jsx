@@ -21,8 +21,8 @@ export default class Home extends Component {
                 <div></div>
                 <h2 style={{marginTop: '20px'}}>Latest Updates</h2>
                 <table></table>
-                <CommentForm />
-                <Comment />
+                {/* <CommentForm /> */}
+                {/* <Comment /> */}
                 <ReadChapter />
             </Fragment>
         )
