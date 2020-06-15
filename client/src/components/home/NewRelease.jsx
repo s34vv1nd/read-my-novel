@@ -55,12 +55,12 @@ export default class HomeRelease extends Component {
                             this.state.books.slice(4 * index + 1, 4 * index + 5).map(
                                 book => (
                                     <div class="col-md-3">
-                                        <div class="card" >
+                                        <div class="card h-100" >
                                             <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
                                             <div class="card-body">
                                                 <h4 class="card-title"><Link to="#">{book.name}</Link></h4>
-                                                <p class="card-text">Book intro</p>
-                                                <a href="#" class="btn btn-primary">READ</a>
+                                                <p class="card-text">Author</p>
+                                                <a href="#" class="btn btn-primary mt-auto">READ</a>
                                             </div>
                                         </div>
                                     </div>
