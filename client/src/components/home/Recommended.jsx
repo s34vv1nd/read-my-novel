@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Spinner from '../Spinner';
 import axios from 'axios';
 
+const imgdefault = "https://images-na.ssl-images-amazon.com/images/I/51EstVXM1UL._SX331_BO1,204,203,200_.jpg"
 
 export default class Recommended extends Component {
 
@@ -34,7 +35,7 @@ export default class Recommended extends Component {
         return (
             < div class="col-md-4" >
                 <div class="card" style={{ marginTop: '50px' }}>
-                    <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
+                    <img class="card-img-top" src={imgdefault} alt="Book image"></img>
                     <div class="card-body">
                         <h4 class="card-title"><Link to={"book/" + this.state.books[0]._id}>{this.state.books[0].name}</Link></h4>
                         <p class="card-text">Book intro</p>
@@ -55,7 +56,7 @@ export default class Recommended extends Component {
                                 book => (
                                     <div class="col-lg-3 col-md-6" style={{padding: '10px'}}>
                                         <div class="card h-100"  >
-                                            <img class="card-img-top" src="img_avatar1.png" alt="Book image"></img>
+                                            <img class="card-img-top" src={imgdefault} alt="Book image"></img>
                                             <div class="card-body">
                                                 <h5 class="card-title"><Link to={"book/" + book._id}>{book.name}</Link></h5>
                                                 <p class="card-text">
