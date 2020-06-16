@@ -19,9 +19,7 @@ const UserSchema = new mongoose.Schema({
         type: Boolean
     },
     avatar: {
-        type: Buffer,
-        contentType: String,
-        imgURL: String
+        type: String
     },
     coin: {
         type: Number,

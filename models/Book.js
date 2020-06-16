@@ -12,14 +12,10 @@ const BookSchema = new mongoose.Schema({
         unique: true
     },
     cover: {
-        type: Buffer,
-        contentType: String,
-        imgURL: String
+        type: String
     },
     banner: {
-        type: Buffer,
-        contentType: String,
-        imgURL: String
+        type: String
     },
     genres: [{
         type: mongoose.Schema.Types.ObjectId,

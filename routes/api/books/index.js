@@ -124,7 +124,8 @@ router.get('/', async (req, res, next) => {
 /*
     const res = axios.post('api/books', {
         name: book name,
-        genres: genres' names
+        genres: genres' names,
+        cover: link img
     })
 */
 router.post('/', auth, async (req, res) => {
@@ -132,11 +133,12 @@ router.post('/', auth, async (req, res) => {
         const author = req.user.id;
         const name = req.body.name;
         const genrenames = req.body.genres;
+        const cover = req.body.cover;
         const genres = await Genre.find().where('name').in(genrenames).select('id').exec();
         if (genres.length === 0 || genres.length < genrenames.length) {
             return res.status(400).send('Invalid genres');
         }
-        book = new Book({ author, name, genres });
+        book = new Book({ author, name, genres, cover });
         await book.save();
         res.status(201).json(book);
     }
@@ -197,19 +199,24 @@ router.delete('/:bookid', auth, findBookById, async (req, res) => {
             (name: String,)
             (genres: [String],) // array of genres name
             (completed: Boolean) // true (if completed) | false (if ongoing)
+            (cover: String)
         }
     })
     // res.data is the book after update
 */
 router.put('/:bookid', auth, findBookById, async (req, res) => {
     try {
-        const { name, genrenames, completed } = req.body.book;
+        const { name, genrenames, completed, cover } = req.body.book;
         const genres = await Genre.find().where('name').in(genrenames).select('id').exec();
         if (genres.length === 0 || genres.length !== genrenames.length) {
             return res.status(400).send('Invalid genres');
         }
         try {
-            let book = Book.findByIdAndUpdate(req.book.id, { name, genres, completed }, { new: true, omitUndefined: true });
+            let book = Book.findByIdAndUpdate(
+                req.book.id, 
+                { name, genres, completed, cover }, 
+                { new: true, omitUndefined: true }
+            );
             book = await book.populate('genres');
             res.status(200).json(book);
         }

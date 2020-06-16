@@ -47,34 +47,36 @@ function App() {
                         <Route path="/" exact>
                             <Home />
                         </Route>
+                        
                         <Route path="/browse">
                             <Browse />
                         </Route>
+                        
                         <Route path="/rankings">
                             <Rankings />
                         </Route>
+                        
                         <Route exact path="/book/:bookid" component={Book}>
                         </Route>
+                        
                         <Route exact path="/book/:bookid/:chapid" component={Chapter}>
                         </Route>
 
                         <Route exact path="/create/book/:bookid/chapter/:chapid">
                             <EditChapter />
                         </Route>
+                        
                         <Route exact path="/create/book/:bookid">
                             <ViewChapters />
                         </Route>
+                        
                         <PrivateRoute path="/create/book">
                             <NewBookForm />
                         </PrivateRoute>
+
                         <PrivateRoute exact path="/create">
                             <Create />
                         </PrivateRoute>
-
-
-
-
-
 
                         <PrivateRoute path="/library">
                             <Library />
