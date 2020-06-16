@@ -191,6 +191,6 @@ router.delete('/:chapid', auth, findBookById, findChapterById, async (req, res) 
     }
 })
 
-router.use('/comments', require('./comment'));
+router.use('/:chapid/comments', require('./comments'));
 
 module.exports = router;

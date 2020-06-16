@@ -21,7 +21,6 @@ class ReviewBookForm extends Component {
             const res = await axios.post('api/books/' + bookid + '/reviews', {
                 content: content
             })
-            console.log(res.data);
         } catch (err) {
             console.log(err);
         }

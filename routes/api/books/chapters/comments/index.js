@@ -1,15 +1,9 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 
-const bcrypt = require('bcryptjs');
 const auth = require('../../../../../middlewares/auth');
-const findBookById = require('../../../../../middlewares/book').findBookById;
-const findChapterById = require('../../../../../middlewares/book').findChapterById;
-const jwt = require('jsonwebtoken');
-const config = require('config');
-const { check, validationResult } = require('express-validator');
 
-const deleteChapterById = require('../../../utils/delete').deleteCommentById;
+const deleteCommentById = require('../../../utils/delete');
 
 const Book = require('../../../../../models/Book');
 const Chapter = require('../../../../../models/Chapter');
@@ -37,7 +31,7 @@ router.get('/', async (req, res) => {
         let filter = { chapter };
         if (user) filter = { ...filter, user };
         if (parent) filter = { ...filter, parent };
-        const comments = Comment.find(filter)
+        const comments = await Comment.find(filter)
             .populate('user', 'username')
             .populate('chapter', 'name num');
         return res.status(200).json({ comments, success: true });
@@ -134,7 +128,7 @@ router.post('/', auth, async (req, res) => {
 */
 router.put('/:commentid', auth, async (req, res) => {
     try {
-        const comment = Comment.findByIdAndUpdate(req.params.commentid, {content: req.body.content});
+        const comment = await Comment.findByIdAndUpdate(req.params.commentid, {content: req.body.content});
         return res.status(201).json({comment, success: true});
     }
     catch (err) {
@@ -152,7 +146,7 @@ router.put('/:commentid', auth, async (req, res) => {
 router.delete('/:commentid', auth, async (req, res) => {
     try {
         //await Comment.deleteOne({_id: req.params.commentid});
-        deleteCommentById(req.params.commentid);
+        await deleteCommentById(req.params.commentid);
         res.status(200).json({success: true});
     }
     catch (err) {

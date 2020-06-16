@@ -53,19 +53,7 @@ const ReviewBookList = ({
                     <a class="float-left" href="#"><strong>{review.user.username}</strong></a>
                 </p>
                 <hr />
-                {rating ?
-                <p>Rating: {rating}/5</p>
-                :
-                <p>Not rating</p>}
-
-                {/* <p>
-                                    <a class="float-left" href="#"><strong>{review.user.username}</strong></a>
-                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
-                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
-                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
-                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
-
-                                </p> */}
+                
                 <div class="clearfix"></div>
                 <p>{review.content}</p>
                 <p>

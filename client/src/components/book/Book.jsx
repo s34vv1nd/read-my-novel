@@ -7,8 +7,8 @@ import Spinner from '../Spinner';
 import ChapterList from './ChapterList';
 import { setAlert } from '../../actions/alert';
 import { isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/library';
-import ReviewBookForm from './ReviewBookForm'
-import ReviewBookList from './ReviewBookList'
+import ReviewBookForm from './ReviewForm'
+import ReviewBookList from './ReviewList'
 
 const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 
@@ -47,7 +47,7 @@ class Book extends Component {
                 bookid: bookid
             }
         })
-        if (data.success) return true;
+        if (data.success && data.books != 0) return true;
         return false;
     }
 
@@ -58,9 +58,7 @@ class Book extends Component {
                     // user: userid,
                 }
             });
-            //console.log(res.data);
-            //console.log(res.data.reviews);
-
+            console.log(res.data);
             if (res.data.success) return res.data.reviews;
             return null;
         } catch (err) {
@@ -73,8 +71,7 @@ class Book extends Component {
         await this.setState({ bookid: this.props.match.params.bookid });
         await this.setState({ book: await this.loadBook(this.state.bookid) });
         await this.setState({ reviews: await this.getReviews(this.state.bookid) });
-        await this.setState({ inLibrary: this.isInLibrary(this.state.bookid) });
-        //console.log(this.state.reviews);
+        await this.setState({ inLibrary: await this.isInLibrary(this.state.bookid) });
     }
 
     async onClickLibrary(e) {
@@ -107,7 +104,7 @@ class Book extends Component {
         }
 
         return (
-            <>
+            <div>
                 <Container style={{ border: 'ridge' }}>
                     <Row>
                         <Col md={4} lg={4}>
@@ -140,30 +137,23 @@ class Book extends Component {
                 <Fragment>
                     <hr></hr>
                     <ReviewBookForm bookid={this.state.bookid} />
-
-
                 </Fragment>
-                {this.state.reviews ?
-                    <div class="container" style={{ marginTop: '50px' }}>
-                        <h2>Other reviews</h2>
 
-                        <div class="card">
-                            <div class="card-body">
-                                {this.state.reviews.map(review =>
-                                    <Fragment>
-                                        <ReviewBookList review={review} bookid={this.state.bookid} />
-                                    </Fragment>
-                                )}
-                            </div>
+
+                <div class="container" style={{ marginTop: '50px' }}>
+                    <h2>REVIEWS:</h2>
+
+                    <div class="card">
+                        <div class="card-body">
+                            {this.state.reviews == 0 ? null : this.state.reviews.map(review =>
+                                <Fragment>
+                                    <ReviewBookList review={review} bookid={this.state.bookid} />
+                                </Fragment>
+                            )}
                         </div>
                     </div>
-                    :
-                    <p>This book is not review yet</p>
-                }
-
-
-
-            </>
+                </div>
+            </div>
         );
     }
 }
