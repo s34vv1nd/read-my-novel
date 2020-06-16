@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import Spinner from '../Spinner';
 
-class CreateChapter extends Component {
+class UpdateChapter extends Component {
     constructor() {
         super();
         this.state = {
@@ -30,7 +30,8 @@ class CreateChapter extends Component {
         try {
             const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
             const res_book = await axios.get('api/books/' + bookid);
-
+            console.log(res_chapter.data);
+            console.log(res_book.data);
             if (res_chapter.data.success && res_book.data.success) {
                 return {
                     book: res_book.data.book,
@@ -76,7 +77,6 @@ class CreateChapter extends Component {
                 price,
                 published
             })
-            console.log(data);
         }
         catch (err) {
             console.error(err);
@@ -105,7 +105,8 @@ class CreateChapter extends Component {
         }
     }
 
-    async onSubmit() {
+    async onSubmit(e) {
+        e.preventDefault();
         try {
             await this.updateChapter(
                 this.state.bookid,
@@ -125,7 +126,13 @@ class CreateChapter extends Component {
     render() {
 
         if (!this.props.isAuthenticated) {
-            return <Redirect to='/login' />;
+            console.log("Update chapter: ", this.props.location);
+            return <Redirect to={{
+                pathname: '/login',
+                state: {
+                    from: this.props.location
+                }
+            }} />;
         }
 
         if (!this.state.book && !this.state.chapter) {
@@ -138,7 +145,7 @@ class CreateChapter extends Component {
                 <Fragment>
                     <Form noValidate onSubmit={this.onSubmit}>
                         <Form.Group controlId="name">
-                            <Form.Label>Book's name</Form.Label>
+                            <Form.Label>Chapter's name</Form.Label>
                             <Form.Control type="text" placeholder="Enter chapter's name"
                                 onChange={this.onChange} value={this.state.name} />
                         </Form.Group>
@@ -177,4 +184,4 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-)(CreateChapter));
+)(UpdateChapter));

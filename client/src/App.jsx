@@ -19,8 +19,8 @@ import Notifications from './components/notifications/Notifications';
 import Book from './components/book/Book';
 import Chapter from './components/book/Chapter';
 import NewBookForm from './components/create/NewBookForm';
-import ViewChapters from './components/create/ViewChapters';
-import EditChapter from './components/create/EditChapter';
+import UpdateChapter from './components/create/UpdateChapter';
+import UpdateBook from './components/create/UpdateBook';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './components/PrivateRoute';
@@ -56,18 +56,20 @@ function App() {
                             <Rankings />
                         </Route>
                         
-                        <Route exact path="/book/:bookid" component={Book}>
+                        <Route exact path="/book/:bookid">
+                            <Book />
                         </Route>
                         
-                        <Route exact path="/book/:bookid/:chapid" component={Chapter}>
+                        <Route exact path="/book/:bookid/:chapid">
+                            <Chapter />
                         </Route>
 
                         <Route exact path="/create/book/:bookid/chapter/:chapid">
-                            <EditChapter />
+                            <UpdateChapter />
                         </Route>
                         
                         <Route exact path="/create/book/:bookid">
-                            <ViewChapters />
+                            <UpdateBook />
                         </Route>
                         
                         <PrivateRoute path="/create/book">

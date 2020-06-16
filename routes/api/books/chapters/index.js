@@ -71,7 +71,7 @@ router.get('/:chapid', findBookById, findChapterById, async (req, res, next) => 
         const userid = req.user.id;
         const chapid = req.params.chapid;
         if (req.book.author.equals(req.user.id) || (await Transaction.findOne({ 'user': userid, 'chapter': chapid }))) {
-            return res.status(200).json(req.chapter);
+            return res.status(200).json({chapter: req.chapter, success: true});
         }
         else {
             return res.status(400).json({ errors: [{ msg: 'User need to pay for chapter' }], book: req.book, user: req.user });

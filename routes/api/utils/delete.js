@@ -71,9 +71,10 @@ const deleteChapterById = async chapid => {
         await deleteCommentByChapterId(chapid);
         let chapter = await Chapter.findById(chapid, 'number');
         let number = chapter.number;
+        const book = chapter.book;
         await Chapter.deleteOne({ _id: chapid });
         let nextchap;
-        while (nextchap = await Chapter.findOne({ number: (number + 1) })) {
+        while (nextchap = await Chapter.findOne({book: book, number: (number + 1) })) {
             await Chapter.updateOne({ _id: nextchap._id }, { number: number });
             number += 1;
         }

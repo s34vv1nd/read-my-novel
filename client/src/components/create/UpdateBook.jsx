@@ -7,7 +7,7 @@ import axios from 'axios';
 
 
 
-class ViewChapters extends Component {
+class UpdateBook extends Component {
     constructor() {
         super();
         this.state = {
@@ -79,7 +79,13 @@ class ViewChapters extends Component {
 
     render() {
         if (!this.props.isAuthenticated) {
-            return <Redirect to='/login' />;
+            console.log("Update book: ", this.props.location);
+            return <Redirect to={{
+                pathname: '/login',
+                state: {
+                    from: this.props.location
+                }
+            }} />;
         }
 
         if (this.state.isDeleted) {
@@ -89,7 +95,9 @@ class ViewChapters extends Component {
         return (
             <>
                 <h2>{this.state.book.name}</h2>
-                {this.state.chapters && this.state.chapters[0] ?
+
+                {this.state.chapters && this.state.chapters[0] ? (
+
                     <Table responsive>
                         <thead>
                             <tr>
@@ -127,7 +135,7 @@ class ViewChapters extends Component {
                                 </tr>)
                             }
                         </tbody>
-                    </Table>
+                    </Table>)
                     :
                     <p>No chapter available</p>
                 }
@@ -142,7 +150,7 @@ class ViewChapters extends Component {
     }
 }
 
-ViewChapters.propTypes = {
+UpdateBook.propTypes = {
     isAuthenticated: PropTypes.bool
 };
 
@@ -152,4 +160,4 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-)(ViewChapters));
+)(UpdateBook));

@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Spinner from '../Spinner';
+import { Dropdown, Form, Button, Navbar } from 'react-bootstrap';
 
 class Chapter extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             bookid: '',
             chapid: '',
+            chapters: null,
             book: null,
-            chapter: null
+            chapter: null,
+            needRedirect: false,
+            loading: false
         }
-
         this.componentDidMount = this.componentDidMount.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onClickPrevChap = this.onClickPrevChap.bind(this);
+        this.onClickNextChap = this.onClickNextChap.bind(this);
     }
 
     loadChapter = async (bookid, chapid) => {
+        if (!bookid || !chapid) return null;
         const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
         const res_book = await axios.get('api/books/' + bookid);
 
@@ -31,29 +38,117 @@ class Chapter extends Component {
         return null;
     }
 
+    getChapters = async (bookid) => {
+        try {
+            if (!bookid) return null;
+            const { data } = await axios.get('api/books/' + bookid + '/chapters', {
+                params: {
+                    published: true
+                }
+            });
+            if (!data.success) return null;
+            return data.chapters;
+        }
+        catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
     async componentDidMount() {
         await this.setState({
             bookid: this.props.match.params.bookid,
             chapid: this.props.match.params.chapid
-        });
-
+        })
         await this.setState(await this.loadChapter(this.state.bookid, this.state.chapid));
+        await this.setState({ chapters: await this.getChapters(this.state.bookid) });
+    }
+
+    displayContent = (content) => {
+        const paragraphs = content.split("\n");
+        return paragraphs.map(p => (
+            <p>{p}</p>
+        ))
+    }
+
+    changeChapter = async (chapid) => {
+        this.setState({ loading: true });
+        await Promise.all(
+            [await this.setState({ chapid }),
+            await this.setState(await this.loadChapter(this.state.bookid, this.state.chapid)),
+            await this.setState({ chapters: await this.getChapters(this.state.bookid) })]
+        ).then(() => {
+            this.setState({ loading: false });
+        })
+    }
+
+    onChange = async (e) => {
+        e.preventDefault();
+        const newchap = e.target.value;
+        if (newchap !== this.state.chapid) {
+            this.changeChapter(newchap);
+        }
+    }
+
+    onClickPrevChap = async () => {
+        let num = this.state.chapter.number;
+        const newchap = this.state.chapters.find(chap => chap.number === num - 1);
+        this.changeChapter(newchap._id);
+    }
+
+    onClickNextChap = async () => {
+        let num = this.state.chapter.number;
+        const newchap = this.state.chapters.find(chap => chap.number === num + 1);
+        await this.changeChapter(newchap._id);
+    }
+
+    chaptersNavBar = () => {
+        return (
+            <Navbar style={{ justifyContent: "center", alignItems: "stretch" }} noValidate>
+                <Button 
+                    disabled={this.state.chapter._id === this.state.chapters[0]._id} 
+                    onClick={this.onClickPrevChap} 
+                >
+                    Prev Chapter
+                </Button>
+
+                <select defaultValue={this.state.chapter._id} onChange={this.onChange}>
+                    {this.state.chapters.map(chapter => (
+                        <option key={chapter._id} value={chapter._id}>
+                            {'Chapter ' + chapter.number + ": " + chapter.name}
+                        </option>
+                    ))}
+                </select>
+                
+                <Button 
+                    disabled={this.state.chapter._id === this.state.chapters[this.state.chapters.length - 1]._id} 
+                    onClick={this.onClickNextChap} 
+                >
+                    Next Chapter
+                </Button>
+            </Navbar>
+        )
     }
 
     render() {
         if (!this.props.isAuthenticated) {
-            return <Redirect to='/login' />;
+            return <Redirect to={{ pathname: '/login', state: { from: this.props.location } }} />;
         }
 
-        if (!this.state.book && !this.state.chapter) {
+        if (!this.state.book || !this.state.chapter || !this.state.chapters || this.state.loading) {
             return <Spinner />;
         }
 
         return (
             <div>
-                <h2>Name: {this.state.book.name}</h2>
+                {this.chaptersNavBar()}
+                <h2>{this.state.book.name}</h2>
                 <h2>Chapter {this.state.chapter.number}: {this.state.chapter.name}</h2>
-                <p>Content: {this.state.chapter.content}</p>
+                <h5>Author: {this.state.book.author.username}</h5>
+                <div>
+                    {this.displayContent(this.state.chapter.content)}
+                </div>
+                {this.chaptersNavBar()}
             </div>
         )
     }
@@ -67,7 +162,7 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     // { loadChapter }
-)(Chapter);
+)(Chapter));

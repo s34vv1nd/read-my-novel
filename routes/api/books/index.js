@@ -125,7 +125,8 @@ router.get('/', async (req, res, next) => {
     const res = axios.post('api/books', {
         name: book name,
         genres: genres' names,
-        cover: link img
+        cover: link img,
+        sypnosis: String
     })
 */
 router.post('/', auth, async (req, res) => {
@@ -134,11 +135,12 @@ router.post('/', auth, async (req, res) => {
         const name = req.body.name;
         const genrenames = req.body.genres;
         const cover = req.body.cover;
+        const sypnosis = req.body.sypnosis;
         const genres = await Genre.find().where('name').in(genrenames).select('id').exec();
         if (genres.length === 0 || genres.length < genrenames.length) {
             return res.status(400).send('Invalid genres');
         }
-        book = new Book({ author, name, genres, cover });
+        book = new Book({ author, name, genres, cover, sypnosis });
         await book.save();
         res.status(201).json(book);
     }
@@ -200,13 +202,14 @@ router.delete('/:bookid', auth, findBookById, async (req, res) => {
             (genres: [String],) // array of genres name
             (completed: Boolean) // true (if completed) | false (if ongoing)
             (cover: String)
+            (sypnosis: string)
         }
     })
     // res.data is the book after update
 */
 router.put('/:bookid', auth, findBookById, async (req, res) => {
     try {
-        const { name, genrenames, completed, cover } = req.body.book;
+        const { name, genrenames, completed, cover, sypnosis } = req.body.book;
         const genres = await Genre.find().where('name').in(genrenames).select('id').exec();
         if (genres.length === 0 || genres.length !== genrenames.length) {
             return res.status(400).send('Invalid genres');
@@ -214,7 +217,7 @@ router.put('/:bookid', auth, findBookById, async (req, res) => {
         try {
             let book = Book.findByIdAndUpdate(
                 req.book.id, 
-                { name, genres, completed, cover }, 
+                { name, genres, completed, cover, sypnosis }, 
                 { new: true, omitUndefined: true }
             );
             book = await book.populate('genres');

@@ -6,9 +6,9 @@ import { setAlert } from '../../actions/alert';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-class NewBookForm extends Component {
-    constructor() {
-        super();
+class UpdateBookForm extends Component {
+    constructor(props) {
+        super(props);
         this.state = {
             bookname: '',
             genres: '',
@@ -27,8 +27,8 @@ class NewBookForm extends Component {
         this.setState({ [e.target.id]: e.target.value });
     }
 
-    createBook = async ({ name, genres, sypnosis, cover }) => {
-        const res = await axios.post('api/books', { name, genres, sypnosis, cover });
+    updateBook = async ({ bookid, name, genres, sypnosis, cover }) => {
+        const res = await axios.put('api/books/' + bookid, { name, genres, sypnosis, cover });
         return res.data;
     }
 
@@ -66,7 +66,7 @@ class NewBookForm extends Component {
                     })
                 }
 
-        await this.createBook({ 
+        await this.updateBook({ 
             name: this.state.bookname, 
             genres: [this.state.genres], 
             sypnosis: this.state.sypnosis,
@@ -137,4 +137,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { setAlert }
-)(NewBookForm);
+)(UpdateBookForm);
