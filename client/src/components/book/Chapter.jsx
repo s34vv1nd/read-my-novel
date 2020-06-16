@@ -12,20 +12,20 @@ class Chapter extends Component {
             bookid: '',
             chapid: '',
             book: null,
-            chapters: null
+            chapter: null
         }
 
         this.componentDidMount = this.componentDidMount.bind(this);
     }
 
     loadChapter = async (bookid, chapid) => {
-        const { chapter_data } = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
-        const { book_data } = await axios.get('api/books/' + bookid);
+        const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
+        const res_book = await axios.get('api/books/' + bookid);
 
-        if (chapter_data.success && book_data.success) {
+        if (res_chapter.data.success && res_book.data.success) {
             return {
-                book: book_data.book,
-                chapters: chapter_data.chapters
+                book: res_book.data.book,
+                chapter: res_chapter.data.chapter
             };
         }
         return null;
@@ -37,12 +37,7 @@ class Chapter extends Component {
             chapid: this.props.match.params.chapid
         });
 
-        await this.setState({
-            book: (await this.loadChapter(this.state.bookid, this.state.chapid)).book,
-            chapters: (await this.loadChapter(this.state.bookid, this.state.chapid)).chapters
-        })
-
-        //await this.props.loadChapter(this.state.bookid, this.state.chapid);
+        await this.setState(await this.loadChapter(this.state.bookid, this.state.chapid));
     }
 
     render() {
@@ -50,16 +45,15 @@ class Chapter extends Component {
             return <Redirect to='/login' />;
         }
 
-        if (!this.state.book && !this.state.chapters) {
+        if (!this.state.book && !this.state.chapter) {
             return <Spinner />;
         }
 
         return (
             <div>
                 <h2>Name: {this.state.book.name}</h2>
-                {/* {console.log(this.state.chapters[0])} */}
-                <h2>Chapter {this.state.chapters[0].number}: {this.props.chapters[0].name}</h2>
-                <p>Content: {this.state.chapters[0].content}</p>
+                <h2>Chapter {this.state.chapter.number}: {this.state.chapter.name}</h2>
+                <p>Content: {this.state.chapter.content}</p>
             </div>
         )
     }
