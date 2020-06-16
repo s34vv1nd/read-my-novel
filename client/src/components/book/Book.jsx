@@ -139,7 +139,7 @@ class Book extends Component {
 
                 <Fragment>
                     <hr></hr>
-                    <ReviewBookForm />
+                    <ReviewBookForm bookid={this.state.bookid} />
 
 
                 </Fragment>
