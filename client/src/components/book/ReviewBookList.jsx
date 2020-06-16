@@ -32,7 +32,7 @@ const ReviewBookList = ({
     }
 
     return (
-        <div class="container" style={{ marginTop: '20px' }}>
+        <div class="container" style={{ marginTop: '50px' }}>
             <h2>Other reviews</h2>
 
             <div class="card">
