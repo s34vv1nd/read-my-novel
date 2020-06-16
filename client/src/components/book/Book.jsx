@@ -113,15 +113,8 @@ class Book extends Component {
                         <Col md={4} lg={4}>
                             <Image src={this.state.book.cover ? this.state.book.cover : imgdefault} alt="Image" thumbnail />
                         </Col>
-                        <Col md={8} lg={8} style={{marginTop: '20px'}}>
-                            {
-                                (this.state.chapters && this.state.chapters[0]) ?
-                                    <h3><Link to={{
-                                        pathname: '/book/' + this.state.bookid + '/' + this.state.chapters[0]._id,
-                                    }}>Name: {this.state.book.name}</Link></h3>
-                                    :
-                                    <h3>{this.state.book.name}</h3>
-                            }
+                        <Col md={8} lg={8} style={{ marginTop: '20px' }}>
+                            <h3>{this.state.book.name}</h3>
                             <ListGroup horizontal>
                                 {this.state.book.genres.map(genre => <ListGroup.Item key={genre.name}>{genre.name}</ListGroup.Item>)}
                                 <ListGroup.Item key="status">
@@ -131,7 +124,7 @@ class Book extends Component {
                             <p></p>
                             <p>Author: {this.state.book.author.username}</p>
                             <p>Rating: {this.state.book.ratings}</p>
-                            <ButtonGroup style={{marginBottom:'20px'}}>
+                            <ButtonGroup style={{ marginBottom: '20px' }}>
                                 <Button variant="primary" onClick={this.onClickLibrary}>
                                     {this.state.inLibrary ? "Remove from library" : "Add to library"}
                                 </Button>
@@ -147,8 +140,27 @@ class Book extends Component {
                 <Fragment>
                     <hr></hr>
                     <ReviewBookForm />
-                    <ReviewBookList reviews={this.state.reviews} />
+
+
                 </Fragment>
+                {this.state.reviews ?
+                    <div class="container" style={{ marginTop: '50px' }}>
+                        <h2>Other reviews</h2>
+
+                        <div class="card">
+                            <div class="card-body">
+                                {this.state.reviews.map(review =>
+                                    <Fragment>
+                                        <ReviewBookList review={review} bookid={this.state.bookid} />
+                                    </Fragment>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    :
+                    <p>This book is not review yet</p>
+                }
+
 
 
             </>
