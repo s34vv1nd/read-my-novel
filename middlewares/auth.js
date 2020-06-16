@@ -21,7 +21,7 @@ const auth = async function (req, res, next) {
                 if (!user) {
                     return res.status(401).json({error: 'Invalid Token', success: false});
                 }
-                req.user = req.decoder;
+                req.user = decoder;
                 next();
             }
         });

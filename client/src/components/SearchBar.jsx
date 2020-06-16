@@ -7,14 +7,17 @@ import axios from 'axios';
 import { connect } from 'react-redux'
 import { useEffect } from "react";
 import Spinner from "./Spinner";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
+import './SearchBar.css'
 
 
 const SearchBar = ({ books }) => {
     const [bookid, setBookID] = useState(null);
+    let history = useHistory();
 
     const onChange = async (book) => {
         setBookID(book.value);
+        if (book.value) history.push('book/' + book.value);
     }
     
 
@@ -22,16 +25,14 @@ const SearchBar = ({ books }) => {
         return <Spinner />
     }
 
-    if (bookid) {
-        return <Redirect to={'book/' + bookid} />
-    }
-
     return (
         <Select
+            className="select-custom-class"
             options={books.map(book => ({ label: book.name, value: book._id }))}
             onChange={onChange}
             isClearable
             placeholder='Search...'
+            style="min-width: 100%"
         />
     );
 }

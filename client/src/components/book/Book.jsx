@@ -96,7 +96,9 @@ class Book extends Component {
                             }
                             <ListGroup horizontal>
                                 {this.state.book.genres.map(genre => <ListGroup.Item key={genre.name}>{genre.name}</ListGroup.Item>)}
-                                <ListGroup.Item key="status">{this.state.book.completed == true ? "Completed" : "Ongoing"}</ListGroup.Item>
+                                <ListGroup.Item key="status">
+                                    {this.state.book.completed === true ? "Completed" : "Ongoing"}
+                                </ListGroup.Item>
                             </ListGroup>
                             <p>Author: {this.state.book.author.username}</p>
                             <p>Rating: {this.state.book.ratings}</p>
