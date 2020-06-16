@@ -28,8 +28,8 @@ const admin = async function (req, res, next) {
             }
         });
     } catch (err) {
-        console.error('something wrong with admin middleware')
-        res.status(500).json({ msg: 'Server Error' });
+        console.error(err);
+        res.status(500).json({ error: 'something wrong with admin middleware' });
     }
 };
 
