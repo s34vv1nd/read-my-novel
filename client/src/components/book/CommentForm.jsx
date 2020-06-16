@@ -3,12 +3,13 @@ import { setAlert } from '../../actions/alert';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-class ReviewBookForm extends Component {
+class CommentForm extends Component {
     constructor() {
         super();
         this.state = {
             content: null,
-            bookid: null
+            bookid: null,
+            chapid: null
         }
 
         this.componentDidMount = this.componentDidMount.bind(this);
@@ -16,18 +17,22 @@ class ReviewBookForm extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    setReview = async (bookid, content) => {
+    setComment = async (bookid, chapid, content) => {
         try {
-            const res = await axios.post('api/books/' + bookid + '/reviews', {
+            const res = await axios.post('api/books/' + bookid + '/chapters/' + chapid + '/comments', {
                 content: content
-            })
+            });
+            console.log(res.data);
         } catch (err) {
             console.log(err);
         }
     }
 
     async componentDidMount() {
-        await this.setState({ bookid: this.props.bookid });
+        await this.setState({ 
+            bookid: this.props.bookid,
+            chapid: this.props.chapid
+        });
         // console.log(this.state.bookid);
     }
 
@@ -39,24 +44,24 @@ class ReviewBookForm extends Component {
         e.preventDefault();
         if(!this.state.content) {
             console.log("Content is empty");
-            await this.props.setAlert('Please enter your review', "danger", 2000);
+            await this.props.setAlert('Please enter your comment', "danger", 2000);
             return;
         } else {
-            await this.setReview(this.state.bookid, this.state.content);
-            console.log("Set review");
+            await this.setReview(this.state.bookid, this.state.chapid, this.state.content);
+            console.log("Set comment");
         }
     }
 
     render() {
         return (
             <div class="container">
-                <h2 class="text-center">Review Form</h2>
+                <h2 class="text-center">Comment Form</h2>
                 <div class="col-md-12" style={{ margin: 'auto', width: '80%' }}>
                     <div class="widget-area no-padding blank" >
                         <div class="status-upload">
                             <form>
                                 <div class="row">
-                                    <textarea placeholder="How do u feel about this book?"
+                                    <textarea placeholder="How do u feel about this chapter?"
                                         style={{ width: '100%', height: 'auto' }}
                                         onChange={this.onChange}
                                         value={this.state.content}></textarea>
@@ -83,4 +88,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { setAlert }
-)(ReviewBookForm);
+)(CommentForm);

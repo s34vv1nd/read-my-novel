@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Spinner from '../Spinner';
 import { Dropdown, Form, Button, Navbar } from 'react-bootstrap';
+import CommentList from './CommentList';
+import CommentForm from './CommentForm';
 
 class Chapter extends Component {
     constructor(props) {
@@ -15,6 +17,7 @@ class Chapter extends Component {
             chapters: null,
             book: null,
             chapter: null,
+            comments: null,
             needRedirect: false,
             loading: false
         }
@@ -55,6 +58,23 @@ class Chapter extends Component {
         }
     }
 
+    getComments = async (bookid, chapid) => {
+        try {
+            const res = await axios.get('api/books/' + bookid + '/chapters/' + chapid + '/comments', {
+                params: {
+
+                }
+            });
+
+            console.log(res.data);
+            if (res.data.success) return res.data.comments;
+            return null;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }
+
     async componentDidMount() {
         await this.setState({
             bookid: this.props.match.params.bookid,
@@ -62,6 +82,7 @@ class Chapter extends Component {
         })
         await this.setState(await this.loadChapter(this.state.bookid, this.state.chapid));
         await this.setState({ chapters: await this.getChapters(this.state.bookid) });
+        await this.setState({ comments: await this.getComments(this.state.bookid, this.state.chapid) });
     }
 
     displayContent = (content) => {
@@ -76,7 +97,8 @@ class Chapter extends Component {
         await Promise.all(
             [await this.setState({ chapid }),
             await this.setState(await this.loadChapter(this.state.bookid, this.state.chapid)),
-            await this.setState({ chapters: await this.getChapters(this.state.bookid) })]
+            await this.setState({ chapters: await this.getChapters(this.state.bookid) })],
+            await this.setState({ comments: await this.getComments(this.state.bookid, this.state.chapid) })
         ).then(() => {
             this.setState({ loading: false });
         })
@@ -105,9 +127,9 @@ class Chapter extends Component {
     chaptersNavBar = () => {
         return (
             <Navbar style={{ justifyContent: "center", alignItems: "stretch" }} noValidate>
-                <Button 
-                    disabled={this.state.chapter._id === this.state.chapters[0]._id} 
-                    onClick={this.onClickPrevChap} 
+                <Button
+                    disabled={this.state.chapter._id === this.state.chapters[0]._id}
+                    onClick={this.onClickPrevChap}
                 >
                     Prev Chapter
                 </Button>
@@ -119,10 +141,10 @@ class Chapter extends Component {
                         </option>
                     ))}
                 </select>
-                
-                <Button 
-                    disabled={this.state.chapter._id === this.state.chapters[this.state.chapters.length - 1]._id} 
-                    onClick={this.onClickNextChap} 
+
+                <Button
+                    disabled={this.state.chapter._id === this.state.chapters[this.state.chapters.length - 1]._id}
+                    onClick={this.onClickNextChap}
                 >
                     Next Chapter
                 </Button>
@@ -140,16 +162,26 @@ class Chapter extends Component {
         }
 
         return (
-            <div>
-                {this.chaptersNavBar()}
-                <h2>{this.state.book.name}</h2>
-                <h2>Chapter {this.state.chapter.number}: {this.state.chapter.name}</h2>
-                <h5>Author: {this.state.book.author.username}</h5>
+            <>
                 <div>
-                    {this.displayContent(this.state.chapter.content)}
+                    {this.chaptersNavBar()}
+                    <h2>{this.state.book.name}</h2>
+                    <h2>Chapter {this.state.chapter.number}: {this.state.chapter.name}</h2>
+                    <h5>Author: {this.state.book.author.username}</h5>
+                    <div>
+                        {this.displayContent(this.state.chapter.content)}
+                    </div>
+                    {this.chaptersNavBar()}
                 </div>
-                {this.chaptersNavBar()}
-            </div>
+
+                <Fragment>
+                    <CommentForm bookid={this.state.bookid} chapid={this.state.chapid} />
+                    <hr />
+                    <hr />
+                    <hr />
+                    <CommentList comments={this.state.comments} />
+                </Fragment>
+            </>
         )
     }
 }
