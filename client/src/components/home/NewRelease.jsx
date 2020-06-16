@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Spinner from '../Spinner';
 import axios from 'axios';
 
-const imgdefault = "https://www.creativindie.com/wp-content/uploads/2013/10/got_hc1.jpg"
+const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 
 export default class HomeRelease extends Component {
 
@@ -38,6 +38,7 @@ export default class HomeRelease extends Component {
                     <img class="card-img-top" src={this.state.books[0].cover ? this.state.books[0].cover : imgdefault} alt="Book image"></img>
                     <div class="card-body">
                         <h4 class="card-title"><Link to={"book/" + this.state.books[0]._id}>{this.state.books[0].name}</Link></h4>
+                        <p class="card-text">Author: {this.state.books[0].author.username}</p>
                         <p class="card-text">Book intro</p>
                         <a href={"book/" + this.state.books[0]._id} class="btn btn-primary">READ</a>
                     </div>

@@ -8,6 +8,9 @@ import { connect } from 'react-redux';
 import './Rankings.css';
 import Spinner from '../Spinner';
 
+const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
+
+
 class Rankings extends Component {
     constructor() {
         super();
@@ -34,11 +37,12 @@ class Rankings extends Component {
                         <Row className="bookRow" key={this.props.books.indexOf(book) + 1}>
                             <Container className="bookContainer">
                                 <Row>
-                                    <Col xs={8} md={1}> <h4 style={{color:'blue'}}>{this.props.books.indexOf(book) + 1}</h4>  </Col>
-                                    <Col xs={8} md={1}>
-                                        <Image width="100" height="80" src="" alt="Image" thumbnail />
+                                    <Col md={12} lg={1}> <h4 style={{color:'blue'}}>{this.props.books.indexOf(book) + 1}</h4>  </Col>
+                                    <Col md={3} lg={2}>
+                                        <Image width="100" height="80" src={book.cover ? book.cover : imgdefault} alt="Image" thumbnail 
+                                        style={{margin: 'auto', display: 'block'}}/>
                                     </Col>
-                                    <Col xs={8} md={8}>
+                                    <Col md={6} lg={6}>
                                         <h4><Link to={{
                                             pathname: '/book/' + book._id,
                                             state: { id: book._id }
@@ -47,12 +51,12 @@ class Rankings extends Component {
                                         <p>Rating: {book.ratings} </p>
 
                                     </Col>
-                                    <Col xs={8} md={2}>
+                                    <Col xs={6} lg={3}>
                                         <Link to={{
                                             pathname: '/book/' + book._id,
                                             state: { id: book._id }
-                                        }}><button type="button" class="btn btn-primary" >Read</button></Link>
-                                        <button type="button" class="btn btn-primary">Vote</button>
+                                        }}><button type="button" class="btn btn-primary " style={{marginRight: '10px'}} >Read</button></Link>
+                                        <button type="button" class="btn btn-primary" >Vote</button>
 
                                     </Col>
                                 </Row>

@@ -1,5 +1,5 @@
 - default:
-https://www.pngkit.com/png/detail/428-4287112_cover-clipart-closed-book-plain-book-cover-png.png
+https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg
 
 - Harry Potter 1:
 https://i.pinimg.com/originals/6b/28/06/6b2806c01ea9cd57a8e9ce79f688c39f.jpg
