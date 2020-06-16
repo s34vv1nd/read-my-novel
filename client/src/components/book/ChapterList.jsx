@@ -43,7 +43,7 @@ const ChapterList = ({
     }
 
     return (
-        <Table responsive>
+        <Table responsive style={{marginTop:'50px', border:'ridge'}}>
             <thead>
                 <tr>
                     <th>#</th>

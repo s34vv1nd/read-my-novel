@@ -110,10 +110,10 @@ class Book extends Component {
             <>
                 <Container style={{ border: 'ridge' }}>
                     <Row>
-                        <Col xs={6} md={4}>
+                        <Col md={4} lg={4}>
                             <Image src={this.state.book.cover ? this.state.book.cover : imgdefault} alt="Image" thumbnail />
                         </Col>
-                        <Col xs={12} md={4}>
+                        <Col md={8} lg={8} style={{marginTop: '20px'}}>
                             {
                                 (this.state.chapters && this.state.chapters[0]) ?
                                     <h3><Link to={{
@@ -128,9 +128,10 @@ class Book extends Component {
                                     {this.state.book.completed === true ? "Completed" : "Ongoing"}
                                 </ListGroup.Item>
                             </ListGroup>
+                            <p></p>
                             <p>Author: {this.state.book.author.username}</p>
                             <p>Rating: {this.state.book.ratings}</p>
-                            <ButtonGroup>
+                            <ButtonGroup style={{marginBottom:'20px'}}>
                                 <Button variant="primary" onClick={this.onClickLibrary}>
                                     {this.state.inLibrary ? "Remove from library" : "Add to library"}
                                 </Button>
