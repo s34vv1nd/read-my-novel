@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Rating, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -26,8 +26,6 @@ const ReviewBookList = ({
             return 0;
         }
     }
-
-    useEffect
 
     if (!reviews) {
         return <p>Not available reviews. Create now!</p>
