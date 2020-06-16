@@ -23,7 +23,7 @@ const admin = async function (req, res, next) {
                 if (!user.admin) {
                     return res.status(401).json({error: 'You are not admin', success: false});
                 }
-                req.user = decoder;
+                req.user = decoded.user;
                 next();
             }
         });
