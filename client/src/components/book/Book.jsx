@@ -18,6 +18,7 @@ class Book extends Component {
         this.state = {
             bookid: null,
             book: null,
+            reviews: null,
             inLibrary: false,
             needRedirect: false
         }
@@ -27,7 +28,7 @@ class Book extends Component {
 
     loadBook = async (bookid) => {
         try {
-            const { data } = await axios.get('api/books/' + this.state.bookid);
+            const { data } = await axios.get('api/books/' + bookid);
             if (data.success) {
                 return data.book;
             }
@@ -49,10 +50,30 @@ class Book extends Component {
         return false;
     }
 
+    getReviews = async (bookid) => {
+        try {
+            const res = await axios.get('api/books/' + bookid + '/reviews', {
+                params: {
+                    // user: userid,
+                }
+            });
+            //console.log(res.data);
+            //console.log(res.data.reviews);
+
+            if (res.data.success) return res.data.reviews;
+            return null;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }
+
     async componentDidMount() {
         await this.setState({ bookid: this.props.match.params.bookid });
         await this.setState({ book: await this.loadBook(this.state.bookid) });
+        await this.setState({ reviews: await this.getReviews(this.state.bookid) });
         await this.setState({ inLibrary: this.isInLibrary(this.state.bookid) });
+        //console.log(this.state.reviews);
     }
 
     async onClickLibrary(e) {
@@ -89,7 +110,7 @@ class Book extends Component {
                 <Container style={{ border: 'ridge' }}>
                     <Row>
                         <Col xs={6} md={4}>
-                            <Image src="" alt="Image" thumbnail />
+                            <Image src={this.state.book.cover} alt="Image" thumbnail />
                         </Col>
                         <Col xs={12} md={4}>
                             {
@@ -123,7 +144,7 @@ class Book extends Component {
 
                 <Fragment>
                     <ReviewBookForm />
-                    <ReviewBookList />
+                    <ReviewBookList reviews={this.state.reviews} />
                 </Fragment>
 
 

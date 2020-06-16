@@ -12,7 +12,7 @@ const ChapterList = ({
 
     const getChapters = async (bookid) => {
         try {
-            console.log("bookid: ", bookid);
+            //console.log("bookid: ", bookid);
             
             const { data } = await axios.get('api/books/' + bookid + '/chapters', {
                 params: {
