@@ -29,7 +29,6 @@ export default class HomeRelease extends Component {
 
     async componentDidMount() {
         await this.setState({ books: await this.loadBooks() });
-        // console.log(this.state.books);
     }
 
     mainBook = () => {
@@ -78,7 +77,6 @@ export default class HomeRelease extends Component {
     }
 
     render() {
-        console.log(this.state.books);
         if (!this.state.books || !this.state.books[0]) {
             return <Spinner />
         }

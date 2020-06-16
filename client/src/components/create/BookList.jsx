@@ -21,15 +21,11 @@ const BookList = ({
                 {books.map(book =>
                     <tr key={books.indexOf(book) + 1}>
                         <td>{books.indexOf(book) + 1}</td>
-                        <td><Link to={{
-                            pathname: '/create/book/' + book._id,
-                        }}>{book.name}</Link></td>
+                        <td><Link to={'/create/book/' + book._id}>{book.name}</Link></td>
                         <td>{book.genres.map(genre => `${genre['name'] || genre} `)}</td>
                         <td>{book.completed ? "Completed" : "Ongoing"}</td>
                         <td>{book.createdAt}</td>
-                        <td><Link to={{
-                            pathname: '/create/book/' + book._id,
-                        }}>Explore</Link></td>
+                        <td><Link to={'/create/book/' + book._id}>Explore</Link></td>
                     </tr>)
                 }
             </tbody>

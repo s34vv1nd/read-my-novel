@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Table, ButtonGroup } from 'react-bootstrap';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect, Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -25,14 +25,14 @@ class ViewChapters extends Component {
     }
 
     getCurrentBook = async (bookid) => {
-        if (!bookid) return null 
+        if (!bookid) return null
         const res = await axios.get('api/books/' + bookid);
         if (!res.data.success) return null;
         return res.data.book;
     }
-    
+
     getChapters = async (bookid) => {
-        if (!bookid) return null 
+        if (!bookid) return null
         const res = await axios.get('api/books/' + bookid + '/chapters', {
             params: {
                 published: false
@@ -46,8 +46,8 @@ class ViewChapters extends Component {
         await this.setState({
             bookid: this.props.match.params.bookid
         });
-        await this.setState({book: await this.getCurrentBook(this.state.bookid)});
-        await this.setState({chapters: await this.getChapters(this.state.bookid)});
+        await this.setState({ book: await this.getCurrentBook(this.state.bookid) });
+        await this.setState({ chapters: await this.getChapters(this.state.bookid) });
     }
 
     async onClickDeleteChapter(e) {
@@ -57,20 +57,20 @@ class ViewChapters extends Component {
         });
 
         await axios.delete('/api/books/' + this.state.bookid + '/chapters/' + this.state.chapid);
-        await this.setState({chapters: await this.getChapters(this.state.bookid)});
+        await this.setState({ chapters: await this.getChapters(this.state.bookid) });
     }
 
     async onClickDeleteBook(e) {
         e.preventDefault();
         await axios.delete('api/books/' + this.state.bookid);
-        await this.setState({isDeleted: true});
+        await this.setState({ isDeleted: true });
     }
 
     async onClickCreateChapter(e) {
         e.preventDefault();
         const res = await axios.post('api/books/' + this.state.bookid + '/chapters', {
-            name: "Name", 
-            content: "Content", 
+            name: "Name",
+            content: "Content",
             price: 0
         });
 
@@ -108,17 +108,21 @@ class ViewChapters extends Component {
                                 <tr key={this.state.chapters.indexOf(chapter) + 1}>
                                     <td>{this.state.chapters.indexOf(chapter) + 1}</td>
                                     <td>{chapter.number}</td>
-                                    <td><Link to={{
-                                        pathname: '/create/book/' + this.state.bookid + '/chapter/' + chapter._id,
-                                        state: { id: chapter._id }
-                                    }}>{chapter.name}</Link></td>
-                                    <td>{chapter.published ? "Publish" : "Not publish"}</td>
+                                    <td>
+                                        <Link to={'/create/book/' + this.state.bookid + '/chapter/' + chapter._id}>
+                                            {chapter.name}
+                                        </Link>
+                                    </td>
+                                    <td>{chapter.published ? "Published" : "Not published"}</td>
                                     <td>{chapter.createdAt}</td>
                                     <td>{chapter.updatedAt}</td>
-                                    <td><Link to={{
-                                        pathname: '/create/book/' + this.state.bookid + '/chapter/' + chapter._id,
-                                        state: { id: chapter._id }
-                                    }}><Button>Update</Button></Link></td>
+                                    <td>
+                                        <Link to={'/create/book/' + this.state.bookid + '/chapter/' + chapter._id}>
+                                            <Button>
+                                                Update
+                                            </Button>
+                                        </Link>
+                                    </td>
                                     <td><Button onClick={this.onClickDeleteChapter} value={chapter._id}>Delete</Button></td>
                                 </tr>)
                             }
@@ -146,6 +150,6 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
-)(ViewChapters);
+)(ViewChapters));

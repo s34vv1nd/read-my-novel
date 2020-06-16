@@ -1,12 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'react-bootstrap';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect, Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Spinner from '../Spinner';
 import BookList from './BookList';
-import { loadUser } from '../../actions/auth';
 
 
 class Create extends Component {
@@ -21,19 +20,25 @@ class Create extends Component {
     }
 
     getBooksCreated = async (userid) => {
-        const { data } = await axios.get('api/books', {
-            params: {
-                author: userid
-            }
-        });
-        // console.log(data);
-        if (data.success) return data.books;
-        return null;
+        try {
+            const { data } = await axios.get('api/books', {
+                params: {
+                    author: userid
+                }
+            });
+            if (data.success) return data.books;
+            return null;
+        }
+        catch (err) {
+            console.error(err);
+            this.props.history.push('/');
+            return null;
+        }
     }
 
     async componentDidMount() {
         await this.setState({
-            userid: await this.props.loadUser()._id
+            userid: await this.props.user._id
         });
 
         await this.setState({
@@ -72,7 +77,6 @@ const mapStateToProps = state => ({
     user: state.auth.user
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
-    { loadUser }
-)(Create);
+)(Create));

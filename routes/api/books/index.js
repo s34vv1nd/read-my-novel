@@ -28,21 +28,11 @@ request: req.params: {
     projection: 'name'
 }
 */
-router.get('/', async (req, res) => {
-    try {
-        let author = req.query.author;
-        let searchStr = req.query.searchStr;
-        let genres = req.query.genres || 'all';
-        let status = req.query.status || 'all';
-        let page = parseInt(req.query.page || 1);
-        let perPage = parseInt(req.query.perPage || -1);
-        let sortBy = req.query.sortBy || 'alphabet';
 
+const findBooksBy = async ({ author, genres, status, page, perPage, sortBy, projection }) => {
+    try {
         let query;
-        if (author) query = {author: author};
-        if (searchStr) {
-            
-        }
+        if (author) query = { author };
         if (genres !== 'all') {
             genres = await Genre.find({ name: { "$in": genres } }).select('_id');
             query = { ...query, genres: { "$in": genres } };
@@ -51,11 +41,10 @@ router.get('/', async (req, res) => {
             status = (status === 'completed');
             query = { ...query, completed: status };
         }
-        let books = await Book.find(query, req.query.projection)
+        let books = await Book.find(query, projection)
             .populate('author', 'username')
             .populate('genres', 'name')
             .exec();
-
         let sortVal;
         switch (sortBy) {
             case 'ratings':
@@ -74,10 +63,57 @@ router.get('/', async (req, res) => {
 
         //books[((page - 1)*perPage + 1) .. (page * perPage)]
         if (perPage !== -1) books = books.slice((page - 1) * perPage, page * perPage);
+        return books;
+    }
+    catch (err) {
+        throw err;
+    }
+}
 
-        res.status(200).json({books, success: true});
+router.get('/', async (req, res, next) => {
+    try {
+        let author = req.query.author;
+        let genres = req.query.genres || 'all';
+        let status = req.query.status || 'all';
+        let page = parseInt(req.query.page || 1);
+        let perPage = parseInt(req.query.perPage || -1);
+        let sortBy = req.query.sortBy || 'alphabet';
+        let projection = req.query.projection;
+
+        if (author) next(); else {
+            const books = await findBooksBy({ genres, status, page, perPage, sortBy, projection: req.query.projection });
+            res.status(200).json({ books, success: true });
+        }
     } catch (err) {
         console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+}, auth, async (req, res) => {
+    try {
+        let author = req.query.author;
+        let genres = req.query.genres || 'all';
+        let status = req.query.status || 'all';
+        let page = parseInt(req.query.page || 1);
+        let perPage = parseInt(req.query.perPage || -1);
+        let sortBy = req.query.sortBy || 'alphabet';
+        let projection = req.query.projection;
+        
+        if (req.user.id != author) {
+            return res.status(400).json({ success: false });
+        }
+        const books = await findBooksBy({ 
+            author, 
+            genres, 
+            status, 
+            page, 
+            perPage, 
+            sortBy, 
+            projection
+        });
+        res.status(200).json({ books, success: true });
+    }
+    catch (err) {
+        console.error(err);
         res.status(500).send('Server Error');
     }
 })
@@ -120,11 +156,11 @@ router.post('/', auth, async (req, res) => {
 router.get('/:bookid', findBookById, async (req, res) => {
     try {
         const book = await Book.findById(req.book._id).populate('genres').populate('author', '-password');
-        res.status(200).json({book, success: true});
+        res.status(200).json({ book, success: true });
     }
     catch (err) {
         console.log(err);
-        res.status(500).json({success: false})
+        res.status(500).json({ success: false })
     }
 })
 
@@ -142,13 +178,13 @@ router.delete('/:bookid', auth, findBookById, async (req, res) => {
         }
         catch (err) {
             console.log(err);
-            return res.status(500).json({error: 'utils/deleteBookById failed.', success: false})
+            return res.status(500).json({ error: 'utils/deleteBookById failed.', success: false })
         }
         return res.status(200).json({ success: true });
     }
     catch (err) {
         console.log(err);
-        res.status(500).send({error: 'Server Error when delete book', success: false});
+        res.status(500).send({ error: 'Server Error when delete book', success: false });
     }
 })
 

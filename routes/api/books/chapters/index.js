@@ -58,7 +58,7 @@ router.get('/:chapid', findBookById, findChapterById, async (req, res, next) => 
     try {
         const { price, published } = req.chapter;
         if (price === 0 && published === true) {
-            return res.status(200).json(req.chapter);
+            return res.status(200).json({chapter: req.chapter, success: true});
         }
         next();
     }
@@ -142,15 +142,25 @@ router.put('/:chapid', auth, findBookById, findChapterById, async (req, res) => 
     try {
         const { name, content } = req.body;
         const price = parseInt(req.body.price);
-        const published = (req.body.published === "true");
+        const published = req.body.published == true || (req.body.published == "true");
         const chapter = req.chapter;
-
         try {
-            let updated_chapter = await Chapter.findByIdAndUpdate(chapter._id, { name, content, price }, { new: true, omitUndefined: true });
-            if (published && !chapter[0].published) {
-                updated_chapter = await Chapter.findByIdAndUpdate(chapter._id, { published, publishedAt: Date.now() }, { new: true, omitUndefined: true });
+            let updated_chapter
+            if (published) {
+                updated_chapter = await Chapter.findByIdAndUpdate(
+                    chapter._id,
+                    { name, content, price, published, publishedAt: Date.now() },
+                    { new: true, omitUndefined: true }
+                );
             }
-            res.status(200).json(updated_chapter);
+            else {
+                updated_chapter = await Chapter.findByIdAndUpdate(
+                    chapter._id,
+                    { name, content, price },
+                    { new: true, omitUndefined: true }
+                );
+            }
+            res.status(200).json({chapter: updated_chapter, success: true});
         }
         catch (err) {
             console.log(err);

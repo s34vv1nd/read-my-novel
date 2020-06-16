@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button } from 'react-bootstrap'
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from '../Spinner';
 import ChapterList from './ChapterList';
@@ -26,11 +26,17 @@ class Book extends Component {
     }
 
     loadBook = async (bookid) => {
-        const { data } = await axios.get('api/books/' + this.state.bookid);
-        if (data.success) {
-            return data.book;
+        try {
+            const { data } = await axios.get('api/books/' + this.state.bookid);
+            if (data.success) {
+                return data.book;
+            }
+            return null;
         }
-        return null;
+        catch (err) {
+            console.error(err);
+            return null;
+        }
     }
 
     isInLibrary = async (bookid) => {
@@ -80,7 +86,7 @@ class Book extends Component {
 
         return (
             <>
-                <Container style={{border: 'ridge'}}>
+                <Container style={{ border: 'ridge' }}>
                     <Row>
                         <Col xs={6} md={4}>
                             <Image src="" alt="Image" thumbnail />
@@ -131,7 +137,7 @@ const mapStateToProps = state => ({
     user: state.auth.user,
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     { isInLibrary, addToLibrary, removeFromLibrary, setAlert }
-)(Book);
+)(Book));

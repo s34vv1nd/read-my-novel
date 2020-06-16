@@ -3,7 +3,7 @@ import {
     LOAD_BOOK_FAIL
 } from '../actions/types';
 
-const initialState = null;
+const initialState = [];
 
 export default function(state = initialState, action) {
     const {type, payload} = action;

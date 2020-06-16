@@ -20,7 +20,7 @@ import Book from './components/book/Book';
 import Chapter from './components/book/Chapter';
 import NewBookForm from './components/create/NewBookForm';
 import ViewChapters from './components/create/ViewChapters';
-import CreateChapter from './components/create/CreateChapter';
+import EditChapter from './components/create/EditChapter';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './components/PrivateRoute';
@@ -58,11 +58,11 @@ function App() {
                         <Route exact path="/book/:bookid/:chapid" component={Chapter}>
                         </Route>
 
-                        <Route exact path="/create/book/:bookid/chapter/:chapid" component={CreateChapter}>
+                        <Route exact path="/create/book/:bookid/chapter/:chapid">
+                            <EditChapter />
                         </Route>
-                        <Route exact path="/create/book/:bookid/chapter" component={CreateChapter}>
-                        </Route>
-                        <Route exact path="/create/book/:bookid" component={ViewChapters}>
+                        <Route exact path="/create/book/:bookid">
+                            <ViewChapters />
                         </Route>
                         <PrivateRoute path="/create/book">
                             <NewBookForm />

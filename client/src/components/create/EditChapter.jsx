@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect, Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -13,7 +13,7 @@ class CreateChapter extends Component {
             bookid: '',
             chapid: '',
             book: null,
-            chapters: null,
+            chapter: null,
             name: '',
             content: '',
             price: 0,
@@ -23,30 +23,26 @@ class CreateChapter extends Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onClickPublish = this.onClickPublish.bind(this);
     }
 
     loadChapter = async (bookid, chapid) => {
-        const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
-        const res_book = await axios.get('api/books/' + bookid);
-        // console.log(res_chapter.data);
-        // console.log(res_book.data);
+        try {
+            const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
+            const res_book = await axios.get('api/books/' + bookid);
 
-        if (res_chapter.data && res_book.data.success) {
-            return {
-                book: res_book.data.book,
-                chapters: res_chapter.data
-            };
+            if (res_chapter.data.success && res_book.data.success) {
+                return {
+                    book: res_book.data.book,
+                    chapter: res_chapter.data.chapter,
+                    published: res_chapter.data.chapter.published
+                };
+            }
+            return null;
         }
-        return null;
-    }
-
-    updateChapter = async (bookid, chapid, name, content, price, published) => {
-        const { data } = await axios.put('api/book/' + bookid + '/chapters/' + chapid, {
-            name,
-            content,
-            price,
-            published
-        })
+        catch (err) {
+            console.error(err);
+        }
     }
 
     async componentDidMount() {
@@ -59,37 +55,71 @@ class CreateChapter extends Component {
             const result = await this.loadChapter(this.state.bookid, this.state.chapid);
             await this.setState({
                 book: result.book,
-                chapters: result.chapters
+                chapter: result.chapter,
+                published: result.published
             });
         }
 
-        if (this.state.book && this.state.chapters) {
+        if (this.state.book && this.state.chapter) {
             await this.setState({
-                name: this.state.chapters.name,
-                content: this.state.chapters.content
+                name: this.state.chapter.name,
+                content: this.state.chapter.content
             });
         }
     }
 
-    async onChange(e) {
+    updateChapter = async (bookid, chapid, name, content, price, published) => {
+        try {
+            const { data } = await axios.put('api/books/' + bookid + '/chapters/' + chapid, {
+                name,
+                content,
+                price,
+                published
+            })
+            console.log(data);
+        }
+        catch (err) {
+            console.error(err);
+        }
+    }
+
+    onChange = async e => {
         e.preventDefault();
         await this.setState({ [e.target.id]: e.target.value });
     }
 
-    async onClickPublish(e) {
-        e.preventDefault();
-        // console.log(this.state.published);
-        if (this.state.published) {
-            await this.setState({ published: false });
-        } else {
-            await this.setState({ published: true });
+    onClickPublish = async () => {
+        try {
+            await this.updateChapter(
+                this.state.bookid,
+                this.state.chapid,
+                this.state.name,
+                this.state.content,
+                this.state.price,
+                true
+            );
+            this.props.history.push('/create/book/' + this.state.bookid);
+        }
+        catch (err) {
+            console.error(err);
         }
     }
 
-    async onSubmit(e) {
-        e.preventDefault();
-        //update chapter
-        await this.updateChapter(this.state.bookid, this.state.chapid, this.state.name, this.state.content, this.state.price, this.state.published);
+    async onSubmit() {
+        try {
+            await this.updateChapter(
+                this.state.bookid,
+                this.state.chapid,
+                this.state.name,
+                this.state.content,
+                this.state.price,
+                this.state.published
+            );
+            this.props.history.push('/create/book/' + this.state.bookid);
+        }
+        catch (err) {
+            console.error(err);
+        }
     }
 
     render() {
@@ -98,7 +128,7 @@ class CreateChapter extends Component {
             return <Redirect to='/login' />;
         }
 
-        if (!this.state.book && !this.state.chapters) {
+        if (!this.state.book && !this.state.chapter) {
             return <Spinner />;
         }
 
@@ -125,12 +155,12 @@ class CreateChapter extends Component {
                                 onChange={this.onChange} value={this.state.price} />
                         </Form.Group>
 
-                        <Button variant="primary" onClick={this.onClickPublish}>
-                            {this.state.published ? "Not publish" : "Publish"}
+                        <Button variant="primary" disabled={this.state.published} onClick={this.onClickPublish}>
+                            {this.state.published ? "Already published" : "Publish"}
                         </Button>
 
-                        <Button variant="primary" onClick={this.onSubmit}>
-                            Create
+                        <Button variant="primary" type="submit">
+                            Save
                         </Button>
 
                     </Form>
@@ -141,15 +171,10 @@ class CreateChapter extends Component {
     }
 }
 
-CreateChapter.propTypes = {
-    isAuthenticated: PropTypes.bool
-};
-
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
-    {}
-)(CreateChapter);
+)(CreateChapter));
