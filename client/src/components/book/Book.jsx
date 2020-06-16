@@ -10,6 +10,7 @@ import { isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/libr
 import ReviewBookForm from './ReviewBookForm'
 import ReviewBookList from './ReviewBookList'
 
+const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 
 class Book extends Component {
 
@@ -89,7 +90,7 @@ class Book extends Component {
                 <Container style={{ border: 'ridge' }}>
                     <Row>
                         <Col xs={6} md={4}>
-                            <Image src="" alt="Image" thumbnail />
+                            <Image src={this.state.book.cover ? this.state.book.cover : imgdefault} alt="Image" thumbnail />
                         </Col>
                         <Col xs={12} md={4}>
                             {

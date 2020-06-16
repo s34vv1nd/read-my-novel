@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Spinner from '../Spinner';
 import axios from 'axios';
 
-const imgdefault = "https://images-na.ssl-images-amazon.com/images/I/51EstVXM1UL._SX331_BO1,204,203,200_.jpg"
+const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 
 export default class Recommended extends Component {
 

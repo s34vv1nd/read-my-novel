@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Spinner from '../Spinner';
 import axios from 'axios';
 
-const imgdefault = "https://www.creativindie.com/wp-content/uploads/2013/10/got_hc1.jpg"
+const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 
 export default class HomeRelease extends Component {
 
