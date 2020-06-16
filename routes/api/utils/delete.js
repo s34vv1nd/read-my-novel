@@ -48,7 +48,7 @@ const deleteCommentById = async commentid => {
         (await Comment.find({ parent: commentid }, '_id')).forEach(async (value) => {
             await deleteCommentById(value._id);
         })
-        await Comment.deleteOne({_id: commentid});
+        await Comment.deleteOne({ _id: commentid });
     }
     catch (err) {
         throw err;
@@ -67,14 +67,14 @@ const deleteCommentByChapterId = async chapid => {
 }
 
 const deleteChapterById = async chapid => {
-    try {        
+    try {
         await deleteCommentByChapterId(chapid);
         let chapter = await Chapter.findById(chapid, 'number');
         let number = chapter.number;
-        await Chapter.deleteOne({_id: chapid});
+        await Chapter.deleteOne({ _id: chapid });
         let nextchap;
-        while (nextchap = await Chapter.findOne({number: (number + 1)})) {
-            await Chapter.updateOne({_id: nextchap._id}, {number: number});
+        while (nextchap = await Chapter.findOne({ number: (number + 1) })) {
+            await Chapter.updateOne({ _id: nextchap._id }, { number: number });
             number += 1;
         }
     }
@@ -102,7 +102,7 @@ const deleteBookById = async bookid => {
         await deleteReviewByBookId(bookid);
         await deleteRatingByBookId(bookid);
         await deleteVoteByBookId(bookid);
-        console.log(await Book.findOneAndDelete({ _id: bookid }));
+        await Book.findOneAndDelete({ _id: bookid });
     }
     catch (err) {
         throw err;

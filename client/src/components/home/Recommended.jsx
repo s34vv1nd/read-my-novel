@@ -28,14 +28,14 @@ export default class Recommended extends Component {
     }
 
     async componentDidMount() {
-        await this.setState({books: await this.loadBooks()});
+        await this.setState({ books: await this.loadBooks() });
     }
 
     mainBook = () => {
         return (
             < div class="col-md-4" >
                 <div class="card" style={{ marginTop: '50px' }}>
-                    <img class="card-img-top" src={imgdefault} alt="Book image"></img>
+                    <img class="card-img-top" src={this.state.books[0].cover ? this.state.books[0].cover : imgdefault} alt="Book image"></img>
                     <div class="card-body">
                         <h4 class="card-title"><Link to={"book/" + this.state.books[0]._id}>{this.state.books[0].name}</Link></h4>
                         <p class="card-text">Book intro</p>
@@ -54,9 +54,13 @@ export default class Recommended extends Component {
                         {
                             this.state.books.slice(4 * index + 1, 4 * index + 5).map(
                                 book => (
-                                    <div class="col-lg-3 col-md-6" style={{padding: '10px'}}>
+                                    <div class="col-lg-3 col-md-6" style={{ padding: '10px' }}>
                                         <div class="card h-100"  >
-                                            <img class="card-img-top" src={imgdefault} alt="Book image"></img>
+                                            <img
+                                                class="card-img-top"
+                                                src={book.cover ? book.cover : imgdefault}
+                                                alt="Book image">
+                                            </img>
                                             <div class="card-body">
                                                 <h5 class="card-title"><Link to={"book/" + book._id}>{book.name}</Link></h5>
                                                 <p class="card-text">
@@ -73,12 +77,11 @@ export default class Recommended extends Component {
                     </div>
                 )
             }))
-            
+
     }
 
     render() {
-        console.log(this.state.books);
-        if (!this.state.books  || !this.state.books[0]) {
+        if (!this.state.books || !this.state.books[0]) {
             return <Spinner />
         }
 

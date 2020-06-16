@@ -36,38 +36,38 @@ class NewBookForm extends Component {
         if (!this.state.bookname) {
             console.log("Book name must not be empty");
             await this.props.setAlert('Book name must not be empty', "danger", 2000);
+            return;
         }
         else
-        if (!this.state.genres || this.state.genres.length === 0 || !this.state.genres[0]) {
-            console.log("Choose one genre");
-            await this.props.setAlert('Choose one genre', "danger", 2000);
-        }
-        else
-        if (this.state.file) {
-            const formData = new FormData();
-            formData.append("cover", this.state.file);
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
-                }
+            if (!this.state.genres || this.state.genres.length === 0 || !this.state.genres[0]) {
+                console.log("Choose one genre");
+                await this.props.setAlert('Choose one genre', "danger", 2000);
+                return;
             }
-            await axios.post('api/upload/cover', formData, config).then(res => {
-                console.log('RES', res.data.fileNameInServer)
-                let filePath = res.data.fileNameInServer
-                if (filePath) {
-                    filePath = filePath.split('\\')[1]
+            else
+                if (this.state.file) {
+                    const formData = new FormData();
+                    formData.append("cover", this.state.file);
+                    const config = {
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    }
+                    await axios.post('api/upload/cover', formData, config).then(res => {
+                        console.log('RES', res.data.fileNameInServer)
+                        let filePath = res.data.fileNameInServer
+                        if (filePath) {
+                            filePath = filePath.split('\\')[1]
+                        }
+                        this.setState({
+                            imgURL: '/api/view/' + filePath
+                        })
+                    })
                 }
-                this.setState({
-                    imgURL: '/api/view/' + filePath
-                })
-            })
 
-            console.log(this.state.imgURL);
+        await this.createBook({ name: this.state.bookname, genres: [this.state.genres], cover: this.state.imgURL });
 
-            await this.createBook({ name: this.state.bookname, genres: [this.state.genres], cover: this.state.imgURL });
-    
-            this.setState({ submitted: true })
-        }
+        this.setState({ submitted: true })
     }
 
     render() {
