@@ -33,14 +33,14 @@ const ReviewBookList = ({
 
     return (
         <div class="container" style={{ marginTop: '20px' }}>
-            <h2>Other review</h2>
+            <h2>Other reviews</h2>
 
             <div class="card">
                 <div class="card-body">
                     {reviews.map(review =>
                         <div class="row">
-                            <div class="col-md-2">
-                                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" />
+                            <div class="col-md-2 text-center">
+                                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" style={{width: '50%'}} />
                                 <p class="text-secondary text-center">Created at: {review.createdAt}</p>
                             </div>
                             <div class="col-md-10">

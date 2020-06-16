@@ -145,6 +145,7 @@ class Book extends Component {
                 </Fragment>
 
                 <Fragment>
+                    <hr></hr>
                     <ReviewBookForm />
                     <ReviewBookList reviews={this.state.reviews} />
                 </Fragment>
