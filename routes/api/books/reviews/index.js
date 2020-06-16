@@ -27,7 +27,7 @@ router.get('/', findBookById, async (req, res) => {
     try {
         const book = req.params.bookid;
         const user = req.query.user;
-        const filter = {};
+        let filter = {};
         if (book) filter = {book};
         if (user) filter = {...filter, user}
         const reviews = await Review.find(filter)
