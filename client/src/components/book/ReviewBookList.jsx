@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Rating, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -27,8 +27,6 @@ const ReviewBookList = ({
         }
     }
 
-    useEffect
-
     if (!reviews) {
         return <p>Not available reviews. Create now!</p>
     }
@@ -55,7 +53,7 @@ const ReviewBookList = ({
 
                                 </p> */}
                                 {}
-                                {/* <Rating initialRating={rating} readonly /> */}
+                                <Rating initialRating={rating} readonly />
                                 <div class="clearfix"></div>
                                 <p>{review.content}</p>
                                 <p>
