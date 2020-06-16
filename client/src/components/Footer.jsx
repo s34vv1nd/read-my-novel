@@ -19,7 +19,7 @@ export default class Footer extends Component {
                             <Link to="#" className="link"> <i className="fa fa-instagram contact"></i></Link>
                             <Link to="#" className="link"> <i className="fa fa-twitter contact"></i></Link>
                         </div>
-                        <p id="footer_copyright"> Long &copy; 2020 </p>
+                        <p id="footer_copyright"> Group4 &copy; 2020 </p>
                     </div>
 
                     <div class="col-md-2">

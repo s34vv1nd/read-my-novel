@@ -15,7 +15,7 @@ const BookList = ({
                     <th>Name</th>
                     <th>Genres</th>
                     <th>Status</th>
-                    <th>Rating</th>
+                    <th>Ratings</th>
                     <th>Created at</th>
                 </tr>
             </thead>
@@ -29,7 +29,7 @@ const BookList = ({
                         }}>{book.name}</Link></td>
                         <td>{book.genres.map(genre => `${genre['name'] || genre} `)}</td>
                         <td>{book.completed ? "Completed" : "Ongoing"}</td>
-                        <td>{book.rating}</td>
+                        <td>{book.ratings}</td>
                         <td>{book.createdAt}</td>
                     </tr>)
                 }

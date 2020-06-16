@@ -56,6 +56,9 @@ const findBooksBy = async ({ author, genres, status, page, perPage, sortBy, proj
             case 'collections':
                 sortVal = book => book.collections;
                 break;
+            case 'createdAt':
+                sortVal = book => -book.createdAt;
+                break;
             default:    // alphabet
                 sortVal = book => book.name;
         }

@@ -1,11 +1,7 @@
 import axios from 'axios';
 import {
-    GET_LIBRARY_SUCCESS,
-    GET_LIBRARY_FAIL,
-    ADD_BOOK_SUCCESS,
-    ADD_BOOK_FAIL,
-    REMOVE_FROM_LIBRARY_SUCCESS,
-    REMOVE_FROM_LIBRARY_FAIL,
+    LOAD_LIBRARY_SUCCESS,
+    LOAD_LIBRARY_FAIL,
 } from './types';
 
 export const loadLibrary = () => async dispatch => {
@@ -13,19 +9,19 @@ export const loadLibrary = () => async dispatch => {
         const res = await axios.get('api/library');
         if (res.data.success) {
             dispatch({
-                type: GET_LIBRARY_SUCCESS,
+                type: LOAD_LIBRARY_SUCCESS,
                 payload: res.data.books
             });
         }
         else {
             dispatch({
-                type: GET_LIBRARY_FAIL
+                type: LOAD_LIBRARY_FAIL
             })
         }
     }
     catch (err) {
         dispatch({
-            type: GET_LIBRARY_FAIL
+            type: LOAD_LIBRARY_FAIL
         })
     }
 }

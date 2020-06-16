@@ -65,6 +65,11 @@ class NewBookForm extends Component {
                         })
                     })
                 }
+                else {
+                    this.setState({
+                        imgURL: 'https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg'
+                    })
+                }
 
         await this.createBook({ 
             name: this.state.bookname, 

@@ -16,14 +16,6 @@ export default class Home extends Component {
                 <HomeRelease />
                 <h2 style={{marginTop: '20px'}}>Recommended</h2>
                 <Recommended />
-                {/* <h2 style={{marginTop: '20px'}}>Power Ranking</h2>
-                <div></div>
-                <h2 style={{marginTop: '20px'}}>Latest Updates</h2>
-                <table></table>
-                <CommentForm />
-                <Comment />
-                <ReadChapter /> */}
-                <WebpageReview />
             </Fragment>
         )
     }

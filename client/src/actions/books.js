@@ -1,9 +1,7 @@
 import axios from 'axios';
 import {
-    LOAD_BOOK_SUCCESS, 
-    LOAD_BOOK_FAIL,
-    GET_CHAPTER_SUCCESS,
-    GET_CHAPTER_FAIL,
+    LOAD_BOOKS_SUCCESS, 
+    LOAD_BOOKS_FAIL
 } from './types';
 
 //Get list of books
@@ -11,14 +9,15 @@ import {
 export const loadBooks = () => async dispatch => {
     try {
         const res = await axios.get('api/books', {params: {sortBy: 'popularity'}});
+        console.log(res.data);
         dispatch({
-            type: LOAD_BOOK_SUCCESS,
+            type: LOAD_BOOKS_SUCCESS,
             payload: res.data.books
         });
     } catch(err) {
         console.error(err);
         dispatch({
-            type: LOAD_BOOK_FAIL
+            type: LOAD_BOOKS_FAIL
         });
     }
 }

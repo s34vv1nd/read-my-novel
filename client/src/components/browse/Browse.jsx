@@ -94,11 +94,9 @@ class Browse extends Component {
 }
 
 const mapStateToProps = state => ({
-    //books: state.browse.books,
     genres: state.genres
 });
 
 export default connect(
     mapStateToProps,
-    //{ loadBookBy, loadGenres }
 )(Browse);

@@ -6,9 +6,9 @@ import axios from 'axios';
 import Spinner from '../Spinner';
 import ChapterList from './ChapterList';
 import { setAlert } from '../../actions/alert';
-import { isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/library';
-import ReviewBookForm from './ReviewForm'
-import ReviewBookList from './ReviewList'
+import { addToLibrary, removeFromLibrary } from '../../actions/library';
+import ReviewForm from './ReviewForm'
+import ReviewList from './ReviewList'
 
 const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 
@@ -136,7 +136,7 @@ class Book extends Component {
 
                 <Fragment>
                     <hr></hr>
-                    <ReviewBookForm bookid={this.state.bookid} />
+                    <ReviewForm bookid={this.state.bookid} />
                 </Fragment>
 
 
@@ -145,9 +145,9 @@ class Book extends Component {
 
                     <div class="card">
                         <div class="card-body">
-                            {this.state.reviews == 0 ? null : this.state.reviews.map(review =>
+                            {!this.state.reviews || this.state.reviews == 0 ? null : this.state.reviews.map(review =>
                                 <Fragment>
-                                    <ReviewBookList review={review} bookid={this.state.bookid} />
+                                    <ReviewList review={review} bookid={this.state.bookid} />
                                 </Fragment>
                             )}
                         </div>
@@ -165,5 +165,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    { isInLibrary, addToLibrary, removeFromLibrary, setAlert }
+    { setAlert }
 )(Book));

@@ -9,7 +9,8 @@ class Library extends Component {
     constructor() {
         super();
         this.state = {
-            bookid: ''
+            bookid: '',
+            loading: true
         }
 
         this.componentDidMount = this.componentDidMount.bind(this);
@@ -17,7 +18,9 @@ class Library extends Component {
     }
 
     async componentDidMount() {
-        await this.props.loadLibrary();
+        await this.props.loadLibrary().then(() => {
+            this.setState({loading: false});
+        })
     }
 
     async onClickRemove(e) {
@@ -26,7 +29,7 @@ class Library extends Component {
             bookid: e.target.value
         });
 
-        await removeFromLibrary(this.state.bookid);
+        await removeFromLibrary(e.target.value);
         await this.props.loadLibrary();
     }
 
@@ -34,6 +37,8 @@ class Library extends Component {
         if (!this.props.isAuthenticated) {
             return <Redirect to='/login' />;
         }
+
+
 
         return (
             <>
@@ -54,8 +59,8 @@ class Library extends Component {
                             {this.props.books.map(book =>
                                 <tr key={this.props.books.indexOf(book) + 1}>
                                     <td>{this.props.books.indexOf(book) + 1}</td>
-                                    <td>{book.name}</td>
-                                    <td>{book.genres.map(genre => `${genre['name'] || genre} `)}</td>
+                                    <td><Link to={'/book/' + book._id}>{book.name}</Link></td>
+                                    <td>{book.genres.map(genre => `${genre.name || genre}, `)}</td>
                                     <td>{book.completed ? "Completed" : "Ongoing"}</td>
                                     <td>{book.createdAt}</td>
                                     <td><Button variant="primary" onClick={this.onClickRemove} value={book._id}>Remove from library</Button></td>
@@ -79,7 +84,7 @@ Library.propTypes = {
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
-    books: state.browse.books,
+    books: state.library.books,
 });
 
 export default connect(
