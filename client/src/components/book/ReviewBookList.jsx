@@ -53,7 +53,7 @@ const ReviewBookList = ({
 
                                 </p> */}
                                 {}
-                                <Rating initialRating={rating} readonly />
+                                {/* <Rating initialRating={rating} readonly /> */}
                                 <div class="clearfix"></div>
                                 <p>{review.content}</p>
                                 <p>
