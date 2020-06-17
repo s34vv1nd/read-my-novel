@@ -8,6 +8,7 @@ import ChapterList from './ChapterList';
 import { setAlert } from '../../actions/alert';
 import { isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/library';
 import { loadReviews } from '../../actions/reviews';
+import { loadBook } from '../../actions/book';
 import ReviewForm from './ReviewForm'
 import ReviewList from './ReviewList'
 
@@ -29,19 +30,19 @@ class Book extends Component {
         this.onClickLibrary = this.onClickLibrary.bind(this);
     }
 
-    loadBook = async (bookid) => {
-        try {
-            const { data } = await axios.get('api/books/' + bookid);
-            if (data.success) {
-                return data.book;
-            }
-            return null;
-        }
-        catch (err) {
-            console.error(err);
-            return null;
-        }
-    }
+    // loadBook = async (bookid) => {
+    //     try {
+    //         const { data } = await axios.get('api/books/' + bookid);
+    //         if (data.success) {
+    //             return data.book;
+    //         }
+    //         return null;
+    //     }
+    //     catch (err) {
+    //         console.error(err);
+    //         return null;
+    //     }
+    // }
 
     async getRatings(user, book) {
         try {
@@ -63,8 +64,9 @@ class Book extends Component {
         let reviews;
         this.setState({ loading: true });
         await Promise.all([
-            await this.setState({ bookid: this.props.match.params.bookid }),
-            await this.setState({ book: await this.loadBook(this.state.bookid) }),
+            await this.props.loadBook(this.props.match.params.bookid),
+            await this.setState({ bookid: this.props.book._id }),
+            // await this.setState({ book: await this.loadBook(this.state.bookid) }),
             await this.setState({ inLibrary: await isInLibrary(this.state.bookid) }),
             await this.props.loadReviews(this.state.bookid),
             reviews = await Promise.all(this.props.reviews.map(async review => [review, await this.getRatings(review.user._id, this.state.bookid)]))
@@ -99,7 +101,7 @@ class Book extends Component {
             return <Redirect to='/login'></Redirect>
         }
 
-        if (!this.state.book || !this.state.reviews || this.state.loading) {
+        if (!this.props.book || !this.state.reviews || this.state.loading) {
             return <Spinner />;
         }
 
@@ -108,42 +110,38 @@ class Book extends Component {
                 <Container style={{ border: 'ridge' }}>
                     <Row>
                         <Col md={4} lg={4}>
-                            <Image src={this.state.book.cover ? this.state.book.cover : imgdefault} alt="Image" thumbnail />
+                            <Image src={this.props.book.cover ? this.props.book.cover : imgdefault} alt="Image" thumbnail />
                         </Col>
                         <Col md={8} lg={8} style={{ marginTop: '20px' }}>
-                            <h3>{this.state.book.name}</h3>
+                            <h3>{this.props.book.name}</h3>
                             <Row>
                                 <Col lg={8}>
                                     <ListGroup horizontal>
-                                        {this.state.book.genres.map(genre =>
+                                        {this.props.book.genres.map(genre =>
                                             <ListGroup.Item key={genre.name}>
                                                 {genre.name}
                                             </ListGroup.Item>)}
                                     </ListGroup>
                                     <ListGroup horizontal>
                                         <ListGroup.Item key="status" variant="primary">
-                                            {this.state.book.completed === true ? "Completed" : "Ongoing"}
+                                            {this.props.book.completed === true ? "Completed" : "Ongoing"}
                                         </ListGroup.Item>
                                     </ListGroup>
                                 </Col>
                                 <Col lg={4}>
                                     <ButtonGroup style={{ marginBottom: '20px' }}>
                                         <Button variant="primary" onClick={this.onClickLibrary}>
-                                            {this.state.inLibrary ? "Remove from library" : "Add to library"}
+                                            {this.props.inLibrary ? "Remove from library" : "Add to library"}
                                         </Button>
-                                    </ButtonGroup> 
+                                    </ButtonGroup>
                                 </Col>
                             </Row>
 
 
-                            <p>Author: {this.state.book.author.username}</p>
-                            <p>Rating: {this.state.book.ratings}</p>
+                            <p>Author: {this.props.book.author.username}</p>
+                            <p>Rating: {this.props.book.ratings}</p>
 
-                            <p>{this.state.book.sypnosis}</p>
-
-
-
-
+                            <p>{this.props.book.sypnosis}</p>
                         </Col>
 
                     </Row>
@@ -163,9 +161,10 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     reviews: state.reviews,
+    book: state.book.book
 });
 
 export default withRouter(connect(
     mapStateToProps,
-    { setAlert, loadReviews }
+    { setAlert, loadReviews, loadBook }
 )(Book));

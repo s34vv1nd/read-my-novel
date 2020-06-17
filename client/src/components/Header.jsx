@@ -25,16 +25,13 @@ class Header extends Component {
                         <Link to="/browse" className="nav-link">Browse</Link>
                         <Link to="/rankings" className="nav-link">Ranking</Link>
                         <Link to="/create" className="nav-link">Create</Link>
+                        <Link to="/library" className="nav-link"> Library </Link>
                     </Nav>
-                    <Nav>
+                    <Nav style={{paddingRight: "20px"}}>
                         <SearchBar />
                     </Nav>
                     <Nav>
-                        <Link to="/library" className="nav-link">
-                            <div style={{padding: "inherit"}}>
-                                Library
-                            </div>
-                        </Link>
+                        
                     </Nav>
                     <Nav>
                         {this.props.isAuthenticated ?

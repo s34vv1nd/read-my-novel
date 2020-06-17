@@ -16,21 +16,21 @@ const ReviewList = ({
     }
 
     const displayReview = (review) => (
-        <div class="row">
-            <div class="col-md-2 text-center">
-                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" style={{ width: '50%' }} />
-                <p class="text-secondary text-center">Created at: {review.createdAt}</p>
+        <div className="row">
+            <div className="col-md-2 text-center">
+                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" className="img img-rounded img-fluid" style={{ width: '50%' }} />
+                <p className="text-secondary text-center">Created at: {review.createdAt}</p>
             </div>
-            <div class="col-md-10">
+            <div className="col-md-10">
                 <p>
-                    <a class="float-left" href="#"><strong>{review.user.username}</strong></a>
+                    <a className="float-left" href="#"><strong>{review.user.username}</strong></a>
                 </p>
                 <hr />
 
-                <div class="clearfix"></div>
+                <div className="clearfix"></div>
                 <p>{review.content}</p>
                 {/* <p>
-                    <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
+                    <a className="float-right btn text-white btn-danger"> <i className="fa fa-heart"></i> Like</a>
                 </p> */}
             </div>
         </div>

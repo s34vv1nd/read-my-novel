@@ -1,6 +1,6 @@
 import {
     LOAD_BOOKS_SUCCESS, 
-    LOAD_BOOK_FAIL
+    LOAD_BOOKS_FAIL
 } from '../actions/types';
 
 const initialState = [];

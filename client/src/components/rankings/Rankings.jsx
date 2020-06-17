@@ -12,12 +12,8 @@ const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 
 
 class Rankings extends Component {
-    constructor() {
-        super();
-        this.state = {
-
-        }
-
+    constructor(props) {
+        super(props);
         this.componentDidMount = this.componentDidMount.bind(this);
     }
 
@@ -29,6 +25,7 @@ class Rankings extends Component {
         if (!this.props.books) {
             return <Spinner />
         }
+
         return (
             <>
                 <h2 style={{textAlign:'center', marginTop:'20px'}}> Power Ranking</h2>
@@ -55,8 +52,8 @@ class Rankings extends Component {
                                         <Link to={{
                                             pathname: '/book/' + book._id,
                                             state: { id: book._id }
-                                        }}><button type="button" class="btn btn-primary " style={{marginRight: '10px'}} >Read</button></Link>
-                                        <button type="button" class="btn btn-primary" >Vote</button>
+                                        }}><button type="button" className="btn btn-primary " style={{marginRight: '10px'}} >Read</button></Link>
+                                        <button type="button" className="btn btn-primary" >Vote</button>
 
                                     </Col>
                                 </Row>

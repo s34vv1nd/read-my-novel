@@ -145,7 +145,7 @@ class UpdateBookForm extends Component {
                     </Form.Group>
 
                     <Button variant="primary" type="submit">
-                        Create Book
+                        Update Book
                     </Button>
                 </Form>
             </Fragment>

@@ -66,7 +66,6 @@ const findBooksBy = async ({ author, genres, status, page, perPage, sortBy, proj
 
         //books[((page - 1)*perPage + 1) .. (page * perPage)]
         if (perPage !== -1) books = books.slice((page - 1) * perPage, page * perPage);
-        console.log(books.length);
         return books;
     }
     catch (err) {

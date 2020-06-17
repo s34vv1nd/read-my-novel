@@ -19,7 +19,7 @@ export default class Recommended extends Component {
             params: {
                 page: 1,
                 perPage: 9,
-                sortBy: 'popularity'
+                sortBy: 'collections'
             }
         });
         console.log(data.books);

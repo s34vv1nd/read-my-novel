@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Button, Table, ButtonGroup } from 'react-bootstrap';
+import { Button, Table, ButtonGroup, Image, Spinner } from 'react-bootstrap';
 import { Redirect, Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
-
+const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 
 
 class UpdateBook extends Component {
@@ -15,6 +15,7 @@ class UpdateBook extends Component {
             chapid: '',
             book: {},
             chapters: [],
+            loading: true,
             isDeleted: false
         }
 
@@ -48,6 +49,7 @@ class UpdateBook extends Component {
         });
         await this.setState({ book: await this.getCurrentBook(this.state.bookid) });
         await this.setState({ chapters: await this.getChapters(this.state.bookid) });
+        this.setState({loading: false});
     }
 
     async onClickDeleteChapter(e) {
@@ -92,10 +94,12 @@ class UpdateBook extends Component {
             return <Redirect to='/create' />;
         }
 
+        if (this.state.loading) return <Spinner />
+
         return (
             <>
                 <h2>{this.state.book.name}</h2>
-
+                <Image style={{width: "25%"}} src={this.state.book.cover ? this.state.book.cover : imgdefault} alt="Image" thumbnail />
                 {this.state.chapters && this.state.chapters[0] ? (
 
                     <Table responsive>

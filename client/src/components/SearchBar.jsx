@@ -1,31 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import { connect } from 'react-redux'
 import Spinner from "./Spinner";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect, withRouter } from "react-router-dom";
 import './SearchBar.css'
+import { loadBook } from '../actions/book';
 
 
-const SearchBar = ({ books }) => {
+const SearchBar = ({ dispatch, books }) => {
     let history = useHistory();
 
-    const onChange = async (book) => {
-        if (book.value) history.push('book/' + book.value);
+    const onChange = (option) => {
+        if (option && option.value) {
+            dispatch(loadBook(option.value));
+            history.push('/book/' + option.value);
+        }
     }
-    
+
     if (!books) {
         return <Spinner />
     }
 
     return (
-        <Select
-            className="select-custom-class"
-            options={books.map(book => ({ label: book.name, value: book._id }))}
-            onChange={onChange}
-            isClearable
-            placeholder='Search...'
-            style="min-width: 100%"
-        />
+        <div>
+            <Select
+                className="select-custom-class"
+                options={books.map(book => ({ label: book.name, value: book._id }))}
+                onChange={onChange}
+                isClearable
+                placeholder='Search...'
+            />
+        </div>
     );
 }
 
@@ -33,6 +39,6 @@ const mapStateToProps = state => ({
     books: state.books,
 });
 
-export default connect(
-    mapStateToProps,
-)(SearchBar);
+export default withRouter(connect(
+    mapStateToProps
+)(SearchBar));
