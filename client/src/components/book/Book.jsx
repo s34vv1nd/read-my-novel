@@ -6,9 +6,8 @@ import axios from 'axios';
 import Spinner from '../Spinner';
 import ChapterList from './ChapterList';
 import { setAlert } from '../../actions/alert';
-import { isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/library';
-import { loadReviews } from '../../actions/reviews';
-import { loadBook } from '../../actions/book';
+//import { loadReviews } from '../../actions/reviews';
+import { loadBook, isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/book';
 import ReviewForm from './ReviewForm'
 import ReviewList from './ReviewList'
 
@@ -19,30 +18,12 @@ class Book extends Component {
     constructor(props) {
         super();
         this.state = {
-            bookid: null,
-            book: null,
-            reviews: null,
-            inLibrary: false,
             needRedirect: false,
             loading: true
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.onClickLibrary = this.onClickLibrary.bind(this);
     }
-
-    // loadBook = async (bookid) => {
-    //     try {
-    //         const { data } = await axios.get('api/books/' + bookid);
-    //         if (data.success) {
-    //             return data.book;
-    //         }
-    //         return null;
-    //     }
-    //     catch (err) {
-    //         console.error(err);
-    //         return null;
-    //     }
-    // }
 
     async getRatings(user, book) {
         try {
@@ -61,15 +42,9 @@ class Book extends Component {
     }
 
     async componentDidMount() {
-        let reviews;
         this.setState({ loading: true });
         await Promise.all([
             await this.props.loadBook(this.props.match.params.bookid),
-            await this.setState({ bookid: this.props.book._id }),
-            // await this.setState({ book: await this.loadBook(this.state.bookid) }),
-            await this.setState({ inLibrary: await isInLibrary(this.state.bookid) }),
-            await this.props.loadReviews(this.state.bookid),
-            reviews = await Promise.all(this.props.reviews.map(async review => [review, await this.getRatings(review.user._id, this.state.bookid)]))
         ]).then(() => {
             this.setState({ loading: false });
         })
@@ -83,14 +58,14 @@ class Book extends Component {
             await this.setState({ needRedirect: true });
             return;
         }
-        if (this.state.inLibrary) {
-            if (await removeFromLibrary(this.state.bookid)) {
-                await this.setState({ inLibrary: false });
+        if (this.props.inLibrary) {
+            if (await this.props.removeFromLibrary(this.props.book._id)) {
+                //await this.setState({ inLibrary: false });
             }
         }
         else {
-            if (await addToLibrary(this.state.bookid)) {
-                await this.setState({ inLibrary: true });
+            if (await this.props.addToLibrary(this.props.book._id)) {
+                //await this.setState({ inLibrary: true });
             }
         }
     }
@@ -101,7 +76,7 @@ class Book extends Component {
             return <Redirect to='/login'></Redirect>
         }
 
-        if (!this.props.book || !this.state.reviews || this.state.loading) {
+        if (!this.props.book || !this.props.reviews || this.state.loading) {
             return <Spinner />;
         }
 
@@ -136,22 +111,19 @@ class Book extends Component {
                                     </ButtonGroup>
                                 </Col>
                             </Row>
-
-
-                            <p>Author: {this.props.book.author.username}</p>
+                            <p style={{marginTop:'10px'}}>Author: {this.props.book.author.username}</p>
                             <p>Rating: {this.props.book.ratings}</p>
-
                             <p>{this.props.book.sypnosis}</p>
                         </Col>
 
                     </Row>
                 </Container>
 
-                <ChapterList bookid={this.state.bookid} />
+                <ChapterList bookid={this.props.book._id} />
 
                 <hr></hr>
-                <ReviewForm bookid={this.state.bookid} />
-                {!this.state.reviews ? null : <ReviewList reviews={this.state.reviews} bookid={this.state.bookid} />}
+                <ReviewForm bookid={this.props.book._id} />
+                {!this.props.reviews || this.props.reviews == 0 ? null : <ReviewList bookid={this.props.book._id} />}
             </div>
         );
     }
@@ -160,11 +132,12 @@ class Book extends Component {
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    reviews: state.reviews,
-    book: state.book.book
+    reviews: state.book.reviews,
+    book: state.book.book,
+    inLibrary: state.book.inLibrary
 });
 
 export default withRouter(connect(
     mapStateToProps,
-    { setAlert, loadReviews, loadBook }
+    { setAlert, loadBook, isInLibrary, addToLibrary, removeFromLibrary }
 )(Book));

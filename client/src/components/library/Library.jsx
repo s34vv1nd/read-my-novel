@@ -3,7 +3,8 @@ import { Table, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { loadLibrary, removeFromLibrary } from '../../actions/library';
+import {loadLibrary} from '../../actions/library';
+import { removeFromLibrary } from '../../actions/book';
 import Spinner from '../Spinner';
 
 class Library extends Component {

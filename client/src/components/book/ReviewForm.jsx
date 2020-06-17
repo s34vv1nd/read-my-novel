@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { setAlert } from '../../actions/alert';
-import { postReviews } from '../../actions/reviews';
+import { postReviews } from '../../actions/book';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -40,9 +40,8 @@ class ReviewForm extends Component {
             console.log("Content is empty");
             await this.props.setAlert('Please enter your review', "danger", 2000);
         } else {
-            console.log(this.props.bookid, this.state.content);
             await this.props.postReviews(this.props.bookid, this.state.content);
-            console.log("Set review");
+            this.setState({content: ""});
         }
     }
 
@@ -58,7 +57,9 @@ class ReviewForm extends Component {
                                     <textarea placeholder="Write something..."
                                         style={{ width: '100%', height: 'auto' }}
                                         onChange={this.onChange}
-                                        value={this.state.content}></textarea>
+                                        value={this.state.content}>
+                                    ""
+                                    </textarea>
                                 </div>
                                 <div className="row pull-right" style={{ marginTop: '10px' }}>
                                     <button type="submit" className="btn btn-success green pull-right">

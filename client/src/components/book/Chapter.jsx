@@ -7,7 +7,7 @@ import Spinner from '../Spinner';
 import { Button, Navbar } from 'react-bootstrap';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
-import { updateBookmark } from '../../actions/library';
+import { updateBookmark } from '../../actions/book';
 
 
 class Chapter extends Component {
@@ -34,7 +34,7 @@ class Chapter extends Component {
             if (!bookid || !chapid) return null;
             const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
             const res_book = await axios.get('api/books/' + bookid);
-            const success = await updateBookmark({ bookid, chapnum: res_chapter.data.chapter.number });
+            const success = await this.props.updateBookmark({ bookid, chapnum: res_chapter.data.chapter.number });
             if (res_chapter.data.success && res_book.data.success) {
                 return {
                     book: res_book.data.book,
@@ -136,7 +136,7 @@ class Chapter extends Component {
                     Prev Chapter
                 </Button>
 
-                <select style={{marginLeft: '10px', marginRight: '10px'}}
+                <select style={{ marginLeft: '10px', marginRight: '10px' }}
                     defaultValue={this.state.chapter._id} onChange={this.onChange}>
                     {this.state.chapters.map(chapter => (
                         <option key={chapter._id} value={chapter._id}>
@@ -161,9 +161,6 @@ class Chapter extends Component {
         }
 
         if (!this.state.book || !this.state.chapter || !this.state.chapters || this.state.loading) {
-            console.log(
-                this.state
-            )
             return <Spinner />;
         }
 
@@ -203,4 +200,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
+    { updateBookmark }
 )(Chapter));

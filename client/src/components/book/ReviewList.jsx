@@ -7,11 +7,10 @@ import Spinner from '../Spinner';
 //import { Star } from "@material-ui/icons";
 
 const ReviewList = ({
-    bookid,
-    reviews
+    reviews, bookid
 }) => {
 
-    if (!reviews || !bookid) {
+    if (!reviews) {
         return <Spinner />;
     }
 
@@ -51,7 +50,7 @@ const ReviewList = ({
 }
 
 const mapStateToProps = state => ({
-    reviews: state.reviews,
+    reviews: state.book.reviews,
 });
 
 export default withRouter(connect(
