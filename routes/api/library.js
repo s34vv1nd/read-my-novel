@@ -20,12 +20,13 @@ router.get('/', auth, async (req, res) => {
         const book = req.query.bookid;
         const filter = {user: req.user.id};
         if (book) filter.book = book;
-        const libraryInstances = await Library.find(filter);
-        const ids = libraryInstances.map(x => x.book);
-        
-        const books = await Book.find().where('_id').in(ids)
-            .populate('genres', 'name')
-            .populate('author', 'username');
+        const books = await Library.find(filter)
+            .sort('updatedAt')
+            .populate({
+                path: 'book',
+                populate: {path: 'author', select: 'username'},
+                populate: {path: 'genres', select: 'name'}
+            });
         return res.status(200).json({books, success: true});
         /*
             res.data = books = [{Book}]
@@ -108,11 +109,15 @@ router.put('/', auth, async (req, res) => {
         if (!libraryInstance) {
             return res.status(400).json({ error: 'Book not in library', success: false });
         }
-        const countChapters = await Chapter.find({ book: bookid }).countDocuments();
-        if (!Number.isInteger(chapnum) || chapnum > countChapters || chapnum < 0) {
+        const chapter = await Chapter.findOne({ book: bookid, number: chapnum });
+        if (!chapter) {
             return res.status(400).json({ error: 'Invalid chapter', success: false });
         }
-        const newlibraryInstance = await Library.findOneAndUpdate(filter, { bookmark: chapnum }, { new: true });
+        const newlibraryInstance = await Library.findOneAndUpdate(
+            filter, 
+            { bookmark: chapnum, bookmark_id: chapter._id }, 
+            { new: true }
+        );
         res.status(200).json({ newlibraryInstance, success: true });
     }
     catch (err) {

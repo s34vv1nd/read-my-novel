@@ -77,7 +77,6 @@ router.post('/', auth, async (req, res) => {
             user, book, content
         })
         await review.save(null, async (err, doc) => {
-
             res.body = await doc.populate('user', 'username').populate('book', 'name').execPopulate();
         });
         return res.status(201).json({review: res.body, success: true});

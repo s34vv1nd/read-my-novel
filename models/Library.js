@@ -17,6 +17,10 @@ const LibrarySchema = new Schema({
     bookmark: {
         type: Number, 
         default: 0
+    },
+    bookmark_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'chapter'
     }
 }, {timestamps: true}); // timestamps add {createdAt: Date, updatedAt: Date}
 

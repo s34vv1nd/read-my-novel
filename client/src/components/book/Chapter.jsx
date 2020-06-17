@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Spinner from '../Spinner';
-import { Dropdown, Form, Button, Navbar } from 'react-bootstrap';
+import { Button, Navbar } from 'react-bootstrap';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
+import { updateBookmark } from '../../actions/library';
+
 
 class Chapter extends Component {
     constructor(props) {
@@ -31,8 +33,8 @@ class Chapter extends Component {
         if (!bookid || !chapid) return null;
         const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
         const res_book = await axios.get('api/books/' + bookid);
-
-        if (res_chapter.data.success && res_book.data.success) {
+        const success = await updateBookmark({ bookid, chapnum: res_chapter.data.chapter.number });
+        if (success && res_chapter.data.success && res_book.data.success) {
             return {
                 book: res_book.data.book,
                 chapter: res_chapter.data.chapter
@@ -60,13 +62,7 @@ class Chapter extends Component {
 
     getComments = async (bookid, chapid) => {
         try {
-            const res = await axios.get('api/books/' + bookid + '/chapters/' + chapid + '/comments', {
-                params: {
-
-                }
-            });
-
-            console.log(res.data);
+            const res = await axios.get('api/books/' + bookid + '/chapters/' + chapid + '/comments');
             if (res.data.success) return res.data.comments;
             return null;
         } catch (err) {
@@ -192,9 +188,9 @@ Chapter.propTypes = {
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
+    books: state.library
 });
 
 export default withRouter(connect(
     mapStateToProps,
-    // { loadChapter }
 )(Chapter));

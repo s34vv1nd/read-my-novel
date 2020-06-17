@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { loadLibrary, removeFromLibrary } from '../../actions/library';
+import Spinner from '../Spinner';
 
 class Library extends Component {
     constructor() {
@@ -38,7 +39,9 @@ class Library extends Component {
             return <Redirect to='/login' />;
         }
 
-
+        if (this.state.loading) {
+            return <Spinner />
+        }
 
         return (
             <>
@@ -51,7 +54,8 @@ class Library extends Component {
                                 <th>Book name</th>
                                 <th>Book genres</th>
                                 <th>Status</th>
-                                <th>Created at</th>
+                                <th>Last update</th>
+                                <th>Bookmark</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -59,11 +63,16 @@ class Library extends Component {
                             {this.props.books.map(book =>
                                 <tr key={this.props.books.indexOf(book) + 1}>
                                     <td>{this.props.books.indexOf(book) + 1}</td>
-                                    <td><Link to={'/book/' + book._id}>{book.name}</Link></td>
-                                    <td>{book.genres.map(genre => `${genre.name || genre}, `)}</td>
-                                    <td>{book.completed ? "Completed" : "Ongoing"}</td>
-                                    <td>{book.createdAt}</td>
-                                    <td><Button variant="primary" onClick={this.onClickRemove} value={book._id}>Remove from library</Button></td>
+                                    <td><Link to={'/book/' + book.book._id}>{book.book.name}</Link></td>
+                                    <td>{book.book.genres.map(genre => `${genre.name || genre}, `)}</td>
+                                    <td>{book.book.completed ? "Completed" : "Ongoing"}</td>
+                                    <td>{new Date(book.updatedAt).toLocaleDateString("en-US")}</td>
+                                    <td>{book.bookmark === 0 ? null :
+                                        (<Link to={'/book/' + book.book._id + '/' + book.bookmark_id}>
+                                            {'Chapter ' + book.bookmark}
+                                        </Link>)}
+                                    </td>
+                                    <td><Button variant="danger" onClick={this.onClickRemove} value={book.book._id}>X</Button></td>
                                 </tr>)
                             }
                         </tbody>

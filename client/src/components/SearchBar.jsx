@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Select from 'react-select';
 import { connect } from 'react-redux'
 import Spinner from "./Spinner";
@@ -13,7 +13,6 @@ const SearchBar = ({ books }) => {
         if (book.value) history.push('book/' + book.value);
     }
     
-    console.log("Search bar", books);
     if (!books) {
         return <Spinner />
     }

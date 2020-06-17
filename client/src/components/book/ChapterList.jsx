@@ -1,5 +1,5 @@
-import React, { Component, Fragment, useState, useEffect } from 'react';
-import { Row, Col, Button, Table } from 'react-bootstrap';
+import React, {  useState, useEffect } from 'react';
+import {  Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from '../Spinner';

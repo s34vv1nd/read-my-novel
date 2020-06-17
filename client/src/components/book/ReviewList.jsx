@@ -1,48 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Spinner from '../Spinner';
 //import { Star } from "@material-ui/icons";
 
-const ReviewBookList = ({
-    review,
-    bookid
+const ReviewList = ({
+    bookid,
+    reviews
 }) => {
-    const [rating, setRating] = useState(null);
 
-    const getRating = async (book_id, user_id) => {
-        try {
-            const res = await axios.get('api/ratings', {
-                params: {
-                    user: user_id,
-                    book: book_id
-                }
-            });
-
-            if (res.data != 0) return res.data;
-            return null;
-        } catch (err) {
-            console.log(err);
-            return null;
-        }
-    }
-
-    useEffect(() => {
-        const asyncFunc = async () => {
-            const rate = await getRating(bookid, review.user._id);
-            await setRating(rate);
-        }
-        asyncFunc();
-    }, []);
-
-    if (!review) {
+    if (!reviews || !bookid) {
         return <Spinner />;
     }
 
-    return (
-
+    const displayReview = (review) => (
         <div class="row">
             <div class="col-md-2 text-center">
                 <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" style={{ width: '50%' }} />
@@ -53,7 +26,7 @@ const ReviewBookList = ({
                     <a class="float-left" href="#"><strong>{review.user.username}</strong></a>
                 </p>
                 <hr />
-                
+
                 <div class="clearfix"></div>
                 <p>{review.content}</p>
                 <p>
@@ -61,8 +34,26 @@ const ReviewBookList = ({
                 </p>
             </div>
         </div>
+    )
+
+    return (
+        <div className="container" style={{ marginTop: '50px' }}>
+            <h2>REVIEWS:</h2>
+
+            <div className="card">
+                <div className="card-body">
+                    {reviews.map(review => displayReview(review))}
+                </div>
+            </div>
+        </div>
 
     );
 }
 
-export default ReviewBookList;
+const mapStateToProps = state => ({
+    reviews: state.reviews,
+});
+
+export default withRouter(connect(
+    mapStateToProps,
+)(ReviewList));

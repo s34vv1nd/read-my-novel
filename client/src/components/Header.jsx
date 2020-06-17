@@ -30,8 +30,11 @@ class Header extends Component {
                         <SearchBar />
                     </Nav>
                     <Nav>
-                        <Link to="/library" className="nav-link">Library</Link>
-                        <Link to="/notifications" className="nav-link">Notifications</Link>
+                        <Link to="/library" className="nav-link">
+                            <div style={{padding: "inherit"}}>
+                                Library
+                            </div>
+                        </Link>
                     </Nav>
                     <Nav>
                         {this.props.isAuthenticated ?

@@ -9,7 +9,6 @@ import {
 export const loadBooks = () => async dispatch => {
     try {
         const res = await axios.get('api/books', {params: {sortBy: 'popularity'}});
-        console.log(res.data);
         dispatch({
             type: LOAD_BOOKS_SUCCESS,
             payload: res.data.books

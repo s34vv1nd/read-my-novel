@@ -3,7 +3,6 @@ const path = require('path');
 
 router.get('/:name', (req, res) => {
     const fileName = req.params.name;
-    console.log('fileName', fileName);
     if (!fileName) {
         return res.send({
             success: false,

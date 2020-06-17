@@ -26,6 +26,22 @@ export const loadLibrary = () => async dispatch => {
     }
 }
 
+export const updateBookmark = async ({ bookid, chapnum }) => {
+    try {
+        const { data } = await axios.put('/api/library/', {
+            book: {
+                id: bookid,
+                chapter: chapnum
+            }
+        });
+        return data.success ? true : false;
+    }
+    catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
 export const isInLibrary = async (bookid) => {
     try {
         const res = await axios.get('api/library', {
@@ -47,7 +63,6 @@ export const isInLibrary = async (bookid) => {
 
 export const addToLibrary = async (bookid) => {
     try {
-        //console.log('add ', bookid);
         const res = await axios.post('api/library', {
             book: {
                 id: bookid
@@ -68,7 +83,6 @@ export const addToLibrary = async (bookid) => {
 
 export const removeFromLibrary = async (bookid) => {
     try {
-        //console.log('delete ', bookid);
         const res = await axios.delete('api/library?bookid=' + bookid);
         if (res.data.success) {
             return true;
