@@ -48,13 +48,13 @@ const findBooksBy = async ({ author, genres, status, page, perPage, sortBy, proj
         let sortVal;
         switch (sortBy) {
             case 'ratings':
-                sortVal = book => book.ratings;
+                sortVal = book => -book.ratings;
                 break;
             case 'votes':
-                sortVal = book => book.votes;
+                sortVal = book => -book.votes;
                 break;
             case 'collections':
-                sortVal = book => book.collections;
+                sortVal = book => -book.collections;
                 break;
             case 'createdAt':
                 sortVal = book => -book.createdAt;
@@ -66,6 +66,7 @@ const findBooksBy = async ({ author, genres, status, page, perPage, sortBy, proj
 
         //books[((page - 1)*perPage + 1) .. (page * perPage)]
         if (perPage !== -1) books = books.slice((page - 1) * perPage, page * perPage);
+        console.log(books.length);
         return books;
     }
     catch (err) {

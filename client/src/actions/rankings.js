@@ -9,7 +9,7 @@ export const loadRankings = () => async dispatch => {
     try {
         const res = await axios.get('api/books', {
             params: {
-                sortBy: 'vote'
+                sortBy: 'ratings'
             }
         });
         console.log(res.data.books);

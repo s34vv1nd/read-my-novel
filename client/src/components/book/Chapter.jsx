@@ -84,7 +84,7 @@ class Chapter extends Component {
         })
         await this.setState(await this.loadChapter(this.state.bookid, this.state.chapid));
         await this.setState({ chapters: await this.getChapters(this.state.bookid) });
-        //await this.setState({ comments: await this.getComments(this.state.bookid, this.state.chapid) });
+        await this.setState({ comments: await this.getComments(this.state.bookid, this.state.chapid) });
     }
 
     displayContent = (content) => {

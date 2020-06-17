@@ -17,12 +17,12 @@ export default class Recommended extends Component {
     loadBooks = async () => {
         const { data } = await axios.get('api/books', {
             params: {
-                status: 'ongoing',
                 page: 1,
                 perPage: 9,
-                sortBy: 'ratings'
+                sortBy: 'popularity'
             }
         });
+        console.log(data.books);
         if (data.success) return data.books;
         return null;
     }
@@ -39,7 +39,8 @@ export default class Recommended extends Component {
                     <div class="card-body">
                         <h4 class="card-title"><Link to={"book/" + this.state.books[0]._id}>{this.state.books[0].name}</Link></h4>
                         <p class="card-text">Author: {this.state.books[0].author.username}</p>
-                        <p class="card-text">Book intro</p>
+                        <p class="card-text">{this.state.books[0].sypnosis.slice(0, 200)+'...'}</p>
+                        <p class="card-text">Rating: {this.state.books[0].ratings}</p>
                         <a href={"book/" + this.state.books[0]._id} class="btn btn-primary">READ</a>
                     </div>
                 </div>

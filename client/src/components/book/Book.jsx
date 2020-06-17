@@ -69,7 +69,7 @@ class Book extends Component {
             await this.props.loadReviews(this.state.bookid),
             reviews = await Promise.all(this.props.reviews.map(async review => [review, await this.getRatings(review.user._id, this.state.bookid)]))
         ]).then(() => {
-            this.setState({loading: false});
+            this.setState({ loading: false });
         })
         this.setState({ reviews: this.props.reviews });
     }
@@ -112,26 +112,40 @@ class Book extends Component {
                         </Col>
                         <Col md={8} lg={8} style={{ marginTop: '20px' }}>
                             <h3>{this.state.book.name}</h3>
-                            <ListGroup horizontal>
-                                {this.state.book.genres.map(genre =>
-                                    <ListGroup.Item key={genre.name}>
-                                        {genre.name}
-                                    </ListGroup.Item>)}
-                            </ListGroup>
-                            <ListGroup horizontal>
-                                <ListGroup.Item key="status" variant="primary">
-                                    {this.state.book.completed === true ? "Completed" : "Ongoing"}
-                                </ListGroup.Item>
-                            </ListGroup>
-                            <p></p>
+                            <Row>
+                                <Col lg={8}>
+                                    <ListGroup horizontal>
+                                        {this.state.book.genres.map(genre =>
+                                            <ListGroup.Item key={genre.name}>
+                                                {genre.name}
+                                            </ListGroup.Item>)}
+                                    </ListGroup>
+                                    <ListGroup horizontal>
+                                        <ListGroup.Item key="status" variant="primary">
+                                            {this.state.book.completed === true ? "Completed" : "Ongoing"}
+                                        </ListGroup.Item>
+                                    </ListGroup>
+
+                                </Col>
+                                <Col lg={4}>
+                                    <ButtonGroup style={{ marginBottom: '20px' }}>
+                                        <Button variant="primary" onClick={this.onClickLibrary}>
+                                            {this.state.inLibrary ? "Remove from library" : "Add to library"}
+                                        </Button>
+                                    </ButtonGroup> </Col>
+                            </Row>
+
+
                             <p>Author: {this.state.book.author.username}</p>
                             <p>Rating: {this.state.book.ratings}</p>
-                            <ButtonGroup style={{ marginBottom: '20px' }}>
-                                <Button variant="primary" onClick={this.onClickLibrary}>
-                                    {this.state.inLibrary ? "Remove from library" : "Add to library"}
-                                </Button>
-                            </ButtonGroup>
+
+                            <p>{this.state.book.sypnosis}</p>
+
+
+
+
                         </Col>
+
                     </Row>
                 </Container>
 
