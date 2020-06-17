@@ -125,14 +125,14 @@ class Book extends Component {
                                             {this.state.book.completed === true ? "Completed" : "Ongoing"}
                                         </ListGroup.Item>
                                     </ListGroup>
-
                                 </Col>
                                 <Col lg={4}>
                                     <ButtonGroup style={{ marginBottom: '20px' }}>
                                         <Button variant="primary" onClick={this.onClickLibrary}>
                                             {this.state.inLibrary ? "Remove from library" : "Add to library"}
                                         </Button>
-                                    </ButtonGroup> </Col>
+                                    </ButtonGroup> 
+                                </Col>
                             </Row>
 
 
