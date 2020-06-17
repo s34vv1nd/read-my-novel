@@ -213,6 +213,7 @@ router.delete('/:bookid', auth, findBookById, async (req, res) => {
 router.put('/:bookid', auth, findBookById, async (req, res) => {
     try {
         const { name, genrenames, completed, cover, sypnosis } = req.body.book;
+        console.log(req.body.book);
         const genres = await Genre.find().where('name').in(genrenames).select('id').exec();
         if (genres.length === 0 || genres.length !== genrenames.length) {
             return res.status(400).send('Invalid genres');

@@ -19,7 +19,7 @@ class UpdateBookForm extends Component {
             file: null,
             imgURL: '',
             errors: {},
-            loading: true,
+            loading: false,
             submitted: false
         }
 
@@ -37,9 +37,7 @@ class UpdateBookForm extends Component {
             completed: data.book.completed,
             sypnosis: data.book.sypnosis,
             imgURL: data.book.cover,
-        }).then(() => {
-            this.setState({loading: false});
-        });
+        })
         console.log('state: ', this.state);
     }
 
@@ -47,8 +45,8 @@ class UpdateBookForm extends Component {
         this.setState({ [e.target.id]: e.target.value });
     }
 
-    updateBook = async ({ bookid, name, genres, sypnosis, cover }) => {
-        const res = await axios.put('api/books/' + bookid, { name, genres, sypnosis, cover });
+    updateBook = async ({ bookid, name, genrenames, sypnosis, cover }) => {
+        const res = await axios.put('api/books/' + bookid, { book: {name, genrenames, sypnosis, cover} });
         return res.data;
     }
 
@@ -87,8 +85,9 @@ class UpdateBookForm extends Component {
                 }
 
         await this.updateBook({
+            bookid: this.props.match.params.bookid,
             name: this.state.bookname,
-            genres: [this.state.genres],
+            genrenames: [this.state.genres],
             sypnosis: this.state.sypnosis,
             cover: this.state.imgURL
         });
