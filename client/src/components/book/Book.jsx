@@ -117,7 +117,7 @@ class Book extends Component {
                                     <ListGroup.Item key={genre.name}>
                                         {genre.name}
                                     </ListGroup.Item>)}
-                                <ListGroup.Item key="status">
+                                <ListGroup.Item key="status" variant="primary">
                                     {this.state.book.completed === true ? "Completed" : "Ongoing"}
                                 </ListGroup.Item>
                             </ListGroup>
