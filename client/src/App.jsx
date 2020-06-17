@@ -19,6 +19,7 @@ import Notifications from './components/notifications/Notifications';
 import Book from './components/book/Book';
 import Chapter from './components/book/Chapter';
 import NewBookForm from './components/create/NewBookForm';
+import UpdateBookForm from './components/create/UpdateBookForm';
 import UpdateChapter from './components/create/UpdateChapter';
 import UpdateBook from './components/create/UpdateBook';
 import store from './store';
@@ -67,6 +68,10 @@ function App() {
                         <Route exact path="/create/book/:bookid/chapter/:chapid">
                             <UpdateChapter />
                         </Route>
+
+                        <Route exact path="/create/book/:bookid/update">
+                            <UpdateBookForm />
+                        </Route>
                         
                         <Route exact path="/create/book/:bookid">
                             <UpdateBook />
@@ -83,6 +88,7 @@ function App() {
                         <PrivateRoute path="/library">
                             <Library />
                         </PrivateRoute>
+
                         <PrivateRoute path="/notifications">
                             <Notifications />
                         </PrivateRoute>

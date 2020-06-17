@@ -117,6 +117,8 @@ class Book extends Component {
                                     <ListGroup.Item key={genre.name}>
                                         {genre.name}
                                     </ListGroup.Item>)}
+                            </ListGroup>
+                            <ListGroup horizontal>
                                 <ListGroup.Item key="status">
                                     {this.state.book.completed === true ? "Completed" : "Ongoing"}
                                 </ListGroup.Item>
@@ -137,7 +139,7 @@ class Book extends Component {
 
                 <hr></hr>
                 <ReviewForm bookid={this.state.bookid} />
-                {!this.state.reviews ? null : <ReviewList reviews={this.state.rviews} bookid={this.state.bookid} />}
+                {!this.state.reviews ? null : <ReviewList reviews={this.state.reviews} bookid={this.state.bookid} />}
             </div>
         );
     }

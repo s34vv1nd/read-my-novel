@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { login } from '../../actions/auth';
+import Spinner from './../Spinner';
 
 class Login extends Component {
     constructor() {
@@ -35,6 +36,8 @@ class Login extends Component {
             return <Redirect to={from} />;
         }
 
+        if (this.props.loading) return <Spinner />
+
         return (
             <>
                 <Form noValidate onSubmit={this.onSubmit}>
@@ -61,13 +64,9 @@ class Login extends Component {
     }
 }
 
-Login.propTypes = {
-    login: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool
-};
-
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    loading: state.auth.loading
 });
 
 export default connect(

@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import axios from 'axios';
+import { loadUser } from '../../actions/auth';
+import Spinner from '../Spinner';
 
 class UpdateBookForm extends Component {
     constructor(props) {
@@ -12,15 +14,33 @@ class UpdateBookForm extends Component {
         this.state = {
             bookname: '',
             genres: '',
+            completed: null,
             sypnosis: '',
             file: null,
             imgURL: '',
             errors: {},
+            loading: true,
             submitted: false
         }
 
+        this.componentDidMount = this.componentDidMount.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    async componentDidMount() {
+        const { data } = await axios.get('/api/books/' + this.props.match.params.bookid);
+        console.log(data.book);
+        await this.setState({
+            bookname: data.book.name,
+            genres: data.book.genres[0].name,
+            completed: data.book.completed,
+            sypnosis: data.book.sypnosis,
+            imgURL: data.book.cover,
+        }).then(() => {
+            this.setState({loading: false});
+        });
+        console.log('state: ', this.state);
     }
 
     onChange(e) {
@@ -66,11 +86,11 @@ class UpdateBookForm extends Component {
                     })
                 }
 
-        await this.updateBook({ 
-            name: this.state.bookname, 
-            genres: [this.state.genres], 
+        await this.updateBook({
+            name: this.state.bookname,
+            genres: [this.state.genres],
             sypnosis: this.state.sypnosis,
-            cover: this.state.imgURL 
+            cover: this.state.imgURL
         });
 
         this.setState({ submitted: true })
@@ -79,6 +99,10 @@ class UpdateBookForm extends Component {
     render() {
         if (this.state.submitted) {
             return <Redirect to='/create'></Redirect>
+        }
+
+        if (this.state.loading) {
+            return <Spinner />;
         }
 
         return (
@@ -134,7 +158,7 @@ const mapStateToProps = state => ({
     genres: state.genres
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     { setAlert }
-)(UpdateBookForm);
+)(UpdateBookForm));

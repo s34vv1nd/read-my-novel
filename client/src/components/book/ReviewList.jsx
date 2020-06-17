@@ -29,9 +29,9 @@ const ReviewList = ({
 
                 <div class="clearfix"></div>
                 <p>{review.content}</p>
-                <p>
+                {/* <p>
                     <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
-                </p>
+                </p> */}
             </div>
         </div>
     )

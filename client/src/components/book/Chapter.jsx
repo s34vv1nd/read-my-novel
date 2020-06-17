@@ -30,17 +30,23 @@ class Chapter extends Component {
     }
 
     loadChapter = async (bookid, chapid) => {
-        if (!bookid || !chapid) return null;
-        const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
-        const res_book = await axios.get('api/books/' + bookid);
-        const success = await updateBookmark({ bookid, chapnum: res_chapter.data.chapter.number });
-        if (success && res_chapter.data.success && res_book.data.success) {
-            return {
-                book: res_book.data.book,
-                chapter: res_chapter.data.chapter
-            };
+        try {
+            if (!bookid || !chapid) return null;
+            const res_chapter = await axios.get('api/books/' + bookid + '/chapters/' + chapid);
+            const res_book = await axios.get('api/books/' + bookid);
+            const success = await updateBookmark({ bookid, chapnum: res_chapter.data.chapter.number });
+            if (res_chapter.data.success && res_book.data.success) {
+                return {
+                    book: res_book.data.book,
+                    chapter: res_chapter.data.chapter
+                };
+            }
+            return null;
         }
-        return null;
+        catch (err) {
+            console.error(err);
+            throw err;
+        }
     }
 
     getChapters = async (bookid) => {
@@ -78,7 +84,7 @@ class Chapter extends Component {
         })
         await this.setState(await this.loadChapter(this.state.bookid, this.state.chapid));
         await this.setState({ chapters: await this.getChapters(this.state.bookid) });
-        await this.setState({ comments: await this.getComments(this.state.bookid, this.state.chapid) });
+        //await this.setState({ comments: await this.getComments(this.state.bookid, this.state.chapid) });
     }
 
     displayContent = (content) => {
@@ -130,7 +136,8 @@ class Chapter extends Component {
                     Prev Chapter
                 </Button>
 
-                <select defaultValue={this.state.chapter._id} onChange={this.onChange}>
+                <select style={{marginLeft: '10px', marginRight: '10px'}}
+                    defaultValue={this.state.chapter._id} onChange={this.onChange}>
                     {this.state.chapters.map(chapter => (
                         <option key={chapter._id} value={chapter._id}>
                             {'Chapter ' + chapter.number + ": " + chapter.name}
@@ -154,6 +161,9 @@ class Chapter extends Component {
         }
 
         if (!this.state.book || !this.state.chapter || !this.state.chapters || this.state.loading) {
+            console.log(
+                this.state
+            )
             return <Spinner />;
         }
 
@@ -170,13 +180,13 @@ class Chapter extends Component {
                     {this.chaptersNavBar()}
                 </div>
 
-                <Fragment>
+                {/* <Fragment>
                     <CommentForm bookid={this.state.bookid} chapid={this.state.chapid} />
                     <hr />
                     <hr />
                     <hr />
                     <CommentList comments={this.state.comments} />
-                </Fragment>
+                </Fragment> */}
             </>
         )
     }

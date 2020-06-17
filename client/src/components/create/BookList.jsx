@@ -25,7 +25,11 @@ const BookList = ({
                         <td>{book.genres.map(genre => `${genre['name'] || genre} `)}</td>
                         <td>{book.completed ? "Completed" : "Ongoing"}</td>
                         <td>{book.createdAt}</td>
-                        <td><Link to={'/create/book/' + book._id}>Explore</Link></td>
+                        <td><Link to={{
+                            pathname: '/create/book/' + book._id + '/update',
+                            state: {
+                                book
+                            }}}>Update</Link></td>
                     </tr>)
                 }
             </tbody>
