@@ -3,7 +3,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 import { Button, Navbar } from 'react-bootstrap';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';

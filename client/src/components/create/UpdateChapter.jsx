@@ -4,7 +4,7 @@ import { Redirect, Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 
 class UpdateChapter extends Component {
     constructor() {

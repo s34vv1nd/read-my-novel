@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 // import styles from './Rankings.module.css';
 import './Rankings.css';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 
 const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 

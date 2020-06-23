@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 
 
 const CommentList = ({

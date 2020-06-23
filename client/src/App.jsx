@@ -5,9 +5,9 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { loadUser } from './actions/auth';
 import { loadGenres } from './actions/genres';
 import { loadBooks } from './actions/books';
-import Alert from './components/Alert';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Alert from './components/layout/Alert';
+import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
 import Home from './components/home/Home';
 import Login from './components/authentications/Login';
 import Register from './components/authentications/Register';
@@ -24,7 +24,7 @@ import UpdateChapter from './components/create/UpdateChapter';
 import UpdateBook from './components/create/UpdateBook';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './components/routing/PrivateRoute';
 
 
 if (localStorage.token) {

@@ -2,7 +2,7 @@ import React, {  useState, useEffect } from 'react';
 import {  Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 
 
 const ChapterList = ({
@@ -43,7 +43,6 @@ const ChapterList = ({
         <Table responsive style={{marginTop:'50px', border:'ridge', marginBottom: '50px'}}>
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Chapter #</th>
                     <th>Name</th>
                     <th>Status</th>
@@ -55,19 +54,18 @@ const ChapterList = ({
             <tbody>
                 {chapters.map(chapter =>
                     <tr key={chapters.indexOf(chapter) + 1}>
-                        <td>{chapters.indexOf(chapter) + 1}</td>
                         <td>{chapter.number}</td>
                         <td><Link to={{
                             pathname: '/book/' + bookid + '/' + chapter._id,
                             state: { id: chapter._id }
                         }}>{chapter.name}</Link></td>
                         <td>{chapter.published ? "Publish" : "Not publish"}</td>
-                        <td>{chapter.createdAt}</td>
-                        <td>{chapter.updatedAt}</td>
-                        <td><Link to={{
+                        <td>{new Date(chapter.createdAt).toLocaleDateString("en-US")}</td>
+                        <td>{new Date(chapter.updatedAt).toLocaleDateString("en-US")}</td>
+                        {/* <td><Link to={{
                             pathname: '/book/' + bookid + '/' + chapter._id,
                             state: { id: chapter._id }
-                        }}><Button>Read chapter</Button></Link></td>
+                        }}><Button>Read chapter</Button></Link></td> */}
                     </tr>)
                 }
             </tbody>

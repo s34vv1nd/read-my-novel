@@ -1,7 +1,7 @@
 import React, { Component, Fragment, useEffect } from 'react';
 import { Row, Col, Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 
 const BookList = ({
     books,

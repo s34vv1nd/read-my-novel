@@ -3,9 +3,6 @@ import HomeCarousel from './HomeCarousel.jsx';
 import { Link } from 'react-router-dom'
 import HomeRelease from './NewRelease.jsx';
 import Recommended from './Recommended.jsx';
-import WebpageReview from './WebpageReview.jsx';
-import ReadChapter from './ReadChapter.jsx';
-
 
 export default class Home extends Component {
     render() {

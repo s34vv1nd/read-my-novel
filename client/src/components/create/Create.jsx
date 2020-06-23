@@ -4,7 +4,7 @@ import { Redirect, Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 import BookList from './BookList';
 
 
@@ -15,8 +15,6 @@ class Create extends Component {
             userid: null,
             books: null
         }
-
-        this.componentDidMount = this.componentDidMount.bind(this);
     }
 
     getBooksCreated = async (userid) => {
@@ -37,14 +35,17 @@ class Create extends Component {
     }
 
     async componentDidMount() {
-        await this.setState({
-            userid: await this.props.user._id
-        });
+        if (this.props.user)
+            await this.setState({
+                books: await this.getBooksCreated(this.props.user._id)
+            });
+    }
 
-        await this.setState({
-            books: await this.getBooksCreated(this.state.userid)
-        })
-
+    async componentDidUpdate(prevProps) {
+        if (this.props.user && (!prevProps.user || !this.state.books || prevProps.user._id !== this.props.user._id))
+            await this.setState({
+                books: await this.getBooksCreated(this.props.user._id)
+            });
     }
 
     render() {
@@ -52,9 +53,7 @@ class Create extends Component {
             return <Redirect to='/login' />;
         }
 
-        if (!this.state.books) {
-            return <Spinner />
-        }
+        if (!this.props.user || !this.state.books) { return <Spinner /> }
 
         return (
             <>
@@ -69,7 +68,8 @@ class Create extends Component {
 
 Create.propTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
-    user: PropTypes.object
+    user: PropTypes.object,
+    loading: PropTypes.bool
 };
 
 const mapStateToProps = state => ({

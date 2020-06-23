@@ -24,7 +24,7 @@ const BookList = ({
                         <td><Link to={'/create/book/' + book._id}>{book.name}</Link></td>
                         <td>{book.genres.map(genre => `${genre['name'] || genre} `)}</td>
                         <td>{book.completed ? "Completed" : "Ongoing"}</td>
-                        <td>{book.createdAt}</td>
+                        <td>{new Date(book.createdAt).toLocaleDateString("en-US")}</td>
                         <td><Link to={'/create/book/' + book._id + '/update'}>Update</Link></td>
                     </tr>)
                 }

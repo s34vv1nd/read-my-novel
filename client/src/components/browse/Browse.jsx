@@ -2,7 +2,7 @@ import React, { Component, Fragment, useEffect } from 'react';
 import { Container, Form, Col, Row, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import BookList from './BookList';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 //import { loadBookBy, loadGenres } from '../../actions/browse';
 import axios from 'axios';
 

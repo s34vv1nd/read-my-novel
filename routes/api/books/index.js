@@ -65,7 +65,7 @@ const findBooksBy = async ({ author, genres, status, page, perPage, sortBy, proj
         books.sort((a, b) => +(sortVal(a) > sortVal(b)) || -(sortVal(a) < sortVal(b)));
 
         //books[((page - 1)*perPage + 1) .. (page * perPage)]
-        if (perPage !== -1) books = books.slice((page - 1) * perPage, page * perPage);
+        if (perPage !== -1) books = books.slice((page - 1) * perPage, Math.min(books.length,page * perPage));
         return books;
     }
     catch (err) {

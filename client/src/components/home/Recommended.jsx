@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 import axios from 'axios';
 
 const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
@@ -22,7 +22,6 @@ export default class Recommended extends Component {
                 sortBy: 'collections'
             }
         });
-        console.log(data.books);
         if (data.success) return data.books;
         return null;
     }
@@ -33,15 +32,15 @@ export default class Recommended extends Component {
 
     mainBook = () => {
         return (
-            < div class="col-md-4" >
-                <div class="card" style={{ marginTop: '50px' }}>
-                    <img class="card-img-top" src={this.state.books[0].cover ? this.state.books[0].cover : imgdefault} alt="Book image"></img>
-                    <div class="card-body">
-                        <h4 class="card-title"><Link to={"book/" + this.state.books[0]._id}>{this.state.books[0].name}</Link></h4>
-                        <p class="card-text">Author: {this.state.books[0].author.username}</p>
-                        <p class="card-text">{this.state.books[0].sypnosis.slice(0, 200)+'...'}</p>
-                        <p class="card-text">Rating: {this.state.books[0].ratings}</p>
-                        <a href={"book/" + this.state.books[0]._id} class="btn btn-primary">READ</a>
+            < div className="col-md-4" >
+                <div className="card" style={{ marginTop: '50px' }}>
+                    <img className="card-img-top" src={this.state.books[0].cover ? this.state.books[0].cover : imgdefault} alt="Book image"></img>
+                    <div className="card-body">
+                        <h4 className="card-title"><Link to={"book/" + this.state.books[0]._id}>{this.state.books[0].name}</Link></h4>
+                        <p className="card-text">Author: {this.state.books[0].author.username}</p>
+                        <p className="card-text">{this.state.books[0].sypnosis ? this.state.books[0].sypnosis.slice(0, 200)+'...' : null}</p>
+                        <p className="card-text">Rating: {this.state.books[0].ratings}</p>
+                        <a href={"book/" + this.state.books[0]._id} className="btn btn-primary">READ</a>
                     </div>
                 </div>
             </div >
@@ -52,24 +51,24 @@ export default class Recommended extends Component {
         return (
             [{ marginTop: '20px' }, { marginTop: '20px', marginBottom: '20px' }].map((value, index) => {
                 return (
-                    <div class="row" style={value}>
+                    <div className="row" style={value}>
                         {
                             this.state.books.slice(4 * index + 1, 4 * index + 5).map(
                                 book => (
-                                    <div class="col-lg-3 col-md-6" style={{ padding: '10px' }}>
-                                        <div class="card h-100"  >
+                                    <div className="col-lg-3 col-md-6" style={{ padding: '10px' }}>
+                                        <div className="card h-100"  >
                                             <img
-                                                class="card-img-top"
+                                                className="card-img-top"
                                                 src={book.cover ? book.cover : imgdefault}
                                                 alt="Book image">
                                             </img>
-                                            <div class="card-body">
-                                                <h5 class="card-title"><Link to={"book/" + book._id}>{book.name}</Link></h5>
-                                                <p class="card-text">
+                                            <div className="card-body">
+                                                <h5 className="card-title"><Link to={"book/" + book._id}>{book.name}</Link></h5>
+                                                <p className="card-text">
                                                     <div>{book.author.username}</div>
                                                     <div>Rating: {book.ratings}</div>
                                                 </p>
-                                                <a href={"book/" + book._id} class="btn btn-primary mt-auto">READ</a>
+                                                <a href={"book/" + book._id} className="btn btn-primary mt-auto">READ</a>
                                             </div>
                                         </div>
                                     </div>
@@ -88,9 +87,9 @@ export default class Recommended extends Component {
         }
 
         return (
-            <div class="row" style={{ border: 'ridge', backgroundColor: 'white' }}>
+            <div className="row" style={{ border: 'ridge', backgroundColor: 'white' }}>
                 {this.mainBook()}
-                <div class="col-md-8">
+                <div className="col-md-8">
                     {this.otherBooks()}
                 </div>
             </div>

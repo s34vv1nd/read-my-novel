@@ -2,10 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import {loadLibrary} from '../../actions/library';
-import { removeFromLibrary } from '../../actions/book';
-import Spinner from '../Spinner';
+import { loadLibrary } from '../../actions/library';
+import Spinner from '../layout/Spinner';
+import axios from 'axios';
 
 class Library extends Component {
     constructor() {
@@ -21,18 +20,26 @@ class Library extends Component {
 
     async componentDidMount() {
         await this.props.loadLibrary().then(() => {
-            this.setState({loading: false});
+            this.setState({ loading: false });
         })
     }
 
     async onClickRemove(e) {
         e.preventDefault();
-        await this.setState({
-            bookid: e.target.value
+        const bookid = e.target.value;
+        this.setState({
+            bookid: bookid
         });
 
-        await removeFromLibrary(e.target.value);
-        await this.props.loadLibrary();
+        try {
+            const { data } = await axios.delete('api/library?bookid=' + bookid);
+            if (data.success) {
+                await this.props.loadLibrary();
+            }
+        }
+        catch (err) {
+            console.error(err);
+        }
     }
 
     render() {
@@ -46,8 +53,8 @@ class Library extends Component {
 
         return (
             <>
-                <h2 style={{textAlign:'center', marginTop:'20px'}}>Library</h2>
-                {(this.props.books && this.props.books[0])?
+                <h2 style={{ textAlign: 'center', marginTop: '20px' }}>Library</h2>
+                {(this.props.books && this.props.books[0]) ?
                     <Table responsive>
                         <thead>
                             <tr>
@@ -87,10 +94,6 @@ class Library extends Component {
         )
     }
 }
-
-Library.propTypes = {
-    isAuthenticated: PropTypes.bool
-};
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,

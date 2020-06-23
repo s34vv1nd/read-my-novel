@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { connect } from 'react-redux'
-import Spinner from "./Spinner";
+import Spinner from './Spinner';
 import { useHistory, Redirect, withRouter } from "react-router-dom";
 import './SearchBar.css'
-import { loadBook } from '../actions/book';
+import { loadBook } from '../../actions/book';
 
 
 const SearchBar = ({ dispatch, books }) => {

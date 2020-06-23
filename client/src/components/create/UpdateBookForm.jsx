@@ -6,7 +6,7 @@ import { setAlert } from '../../actions/alert';
 import { Redirect, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { loadUser } from '../../actions/auth';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 
 class UpdateBookForm extends Component {
     constructor(props) {

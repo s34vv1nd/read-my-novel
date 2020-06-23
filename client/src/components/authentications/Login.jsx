@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { login } from '../../actions/auth';
-import Spinner from './../Spinner';
+import Spinner from '../layout/Spinner';
 
 class Login extends Component {
     constructor() {

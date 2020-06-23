@@ -3,7 +3,7 @@ import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button } from 'reac
 import { connect } from 'react-redux';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import axios from 'axios';
-import Spinner from '../Spinner';
+import Spinner from '../layout/Spinner';
 import ChapterList from './ChapterList';
 import { setAlert } from '../../actions/alert';
 //import { loadReviews } from '../../actions/reviews';
@@ -121,6 +121,8 @@ class Book extends Component {
 
                 <ChapterList bookid={this.props.book._id} />
 
+                <hr></hr>
+                
                 <hr></hr>
                 <ReviewForm bookid={this.props.book._id} />
                 {!this.props.reviews || this.props.reviews == 0 ? null : <ReviewList bookid={this.props.book._id} />}

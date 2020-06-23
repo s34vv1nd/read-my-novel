@@ -5,9 +5,9 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import logo from '.././applogo.png';
-import { logout } from '../actions/auth';
-import { AppName } from '../GlobalVariables.js';
+import logo from './applogo.png';
+import { logout } from '../../actions/auth';
+import { AppName } from '../../GlobalVariables.js';
 import SearchBar from './SearchBar';
 
 class Header extends Component {

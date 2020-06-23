@@ -105,7 +105,6 @@ class UpdateBook extends Component {
                     <Table responsive>
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Chapter #</th>
                                 <th>Name</th>
                                 <th>Status</th>
@@ -118,7 +117,6 @@ class UpdateBook extends Component {
                         <tbody>
                             {this.state.chapters.map(chapter =>
                                 <tr key={this.state.chapters.indexOf(chapter) + 1}>
-                                    <td>{this.state.chapters.indexOf(chapter) + 1}</td>
                                     <td>{chapter.number}</td>
                                     <td>
                                         <Link to={'/create/book/' + this.state.bookid + '/chapter/' + chapter._id}>
@@ -126,16 +124,16 @@ class UpdateBook extends Component {
                                         </Link>
                                     </td>
                                     <td>{chapter.published ? "Published" : "Not published"}</td>
-                                    <td>{chapter.createdAt}</td>
-                                    <td>{chapter.updatedAt}</td>
-                                    <td>
+                                    <td>{new Date(chapter.createdAt).toLocaleDateString("en-US")}</td>
+                                    <td>{new Date(chapter.updatedAt).toLocaleDateString("en-US")}</td>
+                                    {/* <td>
                                         <Link to={'/create/book/' + this.state.bookid + '/chapter/' + chapter._id}>
                                             <Button>
                                                 Update
                                             </Button>
                                         </Link>
-                                    </td>
-                                    <td><Button onClick={this.onClickDeleteChapter} value={chapter._id}>Delete</Button></td>
+                                    </td> */}
+                                    <td><Button variant="danger" onClick={this.onClickDeleteChapter} value={chapter._id}>X</Button></td>
                                 </tr>)
                             }
                         </tbody>
@@ -144,7 +142,7 @@ class UpdateBook extends Component {
                     <p>No chapter available</p>
                 }
 
-                <ButtonGroup>
+                <ButtonGroup >
                     <Button onClick={this.onClickCreateChapter}>Create chapter</Button>
                     <Button onClick={this.onClickDeleteBook}>Delete book</Button>
                 </ButtonGroup>
