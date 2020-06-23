@@ -120,9 +120,9 @@ class Book extends Component {
                                 </Col>
                                 <Col lg={4}>
                                     <ButtonGroup style={{ marginBottom: '20px' }}>
-                                        <Button variant="primary" onClick={this.onClickLibrary}>
+                                        {this.props.isAuthenticated ? <Button variant="primary" onClick={this.onClickLibrary}>
                                             {this.props.inLibrary ? "Remove from library" : "Add to library"}
-                                        </Button>
+                                        </Button>: null}
                                     </ButtonGroup>
                                 </Col>
                             </Row>
@@ -132,7 +132,7 @@ class Book extends Component {
                                 return (
                                     <span
                                         className="star"
-                                        style={{color: n < this.props.book.rating ? "yellow" : "gray"}}
+                                        style={{color: (this.props.isAuthenticated && n < this.props.book.rating) ? "yellow" : "gray"}}
                                         key={n + 1}
                                         data-value={n + 1}
                                         onClick={this.starClickHandler}
