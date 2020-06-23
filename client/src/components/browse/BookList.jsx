@@ -30,7 +30,7 @@ const BookList = ({
                         <td>{book.genres.map(genre => `${genre['name'] || genre} `)}</td>
                         <td>{book.completed ? "Completed" : "Ongoing"}</td>
                         <td>{book.ratings}</td>
-                        <td>{book.createdAt}</td>
+                        <td>{new Date(book.createdAt).toLocaleDateString("en-US")}</td>
                     </tr>)
                 }
             </tbody>
