@@ -1,3 +1,4 @@
+import './Book.css';
 import React, { Component, Fragment } from 'react';
 import { Container, Row, Col, Image, ListGroup, ButtonGroup, Button } from 'react-bootstrap'
 import { connect } from 'react-redux';
@@ -7,7 +8,7 @@ import Spinner from '../layout/Spinner';
 import ChapterList from './ChapterList';
 import { setAlert } from '../../actions/alert';
 //import { loadReviews } from '../../actions/reviews';
-import { loadBook, isInLibrary, addToLibrary, removeFromLibrary } from '../../actions/book';
+import { loadBook, isInLibrary, addToLibrary, removeFromLibrary, setRating } from '../../actions/book';
 import ReviewForm from './ReviewForm'
 import ReviewList from './ReviewList'
 
@@ -23,6 +24,7 @@ class Book extends Component {
         }
         this.componentDidMount = this.componentDidMount.bind(this);
         this.onClickLibrary = this.onClickLibrary.bind(this);
+        this.starClickHandler = this.starClickHandler.bind(this);
     }
 
     async getRatings(user, book) {
@@ -70,10 +72,23 @@ class Book extends Component {
         }
     }
 
+    async starClickHandler(e) {
+        e.preventDefault();
+        if (!this.props.isAuthenticated) {
+            await this.setState({ needRedirect: true });
+            return;
+        }
+        this.setState({loading: true});
+        const bookid = this.props.book._id;
+        this.props.setRating({ bookid, rating: e.target.dataset.value}).then(() => {
+            this.setState({loading: false});
+        });
+    }
+
     render() {
 
         if (this.state.needRedirect) {
-            return <Redirect to='/login'></Redirect>
+            return <Redirect to={{pathname: '/login', state: {from: this.props.location}}}></Redirect>
         }
 
         if (!this.props.book || !this.props.reviews || this.state.loading) {
@@ -111,8 +126,22 @@ class Book extends Component {
                                     </ButtonGroup>
                                 </Col>
                             </Row>
-                            <p style={{marginTop:'10px'}}>Author: {this.props.book.author.username}</p>
+                            <p style={{ marginTop: '10px' }}>Author: {this.props.book.author.username}</p>
                             <p>Rating: {this.props.book.ratings}</p>
+                            <span>Rate this book: {[...Array(5).keys()].map(n => {
+                                return (
+                                    <span
+                                        className="star"
+                                        style={{color: n < this.props.book.rating ? "yellow" : "gray"}}
+                                        key={n + 1}
+                                        data-value={n + 1}
+                                        onClick={this.starClickHandler}
+                                    >
+                                        &#9733;
+                                    </span>
+                                );
+                            })}</span>
+                            <hr></hr>
                             <p>{this.props.book.sypnosis}</p>
                         </Col>
 
@@ -121,8 +150,6 @@ class Book extends Component {
 
                 <ChapterList bookid={this.props.book._id} />
 
-                <hr></hr>
-                
                 <hr></hr>
                 <ReviewForm bookid={this.props.book._id} />
                 {!this.props.reviews || this.props.reviews == 0 ? null : <ReviewList bookid={this.props.book._id} />}
@@ -141,5 +168,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    { setAlert, loadBook, isInLibrary, addToLibrary, removeFromLibrary }
+    { setAlert, loadBook, isInLibrary, addToLibrary, removeFromLibrary, setRating }
 )(Book));

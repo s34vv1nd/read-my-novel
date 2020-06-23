@@ -13,7 +13,9 @@ import {
     LOAD_REVIEWS_SUCCESS,
     LOAD_REVIEWS_FAIL,
     POST_REVIEWS_SUCCESS,
-    POST_REVIEWS_FAIL
+    POST_REVIEWS_FAIL,
+    SET_RATING_SUCCESS,
+    SET_RATING_FAIL
 } from './types';
 
 export const updateBookmark = ({ bookid, chapnum }) => async dispatch => {
@@ -118,10 +120,30 @@ export const postReviews = (bookid, content) => async dispatch => {
     }
 }
 
+export const setRating = ({ bookid, rating}) => async dispatch => {
+    try {
+        const res = await axios.put('api/ratings', {
+            book: bookid,
+            rating
+        });
+        await dispatch(loadBook(bookid));
+        dispatch({
+            type: SET_RATING_SUCCESS,
+        });
+    } catch(err) {
+        console.error(err);
+        dispatch({
+            type: SET_RATING_FAIL
+        });
+    }
+}
+
 export const loadBook = (bookid) => async dispatch => {
     try {
         let res = await axios.get('api/books/' + bookid);
         const book = res.data.book;
+        const {data} = await axios.get('api/ratings', {params: {book: bookid, user: 'current'}});
+        book.rating = data.length ? data[0].rating : 0;
         await dispatch(loadReviews(bookid));
         await dispatch(isInLibrary(bookid));
         dispatch({

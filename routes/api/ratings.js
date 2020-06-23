@@ -25,10 +25,25 @@ const Rating = require('../../models/Rating');
 */
 router.get('/', async (req, res, next) => {
     try {
-        const { user, book } = req.query;
+        let { user, book } = req.query;
         let filter = {};
-        if (user) filter = {user};
-        if (book) filter = {...filter, book};
+        if (user === 'current') {
+            const token = req.header('x-auth-token');
+            if (!token) {
+                user = null;
+            }
+            await jwt.verify(token, config.get('jwtSecret'), async (error, decoded) => {
+                if (error) {
+                    user = null;
+                }
+                else {
+                    const res = await User.findById(decoded.user.id);
+                    user = res && res._id;
+                }
+            });
+        }
+        if (user) filter = { user };
+        if (book) filter = { ...filter, book };
         const ratings = await Rating.find(filter)
             .populate('user', 'username')
             .populate('book', 'name')
@@ -55,18 +70,18 @@ router.put('/', auth, async (req, res) => {
     try {
         const book = req.body.book;
         const user = req.user.id;
-        await Rating.updateOne({book, user}, {rating: req.body.rating}, {new: true, upsert: true});
-        const ratings = await Rating.find({book}, 'rating');
+        await Rating.updateOne({ book, user }, { rating: req.body.rating }, { new: true, upsert: true });
+        const ratings = await Rating.find({ book }, 'rating');
         console.log(ratings);
         let num = ratings.length;
         let sum = await ratings.reduce((total, number) => total + (number.rating), 0);
         console.log(num, sum);
-        await Book.updateOne({_id: book}, {ratings: sum / num});
-        res.status(200).json({success: true});
+        await Book.updateOne({ _id: book }, { ratings: (sum / num).toFixed(1) });
+        res.status(200).json({ success: true });
     }
     catch (err) {
         console.log(err);
-        res.status(500).send({error: 'Server Error when put ratings', body: req.body, success:  false});
+        res.status(500).send({ error: 'Server Error when put ratings', body: req.body, success: false });
     }
 })
 
