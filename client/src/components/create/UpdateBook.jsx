@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Button, Table, ButtonGroup, Image, Spinner } from 'react-bootstrap';
+import { Button, Table, ButtonGroup, Image } from 'react-bootstrap';
 import { Redirect, Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
-const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
+import { showModal } from '../../actions/modal';
+import Spinner from '../layout/Spinner';
 
+const imgdefault = "https://gitensite.s3.amazonaws.com/bookcovers/7573.jpg"
 
 class UpdateBook extends Component {
     constructor() {
@@ -49,39 +51,72 @@ class UpdateBook extends Component {
         });
         await this.setState({ book: await this.getCurrentBook(this.state.bookid) });
         await this.setState({ chapters: await this.getChapters(this.state.bookid) });
-        this.setState({loading: false});
+        this.setState({ loading: false });
     }
 
     async onClickDeleteChapter(e) {
         e.preventDefault();
-        await this.setState({
-            chapid: e.target.value
-        });
-
-        await axios.delete('/api/books/' + this.state.bookid + '/chapters/' + this.state.chapid);
-        await this.setState({ chapters: await this.getChapters(this.state.bookid) });
+        const chapid = e.target.value;
+        this.props.showModal({
+            heading: "Delete chapter",
+            body: 'Confirm delete this chapter?',
+            options: [
+                {
+                    name: "NO",
+                    action: function() {}
+                },
+                {
+                    name: "YES",
+                    action: async () => {
+                        axios.delete('/api/books/' + this.state.bookid + '/chapters/' + chapid).then(async () => {
+                            this.setState({ chapters: await this.getChapters(this.state.bookid) });
+                            this.setState({loading: false});
+                        });
+                        this.setState({loading: true});
+                    }
+                }
+            ]
+        })
     }
 
     async onClickDeleteBook(e) {
         e.preventDefault();
-        await axios.delete('api/books/' + this.state.bookid);
-        await this.setState({ isDeleted: true });
+
+        this.props.showModal({
+            heading: "Delete book",
+            body: 'Confirm delete this book?',
+            options: [
+                {
+                    name: "NO",
+                    action: function() {}
+                },
+                {
+                    name: "YES",
+                    action: async () => {
+                        axios.delete('api/books/' + this.state.bookid).then(() => {
+                            this.setState({ isDeleted: true });
+                            this.setState({loading: false});
+                        });
+                        this.setState({loading: true});
+                    }
+                }
+            ]
+        })
     }
 
     async onClickCreateChapter(e) {
         e.preventDefault();
+
         const res = await axios.post('api/books/' + this.state.bookid + '/chapters', {
             name: "Name",
             content: "Content",
             price: 0
         });
-
         this.props.history.push('/create/book/' + this.state.bookid + '/chapter/' + res.data.chapter._id);
     }
 
     render() {
         if (!this.props.isAuthenticated) {
-            console.log("Update book: ", this.props.location);
             return <Redirect to={{
                 pathname: '/login',
                 state: {
@@ -99,7 +134,7 @@ class UpdateBook extends Component {
         return (
             <>
                 <h2>{this.state.book.name}</h2>
-                <Image style={{width: "25%"}} src={this.state.book.cover ? this.state.book.cover : imgdefault} alt="Image" thumbnail />
+                <Image style={{ width: "25%" }} src={this.state.book.cover ? this.state.book.cover : imgdefault} alt="Image" thumbnail />
                 {this.state.chapters && this.state.chapters[0] ? (
 
                     <Table responsive>
@@ -162,4 +197,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
+    { showModal }
 )(UpdateBook));

@@ -6,6 +6,7 @@ import { loadUser } from './actions/auth';
 import { loadGenres } from './actions/genres';
 import { loadBooks } from './actions/books';
 import Alert from './components/layout/Alert';
+import Modal from './components/layout/Modal';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Home from './components/home/Home';
@@ -42,6 +43,7 @@ function App() {
         <Provider store={store}>
             <Router>
                 <Alert />
+                <Modal />
                 <div className="container">
                     <Header />
                     <Switch>

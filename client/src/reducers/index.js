@@ -7,6 +7,7 @@ import books from './books';
 import book from './book';
 import library from './library';
 import reviews from './reviews';
+import modal from './modal';
 
 
 export default combineReducers({
@@ -17,5 +18,6 @@ export default combineReducers({
   books,
   book,
   library,
-  reviews
+  reviews,
+  modal
 });

@@ -1,6 +1,10 @@
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
 
+export const SHOW_MODAL = 'SHOW_MODAL';
+export const CHOOSE_OPTION = 'CHOOSE_OPTION';
+export const HIDE_MODAL = 'HIDE_MODAL';
+
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
 

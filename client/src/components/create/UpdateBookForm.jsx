@@ -7,6 +7,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { loadUser } from '../../actions/auth';
 import Spinner from '../layout/Spinner';
+import { showModal } from '../../actions/modal';
 
 class UpdateBookForm extends Component {
     constructor(props) {
@@ -30,7 +31,6 @@ class UpdateBookForm extends Component {
 
     async componentDidMount() {
         const { data } = await axios.get('/api/books/' + this.props.match.params.bookid);
-        console.log(data.book);
         await this.setState({
             bookname: data.book.name,
             genres: data.book.genres[0].name,
@@ -38,7 +38,6 @@ class UpdateBookForm extends Component {
             sypnosis: data.book.sypnosis,
             imgURL: data.book.cover,
         })
-        console.log('state: ', this.state);
     }
 
     onChange(e) {
@@ -46,7 +45,7 @@ class UpdateBookForm extends Component {
     }
 
     updateBook = async ({ bookid, name, genrenames, sypnosis, cover }) => {
-        const res = await axios.put('api/books/' + bookid, { book: {name, genrenames, sypnosis, cover} });
+        const res = await axios.put('api/books/' + bookid, { book: { name, genrenames, sypnosis, cover } });
         return res.data;
     }
 
@@ -73,7 +72,6 @@ class UpdateBookForm extends Component {
                         }
                     }
                     await axios.post('api/upload/cover', formData, config).then(res => {
-                        console.log('RES', res.data.fileNameInServer)
                         let filePath = res.data.fileNameInServer
                         if (filePath) {
                             filePath = filePath.split('\\')[1]
@@ -84,15 +82,30 @@ class UpdateBookForm extends Component {
                     })
                 }
 
-        await this.updateBook({
-            bookid: this.props.match.params.bookid,
-            name: this.state.bookname,
-            genrenames: [this.state.genres],
-            sypnosis: this.state.sypnosis,
-            cover: this.state.imgURL
-        });
-
-        this.setState({ submitted: true })
+        this.props.showModal({
+            heading: 'Update book',
+            body: 'Confirm updating this book?',
+            options: [
+                {
+                    name: 'NO',
+                    action: () => { }
+                },
+                {
+                    name: 'YES',
+                    action: () => {
+                        this.updateBook({
+                            bookid: this.props.match.params.bookid,
+                            name: this.state.bookname,
+                            genrenames: [this.state.genres],
+                            sypnosis: this.state.sypnosis,
+                            cover: this.state.imgURL
+                        }).then(() => {
+                            this.setState({ submitted: true })
+                        })
+                    }
+                }
+            ]
+        })
     }
 
     render() {
@@ -143,7 +156,9 @@ class UpdateBookForm extends Component {
                             placeholder="choose image"
                         />
                     </Form.Group>
-
+                    <Button variant="secondary" onClick={() => this.setState({submitted: true})}>
+                        Cancel
+                    </Button>
                     <Button variant="primary" type="submit">
                         Update Book
                     </Button>
@@ -159,5 +174,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    { setAlert }
+    { setAlert, showModal }
 )(UpdateBookForm));
